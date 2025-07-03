@@ -1,0 +1,213 @@
+/* CSS Reset & Basic Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #ffffff;
+    color: #212529;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.container {
+    width: 100%;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Header */
+.main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e9ecef;
+    padding: 12px 0;
+    z-index: 1000;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ff6f0f; /* 당근 오렌지 색상 */
+}
+.logo img {
+    width: 32px;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+
+.main-nav {
+    margin-left: 30px;
+}
+.main-nav a {
+    font-size: 18px;
+    font-weight: 700;
+    margin-right: 20px;
+    color: #495057;
+}
+.main-nav a.active {
+    color: #212529;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.search-bar {
+    width: 250px;
+    padding: 8px 12px;
+    border: 1px solid #dee2e6;
+    background-color: #f1f3f5;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.header-buttons button {
+    background: none;
+    border: 1px solid #dee2e6;
+    padding: 8px 16px;
+    margin-left: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+/* Hero Section */
+.hero-section {
+    background-color: #FFFAE0;
+    width: 100%;
+    margin-top: 65px;
+}
+
+.hero-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.hero-text {
+}
+
+.hero-text h1 {
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 24px;
+    color: #111;
+    text-align: left;
+}
+
+.hero-text p {
+    font-size: 18px;
+    color: #111;
+    line-height: 1.6;
+    text-align: left;
+}
+
+.hero-image-wrapper {
+    /* 이미지 컨테이너, 필요 시 스타일 추가 */
+}
+
+.hero-illustration {
+    width: 476px; /* 이미지 너비 조절 */
+    height: auto;
+}
+
+/* Popular Items Section */
+.popular-items-section {
+    padding: 60px 0;
+}
+
+.section-title {
+    font-size: 32px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.item-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px 20px;
+}
+
+.item-card {
+    cursor: pointer;
+}
+
+.item-image {
+    width: 100%;
+    padding-bottom: 100%; /* 1:1 비율 */
+    background-color: #DBDCE2;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    /* TODO: 실제 이미지를 background-image로 넣거나, img 태그를 사용하세요. */
+}
+
+.item-info .item-title {
+    font-size: 16px;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.item-info .item-price {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.item-info .item-location {
+    font-size: 13px;
+    color: #868e96;
+    margin-bottom: 4px;
+}
+
+.item-info .item-stats {
+    font-size: 13px;
+    color: #868e96;
+}
+
+/* Floating Action Button (FAB) */
+.fab {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: #FF6F0E;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 24px;
+    font-size: 16px;
+    font-weight: 700;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+.fab:hover {
+    transform: scale(1.05);
+}

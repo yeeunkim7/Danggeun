@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>믿을만한 이웃 간 중고거래, 당근</title>
+
+    <!-- Google Fonts: Noto Sans KR -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- External CSS Link -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="~{fragments/header :: headerFragment}"></div>
+
+<main>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container hero-container">
+            <div class="hero-text">
+                <h1>믿을만한<br>이웃 간 중고거래</h1>
+                <p>동네 주민들과 가깝고 따뜻한 거래를<br>지금 경험해보세요.</p>
+            </div>
+            <div class="hero-image-wrapper">
+                <img th:src="@{/images/fleamarket.svg}" alt="중고거래 일러스트" class="hero-illustration">
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Items Section -->
+    <section class="popular-items-section container">
+        <h2 class="section-title">중고거래 인기매물</h2>
+
+        <!--
+          TODO: Spring MVC에서 Model에 담겨온 상품 리스트(itemList)를
+          JSP의 <c:forEach> 또는 Thymeleaf의 th:each를 사용해 반복 출력하는 부분입니다.
+          아래 <article> 태그를 반복문 안에 넣어주세요.
+        -->
+        <div class="item-grid">
+            <!-- 아이템 카드 (Sample) - 이 부분을 반복합니다. -->
+            <article class="item-card">
+                <div class="item-image"></div>
+                <div class="item-info">
+                    <h3 class="item-title">위닉스 제습기</h3>
+                    <p class="item-price">50,000원</p>
+                    <p class="item-location">인천 부평구 부평동</p>
+                    <p class="item-stats">조회 15 ∙ 채팅 41</p>
+                </div>
+            </article>
+            <!-- 반복 끝 -->
+
+            <!-- 아래는 UI 확인을 위한 샘플 데이터입니다. 실제 구현 시에는 반복문 하나만 남기고 삭제하세요. -->
+            <article class="item-card">
+                <div class="item-image"></div>
+                <div class="item-info">
+                    <h3 class="item-title">위닉스 제습기</h3>
+                    <p class="item-price">50,000원</p>
+                    <p class="item-location">인천 부평구 부평동</p>
+                    <p class="item-stats">조회 15 ∙ 채팅 41</p>
+                </div>
+            </article>
+            <article class="item-card">
+                <div class="item-image"></div>
+                <div class="item-info">
+                    <h3 class="item-title">위닉스 제습기</h3>
+                    <p class="item-price">50,000원</p>
+                    <p class="item-location">인천 부평구 부평동</p>
+                    <p class="item-stats">조회 15 ∙ 채팅 41</p>
+                </div>
+            </article>
+            <article class="item-card">
+                <div class="item-image"></div>
+                <div class="item-info">
+                    <h3 class="item-title">위닉스 제습기</h3>
+                    <p class="item-price">50,000원</p>
+                    <p class="item-location">인천 부평구 부평동</p>
+                    <p class="item-stats">조회 15 ∙ 채팅 41</p>
+                </div>
+            </article>
+            <article class="item-card">
+                <div class="item-image"></div>
+                <div class="item-info">
+                    <h3 class="item-title">위닉스 제습기</h3>
+                    <p class="item-price">50,000원</p>
+                    <p class="item-location">인천 부평구 부평동</p>
+                    <p class="item-stats">조회 15 ∙ 채팅 41</p>
+                </div>
+            </article>
+            <article class="item-card">
+                <div class="item-image"></div>
+                <div class="item-info">
+                    <h3 class="item-title">위닉스 제습기</h3>
+                    <p class="item-price">50,000원</p>
+                    <p class="item-location">인천 부평구 부평동</p>
+                    <p class="item-stats">조회 15 ∙ 채팅 41</p>
+                </div>
+            </article>
+            <article class="item-card">
+                <div class="item-image"></div>
+                <div class="item-info">
+                    <h3 class="item-title">위닉스 제습기</h3>
+                    <p class="item-price">50,000원</p>
+                    <p class="item-location">인천 부평구 부평동</p>
+                    <p class="item-stats">조회 15 ∙ 채팅 41</p>
+                </div>
+            </article>
+            <article class="item-card">
+                <div class="item-image"></div>
+                <div class="item-info">
+                    <h3 class="item-title">위닉스 제습기</h3>
+                    <p class="item-price">50,000원</p>
+                    <p class="item-location">인천 부평구 부평동</p>
+                    <p class="item-stats">조회 15 ∙ 채팅 41</p>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
+
+<!-- Floating Action Button -->
+<a href="#" class="fab">거래글쓰기</a>
+
+</body>
+</html>
