@@ -10,3 +10,4 @@ public class mainPageController {
     public String mainPage() {
         return "main";
     }
+}
