@@ -1,0 +1,25 @@
+.keyword_wrap{
+    display: flex;
+    justify-content: center;
+}
+.keyword_title{
+    border: none;
+    background-color: white;
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: medium;
+    margin-top: 100px;
+    margin-bottom: 50px;
+}
+.keyword_wrap_row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.keyword{
+    border: none;
+    background-color: white;
+    font-size: medium;
+    margin-bottom: 50px;
+    margin-left: 20px;
+}
