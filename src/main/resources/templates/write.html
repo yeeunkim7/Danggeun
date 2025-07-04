@@ -85,33 +85,34 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <form th:action="@{/trade/write}" method="post" enctype="multipart/form-data">
-            <div class="form-row">
-                <label class="image-upload">
-                    <img src="https://cdn-icons-png.flaticon.com/512/685/685655.png" alt="카메라 아이콘" />
-                    <input type="file" name="image" accept="image/*" required style="display: none;" />
-                </label>
-                <div class="form-group">
-                    <label for="title">글 제목</label>
-                    <input type="text" id="title" name="title" placeholder="글 제목" class="input-gray" />
-                    <label for="price" style="margin-top: 14px;">가격</label>
-                    <input type="text" id="price" name="price" placeholder="가격" class="input-gray" />
-                </div>
-            </div>
+<div class="container">
+    <form th:action="@{/trade/submit}" method="post" enctype="multipart/form-data">
+        <div class="form-row">
+            <label class="image-upload">
+                <img src="https://cdn-icons-png.flaticon.com/512/685/685655.png" alt="카메라 아이콘" />
+                <input type="file" name="productImage" accept="image/*" required style="display: none;" />
+            </label>
+            <div class="form-group">
+                <label for="title">글 제목</label>
+                <input type="text" id="title" name="title" placeholder="글 제목" class="input-gray" required />
 
-            <div class="form-group textarea-group" style="margin-top: 24px;">
-                <label for="description">물품 설명</label>
-                <textarea id="description" name="description" placeholder="게시글 내용을 작성해주세요."></textarea>
+                <label for="productPrice" style="margin-top: 14px;">가격</label>
+                <input type="text" id="productPrice" name="productPrice" placeholder="가격" class="input-gray" required />
             </div>
+        </div>
 
-            <div class="form-group" style="margin-top: 24px;">
-                <label for="address">거래 희망 장소</label>
-                <input type="text" id="address" name="address" placeholder="거래를 희망하는 장소" />
-            </div>
+        <div class="form-group textarea-group" style="margin-top: 24px;">
+            <label for="productDetail">물품 설명</label>
+            <textarea id="productDetail" name="productDetail" placeholder="게시글 내용을 작성해주세요." required></textarea>
+        </div>
 
-            <button type="submit" class="submit-btn">완료</button>
-        </form>
-    </div>
+        <div class="form-group" style="margin-top: 24px;">
+            <label for="address">거래 희망 장소</label>
+            <input type="text" id="address" name="address" placeholder="거래를 희망하는 장소" class="input-gray" required />
+        </div>
+
+        <button type="submit" class="submit-btn">완료</button>
+    </form>
+</div>
 </body>
 </html>
