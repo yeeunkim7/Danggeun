@@ -54,8 +54,12 @@ public class TradeService {
         dto.setProductDetail((String) session.getAttribute("productDetail"));
         dto.setAddress((String) session.getAttribute("address"));
         dto.setImageUrl((String) session.getAttribute("imageUrl"));
-        dto.setViews((Integer) session.getAttribute("views"));
-        dto.setChats((Integer) session.getAttribute("chats"));
+
+        Integer views = (Integer) session.getAttribute("views");
+        dto.setViews(views != null ? views : 0);
+
+        Integer chats = (Integer) session.getAttribute("chats");
+        dto.setChats(chats != null ? chats : 0);
 
         return dto;
     }
