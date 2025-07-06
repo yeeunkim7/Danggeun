@@ -7,18 +7,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @Entity
 @Builder
 @Table(name = "trade")
 @NoArgsConstructor
+@AllArgsConstructor
 public class Trade {
     
     @Id
@@ -54,21 +54,10 @@ public class Trade {
 
     @Lob
     @Column(name = "product_img")
-    private byte[] productImg; // 상품 이미지
+    private MultipartFile productImg; // 상품 이미지
 
-    public Trade(Long productId, Long categoryId, Long userId2, String productNm,
-                 Long productPrice, String productDetail, String productState,
-                 LocalDateTime productCreatedAt, String address, byte[] productImg) {
-        this.productId = productId;
-        this.categoryId = categoryId;
-        this.userId2 = userId2;
-        this.productNm = productNm;
-        this.productPrice = productPrice;
-        this.productDetail = productDetail;
-        this.productState = productState;
-        this.productCreatedAt = productCreatedAt;
-        this.address = address;
-        this.productImg = productImg;
-    }
+    @Lob
+    @Column(name = "product_title")
+    private String title;
 
 }

@@ -16,7 +16,7 @@ public class TradeService {
     private String uploadDir;
 
     public void submitTrade(Trade form, HttpSession session) {
-        String fileName = System.currentTimeMillis() + "_" + form.productImage().getOriginalFilename();
+        String fileName = System.currentTimeMillis() + "_" + form.productImg().getOriginalFilename();
 
         // 업로드 디렉토리 설정
         File folder = new File(uploadDir);
@@ -30,7 +30,7 @@ public class TradeService {
         File savedFile = new File(folder, fileName);
 
         try {
-            form.productImage().transferTo(savedFile);
+            form.productImg().transferTo(savedFile);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("이미지 저장 실패", e);
