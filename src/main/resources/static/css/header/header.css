@@ -18,6 +18,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    max-width: 1200px;   /* 콘텐츠의 최대 너비 제한 */
+    margin: 0 auto;     /* 화면 중앙 정렬 */
+    padding: 0 15px;
 }
 
 .header-left, .header-right {
