@@ -1,0 +1,84 @@
+/* ===================
+   Header Styles
+   =================== */
+
+.main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e9ecef;
+    padding: 12px 0;
+    z-index: 1000;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    max-width: 1200px;   /* 콘텐츠의 최대 너비 제한 */
+    margin: 0 auto;     /* 화면 중앙 정렬 */
+    padding: 0 15px;
+}
+
+.header-left, .header-right {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    width: 70px; /* 로고 사이즈 조정 */
+    height: auto;
+    vertical-align: middle;
+}
+
+.main-nav {
+    margin-left: 30px;
+}
+
+.main-nav a {
+    font-size: 18px;
+    font-weight: 700;
+    margin-right: 20px;
+    color: #495057;
+    text-decoration: none;
+}
+
+.main-nav a.active {
+    color: #212529;
+}
+
+.search-bar {
+    width: 250px;
+    padding: 8px 12px;
+    border: none;
+    background-color: #f1f3f5;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.search-bar:focus {
+    outline: none;
+    background-color: #e9ecef;
+}
+
+.header-buttons button {
+    background: none;
+    border: 1px solid #dee2e6;
+    padding: 7px 15px;
+    margin-left: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 14px;
+    color: #495057;
+    white-space: nowrap;
+}
+
+.header-buttons .btn-chat {
+    border-color: #ff8a3d;
+    color: #ff8a3d;
+}
