@@ -1,4 +1,4 @@
-package org.example.danggeun.repository;
+package org.example.danggeun.write.repository;
 
 import org.example.danggeun.domain.Write;
 import org.springframework.data.jpa.repository.JpaRepository;

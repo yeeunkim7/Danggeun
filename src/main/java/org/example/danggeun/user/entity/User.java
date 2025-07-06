@@ -1,4 +1,4 @@
-package org.example.danggeun.domain;
+package org.example.danggeun.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

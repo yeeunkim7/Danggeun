@@ -1,6 +1,6 @@
-package org.example.danggeun.repository;
+package org.example.danggeun.user.repository;
 
-import org.example.danggeun.domain.User;
+import org.example.danggeun.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

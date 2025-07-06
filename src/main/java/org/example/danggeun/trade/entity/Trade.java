@@ -1,4 +1,4 @@
-package org.example.danggeun.domain;
+package org.example.danggeun.trade.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -7,8 +7,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -16,6 +18,7 @@ import java.time.LocalDateTime;
 @Entity
 @Builder
 @Table(name = "trade")
+@NoArgsConstructor
 public class Trade {
     
     @Id
@@ -67,5 +70,5 @@ public class Trade {
         this.address = address;
         this.productImg = productImg;
     }
-    
+
 }

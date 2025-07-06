@@ -1,4 +1,4 @@
-package org.example.danggeun.controller;
+package org.example.danggeun.mainpage.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,7 +1,7 @@
 package org.example.danggeun.security;
 
-import org.example.danggeun.domain.User;
-import org.example.danggeun.repository.UserRepository;
+import org.example.danggeun.user.entity.User;
+import org.example.danggeun.user.repository.UserRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.user.OAuth2User;

@@ -1,10 +1,10 @@
-package org.example.danggeun.service;
+package org.example.danggeun.trade.service;
 
 import java.io.File;
 import java.io.IOException;
 import jakarta.servlet.http.HttpSession;
-import org.example.danggeun.controller.Dto.TradeDto;
-import org.example.danggeun.controller.Dto.TradeForm;
+import org.example.danggeun.trade.dto.TradeDto;
+import org.example.danggeun.trade.entity.Trade;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ public class TradeService {
     @Value("${file.upload-dir}")  // 예: file.upload-dir=/Users/user/uploads 또는 C:/uploads
     private String uploadDir;
 
-    public void submitTrade(TradeForm form, HttpSession session) {
+    public void submitTrade(Trade form, HttpSession session) {
         String fileName = System.currentTimeMillis() + "_" + form.productImage().getOriginalFilename();
 
         // 업로드 디렉토리 설정
