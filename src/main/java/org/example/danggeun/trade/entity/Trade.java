@@ -54,7 +54,7 @@ public class Trade {
 
     @Lob
     @Column(name = "product_img")
-    private MultipartFile  productImg; // 상품 이미지
+    private String productImg; // 상품 이미지
 
     @Lob
     @Column(name = "product_title")
