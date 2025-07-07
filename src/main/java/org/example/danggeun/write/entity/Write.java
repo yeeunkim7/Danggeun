@@ -1,4 +1,4 @@
-package org.example.danggeun.trade.entity;
+package org.example.danggeun.write.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -7,20 +7,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
-import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @Entity
 @Builder
-@Table(name = "trade")
-@NoArgsConstructor
-@AllArgsConstructor
-public class Trade {
-    
+@Table(name = "product")
+public class Write {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
@@ -54,10 +51,20 @@ public class Trade {
 
     @Lob
     @Column(name = "product_img")
-    private String productImg; // 상품 이미지
+    private byte[] productImg; // 상품 이미지
 
-    @Lob
-    @Column(name = "product_title")
-    private String title;
-
+    public Write(Long productId, Long categoryId, Long userId2, String productNm,
+                 Long productPrice, String productDetail, String productState,
+                 LocalDateTime productCreatedAt, String address, byte[] productImg) {
+        this.productId = productId;
+        this.categoryId = categoryId;
+        this.userId2 = userId2;
+        this.productNm = productNm;
+        this.productPrice = productPrice;
+        this.productDetail = productDetail;
+        this.productState = productState;
+        this.productCreatedAt = productCreatedAt;
+        this.address = address;
+        this.productImg = productImg;
+    }
 }
