@@ -16,7 +16,7 @@ public class TradeService {
     private String uploadDir;
 
     public void submitTrade(Trade form, HttpSession session) {
-        String fileName = System.currentTimeMillis() + "_" + form.productImg().getOriginalFilename();
+        String fileName = System.currentTimeMillis() + "_" + form.getProductImg().getOriginalFilename();
 
         // 업로드 디렉토리 설정
         File folder = new File(uploadDir);
@@ -30,17 +30,17 @@ public class TradeService {
         File savedFile = new File(folder, fileName);
 
         try {
-            form.productImg().transferTo(savedFile);
+            form.getProductImg().transferTo(savedFile);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("이미지 저장 실패", e);
         }
 
         // 세션에 데이터 저장
-        session.setAttribute("title", form.title());
-        session.setAttribute("productPrice", form.productPrice());
-        session.setAttribute("productDetail", form.productDetail());
-        session.setAttribute("address", form.address());
+        session.setAttribute("title", form.getTitle());
+        session.setAttribute("productPrice", form.getProductPrice());
+        session.setAttribute("productDetail", form.getProductDetail());
+        session.setAttribute("address", form.getAddress());
         session.setAttribute("imageUrl", "/uploads/" + fileName);
         session.setAttribute("views", 1);
         session.setAttribute("chats", 0);

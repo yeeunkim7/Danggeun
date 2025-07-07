@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -53,7 +54,7 @@ public class Trade {
 
     @Lob
     @Column(name = "product_img")
-    private byte[] productImg; // 상품 이미지
+    private MultipartFile  productImg; // 상품 이미지
 
     @Lob
     @Column(name = "product_title")
