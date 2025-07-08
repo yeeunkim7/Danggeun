@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<!-- 헤더 프래그먼트 -->
+<header class="main-header" th:fragment="headerFragment">
+    <div class="header-container">
+        <div class="header-left">
+            <a th:href="@{/main}">
+                <img th:src="@{/images/dangguen.svg}">
+            </a>
+            <nav class="main-nav">
+                <!-- TODO: Controller에서 현재 페이지 정보를 받아와 'active' 클래스를 동적으로 적용 -->
+                <a th:href="@{/trade}" class="active">중고거래</a>
+                <a th:href="@{/auth-town}">동네인증</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <!-- TODO: 검색 기능 구현 시 form 태그로 감싸고, Controller와 연결 -->
+            <input type="text" class="search-bar" placeholder="물품이나 동네를 검색해보세요">
+            <div class="header-buttons">
+                <!-- TODO: 채팅 페이지 링크 연결 -->
+                <a th:href="@{/chat}"><button type="button" class="btn-chat">채팅하기</button></a>
+
+                <!--
+                  Security 제거 후 임시 버튼.
+                  나중에 로그인 기능 구현 후 th:if 등을 이용해 조건부로 보여주세요.
+                -->
+                <a th:href="@{/login}"><button type="button" class="btn-logout">로그인</button></a>
+                <!-- <a th:href="@{/logout}"><button type="button" class="btn-logout">로그아웃</button></a> -->
+            </div>
+        </div>
+    </div>
+</header>
+</html>
