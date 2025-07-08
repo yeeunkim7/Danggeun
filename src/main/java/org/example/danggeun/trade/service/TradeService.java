@@ -47,6 +47,7 @@ public class TradeService {
         }
 
         // 2. 세션에 데이터 저장
+        session.setAttribute("productId", tradeDto.getProductId());
         session.setAttribute("title", tradeDto.getTitle());
         session.setAttribute("productPrice", tradeDto.getProductPrice());
         session.setAttribute("productDetail", tradeDto.getProductDetail());
@@ -56,15 +57,10 @@ public class TradeService {
         session.setAttribute("chats", 0); // 최초 채팅수 0으로 설정
     }
 
-    /**
-     * HttpSession에서 게시글 정보를 읽어와 DTO로 반환합니다.
-     * @param session HTTP 세션
-     * @return 세션 정보를 담은 DTO
-     */
     public TradeDto getPostFromSession(HttpSession session) {
         TradeDto dto = new TradeDto();
         dto.setTitle((String) session.getAttribute("title"));
-        dto.setProductPrice((String) session.getAttribute("productPrice"));
+        dto.setProductPrice((Long) session.getAttribute("productPrice"));
         dto.setProductDetail((String) session.getAttribute("productDetail"));
         dto.setAddress((String) session.getAttribute("address"));
         dto.setImageUrl((String) session.getAttribute("imageUrl"));

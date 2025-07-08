@@ -51,11 +51,14 @@ public class Write {
 
     @Lob
     @Column(name = "product_img")
-    private byte[] productImg; // 상품 이미지
+    String productImg; // 상품 이미지
+
+    protected Write() {
+    }
 
     public Write(Long productId, Long categoryId, Long userId2, String productNm,
                  Long productPrice, String productDetail, String productState,
-                 LocalDateTime productCreatedAt, String address, byte[] productImg) {
+                 LocalDateTime productCreatedAt, String address, String productImg) {
         this.productId = productId;
         this.categoryId = categoryId;
         this.userId2 = userId2;

@@ -4,6 +4,7 @@ import lombok.Builder;
 import org.example.danggeun.write.entity.Write;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 public record WriteUserDto(
@@ -11,6 +12,7 @@ public record WriteUserDto(
         String productPrice,
         String productDetail,
         String address,
+        String productImg,
         LocalDateTime productCreatedAt
 ) {
     public Write toEntity() {
@@ -19,6 +21,7 @@ public record WriteUserDto(
                 .productPrice(Long.valueOf(productPrice))
                 .productDetail(productDetail)
                 .address(address)
+                .productImg(productImg)
                 .productCreatedAt(java.time.LocalDateTime.now())
                 .build();
     }

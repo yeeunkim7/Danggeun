@@ -11,8 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TradeDto {
+    private Long productId;
     private String title;
-    private String productPrice;
+    private Long productPrice;
     private String productDetail;
     private String address;
     private String imageUrl;

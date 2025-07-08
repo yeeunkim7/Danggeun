@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>게시글 상세</title>
   <style>
+    /* 기존 스타일 유지 */
     body {
         background-color: #f5f6f8;
         font-family: Arial, sans-serif;
@@ -99,13 +100,14 @@
 <body>
 <div class="container">
   <div class="image-section">
-    <img th:src="@{${dto.imageUrl}}" alt="업로드된 이미지" />
+    <!-- Base64 이미지 표시 예시 -->
+    <img th:src="'data:image/jpeg;base64,' + ${dto.productImg}" alt="업로드된 이미지" />
   </div>
 
   <div class="meta">
     <div>
-      <div class="user">아이디</div>
-      <div class="location">부평 1동</div>
+      <div class="user">아이디 정보 없음</div>
+      <div class="location" th:text="${dto.address}">부평 1동</div>
     </div>
     <form th:action="@{/trade/chat}" method="post">
       <button class="chat-btn" type="submit">채팅하기</button>
@@ -122,12 +124,14 @@
 
   <div class="description" th:text="${dto.productDetail}">글 내용입니다.</div>
 
+
   <input type="text" class="location-input" th:value="${dto.address}" readonly />
 
   <div class="button-group">
     <div></div>
     <div class="action-links">
-      <a href="#">삭제하기</a> | <a href="#">수정하기</a>
+      <a th:href="@{'/trade/delete/' + ${dto.productId}}">삭제하기</a> |
+      <a th:href="@{'/trade/edit/' + ${dto.productId}}">수정하기</a>
     </div>
   </div>
 </div>
