@@ -23,24 +23,11 @@ public class LoginController {
 
     //1. 로그인 화면
     @GetMapping("/login")
-    public String loginPage() {
-        return "login/login";
-    }
-
-    //2. 로그인 요청 처리
-    @PostMapping("/login")
-    public String loginProcess(@RequestParam String username,
-                               @RequestParam String password,
-                               Model model) {
-        Optional<User> userOpt = userRepository.findByUsername(username);
-
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            if (user.getPassword().equals(password)) {
-                return "redirect:/main";
-            }
+    public String loginPage(@RequestParam(value = "error", required = false) String error,
+                            Model model) {
+        if (error != null) {
+            model.addAttribute("error", "아이디 또는 패스워드가 올바르지 않습니다.");
         }
-        model.addAttribute("error", "아이디 또는 패스워드가 올바르지 않습니다.");
         return "login/login";
     }
 }

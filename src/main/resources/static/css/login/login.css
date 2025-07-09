@@ -1,11 +1,10 @@
-/* 전체 배경 및 정렬 */
+/*기본 body 스타일 */
 body {
     margin: 0;
     padding: 0;
-    background-color: #f8f9fa;
+    background-color: #f2f3f6;
     font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
 }
-
 
 .login-wrapper {
     display: flex;
@@ -14,17 +13,17 @@ body {
     height: calc(100vh - 80px);;
 }
 
-/* 로그인 박스(폼 전체) */
+/* 로그인 전체 폼 스타일 */
 .login-form {
     width: 400px;
-    background-color: #f8f9fa;
+    background-color: #f2f3f6;
     padding: 40px 30px;
     border-radius: 12px;
     box-sizing: border-box;
     margin: 0 auto;
 }
 
-/* 입력 필드 그룹 */
+/* 각 입력 필드 그룹 */
 .form-group {
     text-align: left;
     margin-bottom: 20px;
@@ -46,10 +45,10 @@ body {
     box-sizing: border-box;
 }
 
-/* 로그인 버튼 */
+/* 일반 로그인 버튼 스타일 */
 .btn-login {
     width: 100%;
-    background-color: #FF6F0F;
+    background-color: #FF6F0E;
     color: white;
     font-size: 16px;
     font-weight: bold;
@@ -82,9 +81,63 @@ body {
     width: 20px;
 }
 
+/* 로그인 페이지 하단 문구 스타일 */
 .login-footer {
     margin-top: 30px;
     font-size: 14px;
     color: #212529;
     text-align: center;
+}
+
+/* 회원가입 박스 스타일 */
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 80px);
+}
+/* 회원가입 버튼 스타일 */
+.btn-register {
+    background-color: #ff6f0e;
+    color: white;
+    width: 100%;
+    padding: 15px;
+    font-weight: bold;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* 로그인 페이지로 이동하는 링크 */
+.to-login {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.login-link {
+    color: #ff6f0e;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-link:hover {
+text-decoration: underline;
+}
+
+.register-form {
+    width: 400px;
+    background-color: #f2f3f6;
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-sizing: border-box;
+}
+
+.register-link {
+    color: #ff6f0e;
+    text-decoration: none;
+    font-weight: bold;
+}
+.register-link:hover {
+text-decoration: underline;
 }
