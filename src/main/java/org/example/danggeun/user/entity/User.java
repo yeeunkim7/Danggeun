@@ -22,4 +22,7 @@ public class User {
     private String password;
     private String provider;
     private String providerId;
+
+    public void setName(String name) {
+    }
 }

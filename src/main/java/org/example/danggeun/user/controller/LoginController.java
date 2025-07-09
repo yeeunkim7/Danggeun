@@ -41,6 +41,6 @@ public class LoginController {
             }
         }
         model.addAttribute("error", "아이디 또는 패스워드가 올바르지 않습니다.");
-        return "login";
+        return "login/login";
     }
 }
