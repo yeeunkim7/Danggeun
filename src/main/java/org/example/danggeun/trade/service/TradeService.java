@@ -19,42 +19,32 @@ public class TradeService {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    /**
-     * DTO로부터 받은 데이터를 파일로 저장하고, 나머지 정보를 HttpSession에 저장합니다.
-     * @param tradeDto 사용자가 입력한 폼 데이터
-     * @param session HTTP 세션
-     */
-    public void submitAndStoreInSession(TradeDto tradeDto, HttpSession session) {
-        MultipartFile imageFile = tradeDto.getProductImg();
-
+    public void submitAndStoreInSession(TradeDto dto, MultipartFile imageFile, HttpSession session) {
         if (imageFile == null || imageFile.isEmpty()) {
-            throw new IllegalArgumentException("상품 이미지는 필수입니다.");
+            throw new IllegalArgumentException("이미지는 필수입니다.");
         }
 
-        // 1. 파일 저장
         String originalFilename = imageFile.getOriginalFilename();
-        String storedFileName = UUID.randomUUID().toString() + "_" + originalFilename;
+        String storedFileName = UUID.randomUUID() + "_" + originalFilename;
         String fileUrl = "/uploads/" + storedFileName;
 
         try {
             File dest = new File(uploadDir + File.separator + storedFileName);
-            dest.getParentFile().mkdirs();
+            dest.getParentFile().mkdirs(); // 디렉터리 없으면 생성
             imageFile.transferTo(dest);
             log.info("파일 저장 성공: {}", dest.getAbsolutePath());
         } catch (IOException e) {
             log.error("파일 저장 실패", e);
-            throw new RuntimeException("이미지 저장에 실패했습니다.", e);
+            throw new RuntimeException("파일 저장 실패", e);
         }
 
-        // 2. 세션에 데이터 저장
-        session.setAttribute("productId", tradeDto.getProductId());
-        session.setAttribute("title", tradeDto.getTitle());
-        session.setAttribute("productPrice", tradeDto.getProductPrice());
-        session.setAttribute("productDetail", tradeDto.getProductDetail());
-        session.setAttribute("address", tradeDto.getAddress());
-        session.setAttribute("imageUrl", fileUrl); // 저장된 파일의 URL
-        session.setAttribute("views", 1); // 최초 조회수 1로 설정
-        session.setAttribute("chats", 0); // 최초 채팅수 0으로 설정
+        session.setAttribute("title", dto.getTitle());
+        session.setAttribute("productPrice", dto.getProductPrice());
+        session.setAttribute("productDetail", dto.getProductDetail());
+        session.setAttribute("address", dto.getAddress());
+        session.setAttribute("imageUrl", fileUrl); // 업로드된 이미지 경로 저장
+        session.setAttribute("views", 1);
+        session.setAttribute("chats", 0);
     }
 
     public TradeDto getPostFromSession(HttpSession session) {
@@ -71,24 +61,15 @@ public class TradeService {
         Integer chats = (Integer) session.getAttribute("chats");
         dto.setChats(chats != null ? chats : 0);
 
-        // 상세 페이지를 볼 때마다 조회수 증가
-        if(views != null) {
+        if (views != null) {
             session.setAttribute("views", views + 1);
         }
 
         return dto;
     }
 
-    /**
-     * 세션의 채팅 수를 1 증가시킵니다.
-     * @param session HTTP 세션
-     */
     public void increaseChatInSession(HttpSession session) {
         Integer chats = (Integer) session.getAttribute("chats");
-        if (chats == null) {
-            session.setAttribute("chats", 1);
-        } else {
-            session.setAttribute("chats", chats + 1);
-        }
+        session.setAttribute("chats", chats == null ? 1 : chats + 1);
     }
 }

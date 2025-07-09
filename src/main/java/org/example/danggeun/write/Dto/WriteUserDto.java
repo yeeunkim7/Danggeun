@@ -1,28 +1,19 @@
 package org.example.danggeun.write.Dto;
 
-import lombok.Builder;
-import org.example.danggeun.write.entity.Write;
+import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public record WriteUserDto(
-        String productNm,
-        String productPrice,
-        String productDetail,
-        String address,
-        String productImg,
-        LocalDateTime productCreatedAt
-) {
-    public Write toEntity() {
-        return Write.builder()
-                .productNm(productNm)
-                .productPrice(Long.valueOf(productPrice))
-                .productDetail(productDetail)
-                .address(address)
-                .productImg(productImg)
-                .productCreatedAt(java.time.LocalDateTime.now())
-                .build();
-    }
+public class WriteUserDto {
+    private String productNm;
+    private Long productPrice;
+    private String productDetail;
+    private String address;
+    private String productImg; // base64 encoded
+    private LocalDateTime productCreatedAt;
 }

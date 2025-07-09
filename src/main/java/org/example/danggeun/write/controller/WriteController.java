@@ -1,24 +1,17 @@
 package org.example.danggeun.write.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.example.danggeun.write.Dto.WriteUserDto;
 import org.example.danggeun.write.service.WriteService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.multipart.MultipartFile;
-import java.time.OffsetDateTime;
+import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Base64;
-import java.util.List;
+import java.time.OffsetDateTime;
 import java.util.Map;
+import java.util.Base64;
 
 @Controller
 @RequestMapping("/write")
@@ -30,38 +23,41 @@ public class WriteController {
         this.writeService = writeService;
     }
 
-    // ✅ 1. HTML 페이지 렌더링
     @GetMapping
     public String writePage() {
-        return "write/write"; // templates/write/write.html 로 이동
+        return "write/write";
     }
 
-    // ✅ 2. API 요청 처리 (JSON 본문 받고, 문자열 응답)
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    public Map<String, String> write(
-            @RequestPart("productNm") String productNm,
-            @RequestPart("productPrice") String productPrice,
-            @RequestPart("productDetail") String productDetail,
-            @RequestPart("address") String address,
-            @RequestPart("productCreatedAt") String productCreatedAt,
-            @RequestPart("productImg") MultipartFile productImg
-    ) throws IOException {
-        byte[] imageBytes = productImg.getBytes();
-        // Parse ISO_INSTANT string (e.g., 2025-07-08T06:48:28.548Z) to LocalDateTime
-        LocalDateTime createdAt = OffsetDateTime.parse(productCreatedAt).toLocalDateTime();
+    public Map<String, Object> write(@RequestBody WriteUserDto dto, HttpSession session) {
+        LocalDateTime createdAt;
 
-        WriteUserDto dto = WriteUserDto.builder()
-                .productNm(productNm)
-                .productPrice(productPrice)
-                .productDetail(productDetail)
-                .address(address)
-                .productImg(Base64.getEncoder().encodeToString(imageBytes))
-                .productCreatedAt(createdAt)
-                .build();
+        if (dto.getProductCreatedAt() instanceof LocalDateTime) {
+            createdAt = dto.getProductCreatedAt();
+        } else {
+            // 만약 String 타입이라면 파싱
+            createdAt = OffsetDateTime.parse(dto.getProductCreatedAt().toString()).toLocalDateTime();
+        }
 
-        writeService.save(dto, 1L, 1L);
-        return Map.of("message", "저장 완료");
+        // 세션 저장
+        session.setAttribute("title", dto.getProductNm());
+        session.setAttribute("productPrice", Long.parseLong(String.valueOf(dto.getProductPrice())));
+        session.setAttribute("productDetail", dto.getProductDetail());
+        session.setAttribute("address", dto.getAddress());
+        session.setAttribute("imageUrl", "/images/from/base64");
+        session.setAttribute("views", 1);
+        session.setAttribute("chats", 0);
+        session.setAttribute("productCreatedAt", createdAt.toString());
+
+        return Map.of(
+                "productNm", dto.getProductNm(),
+                "productPrice", dto.getProductPrice(),
+                "productDetail", dto.getProductDetail(),
+                "address", dto.getAddress(),
+                "productImg", dto.getProductImg(),
+                "productCreatedAt", createdAt.toString()
+        );
     }
 }

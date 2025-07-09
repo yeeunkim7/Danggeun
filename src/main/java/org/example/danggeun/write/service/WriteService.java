@@ -17,11 +17,11 @@ public class WriteService {
 
     public void save(WriteUserDto dto, Long userId, Long categoryId) {
         Write write = Write.builder()
-                .productNm(dto.productNm())
-                .productPrice(Long.valueOf(dto.productPrice()))
-                .productDetail(dto.productDetail())
-                .address(dto.address())
-                .productImg(dto.productImg())
+                .productNm(dto.getProductNm())
+                .productPrice(dto.getProductPrice())
+                .productDetail(dto.getProductDetail())
+                .address(dto.getAddress())
+                .productImg(dto.getProductImg())
                 .productCreatedAt(LocalDateTime.now())
                 .userId2(userId)
                 .categoryId(categoryId)

@@ -1,5 +1,6 @@
 server:
   port: 80
 
+
 file:
-  upload-dir: /Users/user/Downloads/Danggeun/uploads
+  upload-dir: /Users/user/Downloads/Danggeun/src/main/resources/static/uploads
