@@ -5,12 +5,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="stylesheet" href="/css/header/header.css">
   <link rel="stylesheet" href="/css/mainpage/mainPage_styles.css">
+  <link rel="stylesheet" href="/css/trade/trade_styles.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>당근마켓메인페이지</title>
 </head>
 <body>
   <header th:replace="~{fragments/header :: headerFragment}"></header>
-<div id="body">
   <div class="body_content_1">
     <div class="body_wrap">
       <h2 class="big">당신 근처의 <br> 지역 생활 커뮤니티</h2>
@@ -33,7 +33,6 @@
       <button class="gray_button">인기매물 보기</button>
     </div>
   </div>
-<!--이후 타임리프로 간소화 할 예정-->
   <div class="body_content_3">
     <div class="body_wrap">
       <h2 class="medium">이웃과 함께하는 <br>동네생활</h2>
@@ -69,101 +68,15 @@
     </div>
   </div>
 </div>
-<div>
-  <h1 class="top_title">중고거래 인기매물</h1>
-  <div class="content_5_wrap">
-    <div class="item_row">
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/Jaekyung89/Danggeun/refs/heads/MainPage/src/main/resources/static/asset/repo.png" alt="제습기 이미지" style="border-radius: 12px; width:210px; height:210px">
-        <h2 class="item_name">위닉스제습기</h2>
-        <h2 class="item_cost">50,000원</h2>
-        <h1 class="item_place">서울 마포구 서교동</h1>
-        <div class="like_chating">
-          <span class="like">관심 18</span>
-          <span>&nbsp;&nbsp;・&nbsp;&nbsp;</span>
-          <span class="chat">채팅 40</span>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/Jaekyung89/Danggeun/refs/heads/MainPage/src/main/resources/static/asset/charater.png" alt="LG모니터 이미지" style="border-radius: 12px; width:210px; height:210px">
-        <h2 class="item_name">LG 모니터 팝니다</h2>
-        <h2 class="item_cost">150,000원</h2>
-        <h1 class="item_place">경기도 안양시 만안구 안양동</h1>
-        <div class="like_chating">
-          <span class="like">관심 32</span>
-          <span>&nbsp;&nbsp;・&nbsp;&nbsp;</span>
-          <span class="chat">채팅 60</span>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/Jaekyung89/Danggeun/refs/heads/MainPage/src/main/resources/static/asset/charater.png" alt="닌텐도스위치2 이미지" style="border-radius: 12px; width:210px; height:210px">
-        <h2 class="item_name">닌텐도 스위치 2 마리오카트 월드 미개봉</h2>
-        <h2 class="item_cost">650,000원</h2>
-        <h1 class="item_place">광주 남구 임암동</h1>
-        <div class="like_chating">
-          <span class="like">관심 32</span>
-          <span>&nbsp;&nbsp;・&nbsp;&nbsp;</span>
-          <span class="chat">채팅 8</span>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/Jaekyung89/Danggeun/refs/heads/MainPage/src/main/resources/static/asset/charater.png"  alt="아이폰16pro 이미지" style="border-radius: 12px; width:210px; height:210px">
-        <h2 class="item_name">아이폰16pro</h2>
-        <h2 class="item_cost">800,000원</h2>
-        <h1 class="item_place">충북 청주시 용암동</h1>
-        <div class="like_chating">
-          <span class="like">관심 12</span>
-          <span>&nbsp;&nbsp;・&nbsp;&nbsp;</span>
-          <span class="chat">채팅 36</span>
-        </div>
+<!--타임리프 연동으로 DB 관리 예정-->
+  <div>
+    <h1 class="top_title">중고거래 인기매물</h1>
+    <div class="item-grid">
+      <div th:each="item : ${items}">
+        <div th:replace="~{fragments/tradeItem :: tradeItemFragment(${item})}"> </div>
       </div>
     </div>
-    <div class="item_row">
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/Jaekyung89/Danggeun/refs/heads/MainPage/src/main/resources/static/asset/charater.png"  alt="가구 이미지" style="border-radius: 12px; width:210px; height:210px">
-        <h2 class="item_name">이사로 정리합니다. 가구들 필요한거 가져가세요</h2>
-        <h2 class="item_cost">999원</h2>
-        <h1 class="item_place">광주 북구 신용동</h1>
-        <div class="like_chating">
-          <span class="like">관심 58</span>
-          <span>&nbsp;&nbsp;・&nbsp;&nbsp;</span>
-          <span class="chat">채팅 20</span>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/Jaekyung89/Danggeun/refs/heads/MainPage/src/main/resources/static/asset/charater.png"  alt="초대권 이미지" style="border-radius: 12px; width:210px; height:210px">
-        <h2 class="item_name">워터밤 서울 2025 초대권</h2>
-        <h2 class="item_cost">30,000원</h2>
-        <h1 class="item_place">경기도 성남시 분당구 이매동</h1>
-        <div class="like_chating">
-          <span class="like">관심 33</span>
-          <span>&nbsp;&nbsp;・&nbsp;&nbsp;</span>
-          <span class="chat">채팅 31</span>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/Jaekyung89/Danggeun/refs/heads/MainPage/src/main/resources/static/asset/charater.png"  alt="캠핑테이블 이미지" style="border-radius: 12px; width:210px; height:210px">
-        <h2 class="item_name">캠핑테이블</h2>
-        <h2 class="item_cost">10,000원</h2>
-        <h1 class="item_place">경기도 부천시 중동</h1>
-        <div class="like_chating">
-          <span class="like">관심 14</span>
-          <span>&nbsp;&nbsp;・&nbsp;&nbsp;</span>
-          <span class="chat">채팅 15</span>
-        </div>
-      </div>
-      <div class="item">
-        <img src="https://raw.githubusercontent.com/Jaekyung89/Danggeun/refs/heads/MainPage/src/main/resources/static/asset/charater.png"  alt="피시방 이미지" style="border-radius: 12px; width:210px; height:210px">
-        <h2 class="item_name">피시방 폐업 정리해요</h2>
-        <h2 class="item_cost">30,000원</h2>
-        <h1 class="item_place">강원도 원주시 단계동</h1>
-        <div class="like_chating">
-          <span class="like">관심 19</span>
-          <span>&nbsp;&nbsp;・&nbsp;&nbsp;</span>
-          <span class="chat">채팅 36</span>
-        </div>
-      </div>
-    </div>
+  </div>
     <div class="more_item_wrap">
       <button class="more_item_btn">인기매물 더보기</button>
     </div>
@@ -187,24 +100,20 @@
       <button class="keyword">책</button>
     </div>
   </div>
-
-  <div>
-    <div class="bottom-nav">
-      <div class="bottom-nav-left">
-        <span class="menu-btn">중고거래</span>
-        <span class="menu-btn">채팅하기</span>
-      </div>
-      <div class="bottom-nav-right">
-        <div class="download-title">당근 앱 다운로드</div>
-        <div class="download-btn-group">
+  <div class="bottom-nav">
+    <div class="bottom-nav-left">
+      <a th:href="@{/trade}" class="active"><b>중고거래</b></a>
+      <a th:href="@{/chat}" class="menu-btn">채팅하기</a>
+    </div>
+    <div class="bottom-nav-right">
+      <div class="download-title">당근 앱 다운로드</div>
+      <div class="download-btn-group">
           <button class="white_button" onclick="window.open('https://play.google.com/store/apps/details?id=com.towneers.www&hl=ko')">Google Play</button>
           <button class="white_button" onclick="window.open ('https://apps.apple.com/kr/app/%EB%8B%B9%EA%B7%BC/id1018769995')">App Store</button>
         </div>
       </div>
-    </div>
-    <hr style="color:#495057">
   </div>
-
+    <hr style="color:#495057">
   <script>
     function submitForm(event) {
       event.preventDefault(); // 기본 제출 이벤트 막기

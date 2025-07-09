@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="tradeItemFragment (item)">
+    <article class="item-card">
+        <div class="item-image">
+            <img th:src="@{${item.imageUrl}}" alt="상품 이미지" style="width: 100px; height: 100px;">
+        </div>
+        <div class="item-info">
+            <h3 class="item-title" th:text="${item.title}">상품 제목</h3>
+            <p class="item-price" th:text="${item.price + '원'}">가격</p>
+            <p class="item-location" th:text="${item.location}">지역</p>
+            <p class="item-stats" th:text="'조회 ' + ${item.viewCount} + ' ∙ 채팅 ' + ${item.chatCount}">조회수 ∙ 채팅</p>
+        </div>
+    </article>
+</th:block>
+</html>
