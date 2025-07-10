@@ -100,13 +100,12 @@
 <body>
 <div class="container">
   <div class="image-section">
-    <!-- Base64 이미지 표시 예시 -->
-    <img th:src="${dto.imageUrl}" alt="업로드된 이미지" />
+    <img th:src="@{${dto.productImg}}" th:alt="${dto.productNm}" />
   </div>
 
   <div class="meta">
     <div>
-      <div class="user">아이디 정보 없음</div>
+      <div class="user" th:text="${dto.userId2 != null ? '작성자 ID: ' + dto.userId2 : '아이디 정보 없음'}">아이디 정보 없음</div>
     </div>
     <form th:action="@{/trade/chat}" method="post">
       <button class="chat-btn" type="submit">채팅하기</button>
@@ -114,7 +113,7 @@
   </div>
 
   <div class="post-header">
-    <div class="left-title" th:text="${dto.title}"></div>
+    <div class="left-title" th:text="${dto.productNm}"></div>
     <div class="right-info">
       <div class="price" th:text="${#numbers.formatInteger(dto.productPrice, 3, 'COMMA') + ' 원'}">50,000 원</div>
       <div class="subinfo" th:text="'조회 ' + ${dto.views} + ' | 채팅 ' + ${dto.chats}">조회 5 | 채팅 2</div>
@@ -134,5 +133,6 @@
     </div>
   </div>
 </div>
+<script src="/js/tradePost.js"></script>
 </body>
 </html>

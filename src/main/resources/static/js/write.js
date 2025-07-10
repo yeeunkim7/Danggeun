@@ -14,22 +14,14 @@ function previewImage(event) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("write-form").addEventListener("submit", function (e) {
-        e.preventDefault();
-    });
-
+    const form = document.getElementById("write-form");
     const submitBtn = document.getElementById("submit-btn");
     const imageInput = document.querySelector("input[name='productImage']");
 
-    submitBtn.addEventListener("click", async () => {
-        const productNm = document.getElementById("title").value;
-        const productPrice = document.getElementById("productPrice").value;
-        const productDetail = document.getElementById("productDetail").value;
-        const address = document.getElementById("address").value;
+    submitBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
 
-        const productCreatedAt = new Date().toISOString(); // 예: 2025-07-09T01:11:10.737Z
-
-        console.log("productCreatedAt:", productCreatedAt);
+        const formData = new FormData(form);
 
         const imageFile = imageInput.files[0];
         if (!imageFile) {
@@ -37,59 +29,21 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        const base64Img = await toBase64(imageFile);
-
-        const payload = {
-            productNm,
-            productPrice: Number(productPrice),
-            productDetail,
-            address,
-            productCreatedAt,
-            productImg: base64Img.split(",")[1] // 'data:image/jpeg;base64,' 제거
-        };
-
-        console.log("Payload to send:", payload);
+        formData.append("productCreatedAt", new Date().toISOString());
+        formData.append("productImage", imageFile); // 서버에서 @RequestParam("productImage")로 받음
 
         fetch("/write", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
+            body: formData
         })
-        .then(async res => {
-            const contentType = res.headers.get("content-type") || "";
-            const responseText = await res.text();
-
-            if (!res.ok) {
-                console.error("서버 오류 응답:", responseText);
-                throw new Error(`서버 오류: ${res.status}`);
-            }
-
-            let jsonData;
-            try {
-                jsonData = JSON.parse(responseText);
-            } catch (e) {
-                console.error("JSON 파싱 실패:", e, responseText);
-                throw new Error("응답 JSON 파싱 실패");
-            }
-
+        .then(res => {
+            if (!res.ok) throw new Error("작성 실패");
             alert("작성 완료!");
-            localStorage.setItem("lastPost", JSON.stringify(jsonData));
             window.location.href = "/trade/post";
         })
         .catch(err => {
-            console.error("작성 실패:", err);
-            alert("작성 중 오류가 발생했습니다.");
+            console.error("작성 중 오류 발생:", err);
+            alert("작성 중 문제가 발생했습니다.");
         });
     });
 });
-
-function toBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-        reader.readAsDataURL(file);
-    });
-}

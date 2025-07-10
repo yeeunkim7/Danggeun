@@ -101,15 +101,15 @@
 </head>
 <body>
 <div class="container">
-    <form id="write-form" th:action="@{/trade/submit}" method="post" enctype="multipart/form-data">
+    <form id="write-form" method="post" action="/trade/submit" enctype="multipart/form-data">
         <div class="form-row">
             <label class="image-upload">
                 <img id="preview-image" src="https://cdn-icons-png.flaticon.com/512/685/685655.png" alt="카메라 아이콘" />
                 <input type="file" name="productImage" accept="image/*" required style="display: none;" onchange="previewImage(event)" />
             </label>
             <div class="form-group">
-                <label for="title">글 제목</label>
-                <input type="text" id="title" name="title" placeholder="글 제목" class="input-gray" required />
+                <label for="productNm">글 제목</label>
+                <input type="text" id="productNm" name="productNm" placeholder="글 제목" class="input-gray" required />
 
                 <label for="productPrice" style="margin-top: 14px;">가격</label>
                 <input type="number" id="productPrice" name="productPrice" placeholder="가격" class="input-gray" required />
@@ -126,7 +126,7 @@
             <input type="text" id="address" name="address" placeholder="거래를 희망하는 장소" class="input-gray" required />
         </div>
 
-        <button type="submit" class="submit-btn">완료</button>
+        <button type="submit" id="submit-btn" class="submit-btn">완료</button>
     </form>
 </div>
 </body>

@@ -7,7 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Map;
@@ -24,40 +26,20 @@ public class WriteController {
     }
 
     @GetMapping
-    public String writePage() {
+    public String writePage() { //글쓰기 HTML 폼 페이지를 렌더링함
         return "write/write";
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @ResponseStatus(HttpStatus.CREATED)
-    public Map<String, Object> write(@RequestBody WriteUserDto dto, HttpSession session) {
-        LocalDateTime createdAt;
-
-        if (dto.getProductCreatedAt() instanceof LocalDateTime) {
-            createdAt = dto.getProductCreatedAt();
-        } else {
-            // 만약 String 타입이라면 파싱
-            createdAt = OffsetDateTime.parse(dto.getProductCreatedAt().toString()).toLocalDateTime();
-        }
-
-        // 세션 저장
-        session.setAttribute("title", dto.getProductNm());
-        session.setAttribute("productPrice", Long.parseLong(String.valueOf(dto.getProductPrice())));
-        session.setAttribute("productDetail", dto.getProductDetail());
-        session.setAttribute("address", dto.getAddress());
-        session.setAttribute("imageUrl", "/images/from/base64");
-        session.setAttribute("views", 1);
-        session.setAttribute("chats", 0);
-        session.setAttribute("productCreatedAt", createdAt.toString());
-
-        return Map.of(
-                "productNm", dto.getProductNm(),
-                "productPrice", dto.getProductPrice(),
-                "productDetail", dto.getProductDetail(),
-                "address", dto.getAddress(),
-                "productImg", dto.getProductImg(),
-                "productCreatedAt", createdAt.toString()
-        );
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseStatus(HttpStatus.SEE_OTHER)
+    public String handleFormSubmit(@ModelAttribute WriteUserDto dto,
+                                   HttpSession session) throws IOException {
+        // DTO에 MultipartFile 들어있음 (productImage)
+        writeService.save(dto, 1L, 1L); // userId, categoryId는 실제 로그인값이나 입력값으로 바꾸세요
+        System.out.println("productNm: " + dto.getProductNm());
+        System.out.println("productPrice: " + dto.getProductPrice());
+        System.out.println("productDetail: " + dto.getProductDetail());
+        System.out.println("address: " + dto.getAddress());
+        return "redirect:/trade/post";
     }
 }

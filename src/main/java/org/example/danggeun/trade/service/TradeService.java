@@ -2,12 +2,14 @@ package org.example.danggeun.trade.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import jakarta.servlet.http.HttpSession;
 import org.example.danggeun.trade.dto.TradeDto;
+import org.example.danggeun.write.entity.Write;
+import org.example.danggeun.write.repository.WriteRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,35 +18,54 @@ public class TradeService {
 
     private static final Logger log = LoggerFactory.getLogger(TradeService.class);
 
-    @Value("${file.upload-dir}")
-    private String uploadDir;
+    private final WriteRepository writeRepository;
 
-    public void submitAndStoreInSession(TradeDto dto, MultipartFile imageFile, HttpSession session) {
+    public TradeService(WriteRepository writeRepository) {
+        this.writeRepository = writeRepository;
+    }
+
+    public Long submitAndStoreInSession(TradeDto dto, MultipartFile imageFile, HttpSession session) {
         if (imageFile == null || imageFile.isEmpty()) {
             throw new IllegalArgumentException("이미지는 필수입니다.");
         }
 
         String originalFilename = imageFile.getOriginalFilename();
         String storedFileName = UUID.randomUUID() + "_" + originalFilename;
-        String fileUrl = "/uploads/" + storedFileName;
+
+        // 클래스패스 기준 static/uploads 경로
+        String uploadPath = new File("target/classes/static/uploads").getAbsolutePath();
+        File saveFile = new File(uploadPath, storedFileName);
 
         try {
-            File dest = new File(uploadDir + File.separator + storedFileName);
-            dest.getParentFile().mkdirs(); // 디렉터리 없으면 생성
-            imageFile.transferTo(dest);
-            log.info("파일 저장 성공: {}", dest.getAbsolutePath());
+            saveFile.getParentFile().mkdirs();
+            imageFile.transferTo(saveFile);
         } catch (IOException e) {
             log.error("파일 저장 실패", e);
             throw new RuntimeException("파일 저장 실패", e);
         }
 
-        session.setAttribute("title", dto.getTitle());
-        session.setAttribute("productPrice", dto.getProductPrice());
-        session.setAttribute("productDetail", dto.getProductDetail());
-        session.setAttribute("address", dto.getAddress());
-        session.setAttribute("imageUrl", fileUrl); // 업로드된 이미지 경로 저장
-        session.setAttribute("views", 1);
-        session.setAttribute("chats", 0);
+        String imageUrl = "/uploads/" + storedFileName;
+
+        Write write = Write.builder()
+                .productNm(dto.getTitle())
+                .productPrice(dto.getProductPrice())
+                .productDetail(dto.getProductDetail())
+                .address(dto.getAddress())
+                .productImg("/uploads/" + storedFileName)
+                .productCreatedAt(LocalDateTime.now())
+                .userId2(1L)
+                .categoryId(1L)
+                .build();
+
+
+        Write saved = writeRepository.save(write);
+        Long savedId = saved.getProductId(); // ← 여기 추가
+
+        session.setAttribute("postId", savedId);
+
+        System.out.println("저장된 product_id: " + savedId);
+
+        return savedId;
     }
 
     public TradeDto getPostFromSession(HttpSession session) {

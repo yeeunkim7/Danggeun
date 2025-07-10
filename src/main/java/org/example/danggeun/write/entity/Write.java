@@ -7,14 +7,20 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
-@Entity
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
+@Entity
 @Table(name = "product")
 public class Write {
 
@@ -49,25 +55,19 @@ public class Write {
     @Column(name = "address", length = 200)
     private String address; // 주소 설명
 
-    @Lob
     @Column(name = "product_img")
-    String productImg; // 상품 이미지
+    private String productImg; // 이미지 경로 (URL 또는 static 경로)
 
-    protected Write() {
-    }
+    @Builder.Default
+    @Column(name = "views", nullable = false)
+    private Long views = 0L;
 
-    public Write(Long productId, Long categoryId, Long userId2, String productNm,
-                 Long productPrice, String productDetail, String productState,
-                 LocalDateTime productCreatedAt, String address, String productImg) {
-        this.productId = productId;
-        this.categoryId = categoryId;
-        this.userId2 = userId2;
-        this.productNm = productNm;
-        this.productPrice = productPrice;
-        this.productDetail = productDetail;
-        this.productState = productState;
-        this.productCreatedAt = productCreatedAt;
-        this.address = address;
-        this.productImg = productImg;
+    @Builder.Default
+    @Column(name = "chats", nullable = false)
+    private Long chats = 0L;
+
+    @Column(name = "imageUrl")
+    public String getImageUrl() {
+        return this.productImg;
     }
 }
