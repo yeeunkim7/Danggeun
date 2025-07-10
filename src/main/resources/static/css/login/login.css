@@ -1,7 +1,17 @@
-/*기본 body 스타일 */
+.main-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 50px;
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+    z-index: 999;
+}
+
+/* 헤더가 차지하는 공간만큼 본문 아래로 밀기 */
 body {
     margin: 0;
-    padding: 0;
+    padding-top: 50px; /* 헤더 높이만큼 */
     background-color: #f2f3f6;
     font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
 }
@@ -138,9 +148,11 @@ text-decoration: underline;
     text-decoration: none;
     font-weight: bold;
 }
+
 .register-link:hover {
 text-decoration: underline;
 }
+
 .error-message {
     color: red;
     text-align: center;

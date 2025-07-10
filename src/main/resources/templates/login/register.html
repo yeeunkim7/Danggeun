@@ -1,11 +1,16 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
     <title>회원가입</title>
     <link rel="stylesheet" th:href="@{/css/login/login.css}">
+    <link rel="stylesheet" th:href="@{/css/header/header.css}">
+
 </head>
 <body>
+<!-- 헤더 고정 삽입 -->
+<div th:replace="fragments/header :: headerFragment"></div>
+
 <div class="register-container">
     <form th:action="@{/register}" method="post" class="register-form">
         <div class="form-group">

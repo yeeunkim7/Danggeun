@@ -1,13 +1,16 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
     <title>로그인</title>
 
     <!-- 로그인 전용 CSS -->
     <link rel="stylesheet" th:href="@{/css/login/login.css}">
+    <link rel="stylesheet" th:href="@{/css/header/header.css}">
 </head>
 <body>
+<!-- 헤더 고정 삽입 -->
+<div th:replace="fragments/header :: headerFragment"></div>
 
 
 <form th:action="@{/login}" method="post" class="login-form">

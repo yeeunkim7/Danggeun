@@ -10,7 +10,7 @@
     width: 100%;
     background-color: #ffffff;
     border-bottom: 1px solid #e9ecef;
-    padding: 12px 0;
+    padding: 10px 0;
     z-index: 1000;
 }
 
@@ -65,7 +65,26 @@
     background-color: #e9ecef;
 }
 
-.header-buttons button {
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 0 15px;
+    font-size: 14px;
+    font-weight: 700;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: white;
+    color: #495057;
+    cursor: pointer;
+    line-height: 1;
+}
+
+/*로그인 페이지 상 헤더 위치 구현 위해 잠시 주석 처리
+/*.header-buttons button {
     background: none;
     border: 1px solid #dee2e6;
     padding: 7px 15px;
@@ -76,9 +95,56 @@
     font-size: 14px;
     color: #495057;
     white-space: nowrap;
+}*/
+
+.header-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 버튼 간격 */
 }
 
 .header-buttons .btn-chat {
     border-color: #ff8a3d;
     color: #ff8a3d;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 0 15px;
+    font-size: 14px;
+    font-weight: 700;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: white;
+    color: #495057;
+    cursor: pointer;
+    line-height: 1;
+    box-sizing: border-box;
+}
+
+.btn-login {
+    background-color: #ff8a3d;
+    color: white;
+    border: none;
+}
+
+.btn-login:hover {
+    background-color: #fff5ec;
+    color: #ff8a3d;
+}
+
+.btn-login {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center;
+    height: 36px;
+    padding: 0 15px;
+    line-height: 1;
+    box-sizing: border-box;
+    vertical-align: middle;
 }
