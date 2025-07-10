@@ -25,7 +25,7 @@
 
   <div class="body_content_2">
     <div class="body_wrap">
-      <img src="https://raw.githubusercontent.com/Jaekyung89/Danggeun/refs/heads/MainPage/src/main/resources/static/asset/main1.png" alt="메인 이미지1" width="533" height="685">
+      <img src="https://raw.githubusercontent.com/Jaekyung89/Danggeun/refs/heads/MainPage/src/main/resources/static/asset/main1.png" alt="메인 이미지1" width="533" height="685" style="align-items: center">
     </div>
     <div class="body_wrap">
       <h2 class="medium">우리 동네 <br>중고 직거래 마켓</h2>
@@ -33,30 +33,44 @@
       <button class="gray_button">인기매물 보기</button>
     </div>
   </div>
-  <div class="body_content_3">
+
+  <section class="body_content_3">
     <div class="body_wrap">
       <h2 class="medium">이웃과 함께하는 <br>동네생활</h2>
       <p class="small">우리 동네의 다양한 이야기를 이웃과 함께 나누어요</p>
+      <br>
+      <br>
       <div class="row">
-        <img class="naver" src="https://raw.githubusercontent.com/Jaekyung89/Danggeun/refs/heads/MainPage/src/main/resources/static/asset/main2_1.png" alt="우리동네질문" width="56" height="56">
-        <img class="naver" src="https://raw.githubusercontent.com/Jaekyung89/Danggeun/refs/heads/MainPage/src/main/resources/static/asset/main2_2.png" alt="동네분실센터" width="56" height="56">
-        <img class="naver" src="https://raw.githubusercontent.com/Jaekyung89/Danggeun/refs/heads/MainPage/src/main/resources/static/asset/main2_3.png" alt="동네모임" width="56" height="56">
-      </div>
-      <div class="row">
-        <p class="naver_medium" style="margin-right: 50px; margin-left: 20px">우리동네질문</p>
-        <p class="naver_medium" style="margin-right: 60px;">동네분실센터</p>
-        <p class="naver_medium" style="margin-right: 25px;">동네모임</p>
-      </div>
-      <div class="row">
-        <p class="naver_small">궁금한 게 있을 땐 <br>이웃에게 물어보세요</p>
-        <p class="naver_small">무언가를 잃어버렸을 때,함께 찾을 수 있어요.</p>
-        <p class="naver_small">관심사가 비슷한 이웃과 온오프라인으로 만나요.</p>
+        <div class="card">
+          <img class="naver" src="https://raw.githubusercontent.com/Jaekyung89/Danggeun/refs/heads/MainPage/src/main/resources/static/asset/main2_1.png" alt="우리동네질문" style="width:56 height:56">
+          <div class="text">
+          <p class="naver_small"><br><strong>우리동네질문</strong><br>
+            궁금한 게 있을 땐 이웃에게 물어보세요.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <img class="naver" src="https://raw.githubusercontent.com/Jaekyung89/Danggeun/refs/heads/MainPage/src/main/resources/static/asset/main2_2.png" alt="동네분실센터" style="width:56 height:56">
+          <div class="text">
+            <p class="naver_small"><br><strong>동네분실센터</strong><br>
+              무언가를 잃어버렸을 때,함께 찾을수있어요.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <img class="naver" src="https://raw.githubusercontent.com/Jaekyung89/Danggeun/refs/heads/MainPage/src/main/resources/static/asset/main2_3.png" alt="동네모임" style="width:56 height:56">
+          <div class="text">
+          <p class="naver_small"><br><strong>동네모임</strong><br>
+            관심사가 비슷한 이웃과 온오프라인으로 만나요.</p>
+          </div>
+        </div>
       </div>
     </div>
     <div class="body_wrap">
       <img src="https://raw.githubusercontent.com/Jaekyung89/Danggeun/refs/heads/MainPage/src/main/resources/static/asset/main2.png" alt="메인 이미지2" width="557" height="756">
     </div>
-  </div>
+  </section>
+
   <div class="body_content_4">
     <div class="body_wrap">
       <img class="image_2" src="https://raw.githubusercontent.com/Jaekyung89/Danggeun/refs/heads/MainPage/src/main/resources/static/asset/main3.png" alt="메인 이미지3" width="526" height="736">
@@ -67,39 +81,39 @@
       <button class="gray_button" style="margin-top: 30px;">동네가게 찾기</button>
     </div>
   </div>
-</div>
 <!--타임리프 연동으로 DB 관리 예정-->
   <div>
     <h1 class="top_title">중고거래 인기매물</h1>
     <div class="item-grid">
-      <div th:each="item : ${items}">
-        <div th:replace="~{fragments/tradeItem :: tradeItemFragment(${item})}"> </div>
+      <div th:each="item : ${items}" >
+           <div th:if="${item != null}" th:replace="~{fragments/tradeItem :: tradeItemFragment(item=${item})}"> </div>
+        <br>
+        <br>
       </div>
     </div>
   </div>
     <div class="more_item_wrap">
-      <button class="more_item_btn">인기매물 더보기</button>
+      <br>
+      <br>
+      <a th:href="@{/trade}" class="more_item_btn"><b>인기매물 더보기</b></a>
     </div>
-  </div>
-</div>
 <div class="content_5">
   <div class="keyword_wrap">
     <button class="keyword_title">인기검색어</button>
   </div>
   <div class="keyword_wrap">
     <div class="keyword_wrap_row">
-      <button class="keyword">텀블러</button>
-      <button class="keyword">노트북</button>
-      <button class="keyword">책상</button>
-      <button class="keyword">맥북</button>
-      <button class="keyword">카메라</button>
-      <button class="keyword">스타벅스</button>
-      <button class="keyword">에어컨</button>
-      <button class="keyword">모니터</button>
-      <button class="keyword">선풍기</button>
-      <button class="keyword">책</button>
+      <button class="keyword_btn" onclick="searchKeyword('텀블러')">텀블러</button>
+      <button class="keyword_btn" onclick="searchKeyword('노트북')">노트북</button>
+      <button class="keyword_btn" onclick="searchKeyword('책상')">책상</button>
+      <button class="keyword_btn" onclick="searchKeyword('맥북')">맥북</button>
+      <button class="keyword_btn" onclick="searchKeyword('카메라')">카메라</button>
+      <button class="keyword_btn" onclick="searchKeyword('스타벅스')">스타벅스</button>
+      <br>
+      <br>
     </div>
   </div>
+</div>
   <div class="bottom-nav">
     <div class="bottom-nav-left">
       <a th:href="@{/trade}" class="active"><b>중고거래</b></a>
@@ -123,6 +137,10 @@
       // 입력된 값 출력
       alert(`검색어: ${search_input}`);
     }
+
+    function searchKeyword(keyword) {
+      // 검색 페이지로 이동 (GET 파라미터로 키워드 전달)
+      window.location.href = '/search?query=' + encodeURIComponent(keyword);
+    }
   </script>
-</div>
 </body>

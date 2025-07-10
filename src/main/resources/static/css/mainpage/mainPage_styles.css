@@ -1,4 +1,3 @@
-html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
 del, dfn, em, img, ins, kbd, q, s, samp,
@@ -27,17 +26,16 @@ table { border-collapse: collapse; border-spacing: 0; }
     display: flex;
 }
 .body_content_1, .body_content_2, .body_content_3, .body_content_4 { flex-direction: row; }
-.body_content_5 { flex-direction: column; background: #F8F9FA; }
-.body_content_1 { background: #fffae0; }
+.body_content_5 { flex-direction: column; background: #F8F9FA;}
+.body_content_1 { background: #fffae0; width: 100vw !important;  box-sizing: border-box; padding: 50px 0 0 500px;}
 .body_content_2, .body_content_4 { background: #fff; }
-.body_content_3 { background: #E6F3E6; }
-.body_wrap { padding: 20px; width: 100%; }
-.row { display: flex; flex-direction: row; justify-content: space-evenly; }
+.body_content_3 { background: #E6F3E6; width: 100vw !important; box-sizing: border-box; padding: 50px 0 0 500px;}
+.body_wrap {   width: 100%;    max-width: 524px; padding: 20px;    box-sizing: border-box; }
+.body_wrap img {    display: block;    margin: 0 auto;    max-width: 100%;    height: auto;}
+.row { display: flex; justify-content: center; align-items: center;  gap: 10px; }
+.card { display: flex; flex-direction: column; align-items: center; width: 150px;}
+.text { text-align: left;}
 
-.body_content_1, .body_content_2, .body_content_3, .body_content_4, .body_content_5 {
-    width: 1024px; height: 700px; margin: auto;
-    display: flex;
-}
 .body_content_1, .body_content_2, .body_content_3, .body_content_4 { flex-direction: row; }
 .body_content_5 { flex-direction: column; background: #F8F9FA; }
 .body_content_1 { background: #fffae0; }
@@ -71,7 +69,8 @@ table { border-collapse: collapse; border-spacing: 0; }
 .small { font-size: 1rem; font-weight: 400; line-height: 1.5; letter-spacing: -0.3px; }
 .top_title { font-size: 2.5rem; font-weight: 600; margin: 100px 0; text-align: center; }
 .naver_medium { font-weight: 700; font-size: smaller; }
-.naver_small { margin-left: 20px; font-size: smaller; width: 120px; }
+.naver_small { margin-left: 20px; font-size: smaller; width: 150px; }
+.naver_small strong { font-weight: 700;}
 
 /*하단 박스(중고거래,채팅하기, 다운로드)*/
 .bottom-nav {
@@ -99,4 +98,5 @@ table { border-collapse: collapse; border-spacing: 0; }
 .more_item_btn { margin-bottom: 150px; }
 .keyword_title { margin: 100px 0 50px 0; }
 .keyword_wrap_row { display: flex; flex-direction: row; justify-content: space-around; }
-.keyword { border: none; background: #fff; font-size: medium; margin-bottom: 50px; margin-left: 20px; }
+.keyword_btn { background: transparent; border: none; font-size: medium; margin-bottom: 50px; margin-left: 20px; gap:10px }
+.keyword_btn:hover { background-color: #ff6f0f;}

@@ -1,5 +1,6 @@
 package org.example.danggeun.mainpage.controller;
 
+import io.micrometer.common.util.internal.logging.InternalLogger;
 import org.example.danggeun.item.dto.ItemDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -95,7 +96,10 @@ public class mainPageController {
         item8.setImageUrl("/asset/charater.png");
         items.add(item8);
 
+        items.forEach(i -> System.out.println(i.getTitle()) );
+
         model.addAttribute("items", items);
         return "mainPage/mainPage";
     }
+
 }
