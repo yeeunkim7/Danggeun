@@ -17,21 +17,24 @@ body {
 }
 
 .login-wrapper {
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - 80px);;
+    flex-direction: column;
+    height: calc(100vh - 80px);
 }
 
-/* 로그인 전체 폼 스타일 */
-.login-form {
+/* 로그인 폼, 레지스터 폼 스타일 */
+.login-form,
+.register-form {
     width: 400px;
     background-color: #f2f3f6;
     padding: 40px 30px;
     border-radius: 12px;
     box-sizing: border-box;
-    margin: 0 auto;
 }
+
 
 /* 각 입력 필드 그룹 */
 .form-group {
@@ -133,14 +136,6 @@ body {
 
 .login-link:hover {
 text-decoration: underline;
-}
-
-.register-form {
-    width: 400px;
-    background-color: #f2f3f6;
-    padding: 40px 30px;
-    border-radius: 12px;
-    box-sizing: border-box;
 }
 
 .register-link {

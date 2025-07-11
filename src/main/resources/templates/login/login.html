@@ -12,7 +12,7 @@
 <!-- 헤더 고정 삽입 -->
 <div th:replace="fragments/header :: headerFragment"></div>
 
-
+<div class="login-wrapper">
 <form th:action="@{/login}" method="post" class="login-form">
     <!-- 로그인 오류 메시지 표시 -->
     <div class="error-message" th:if="${error}">
@@ -37,9 +37,10 @@
     </a>
 </form>
 
-<div class="login-footer" style="text-align: center;">
+<div class="login-footer">
     당근마켓 회원이 아니신가요? <br>
     <a th:href="@{/register}" class="register-link">회원가입</a>
+</div>
 </div>
 
 </body>
