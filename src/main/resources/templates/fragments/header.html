@@ -23,7 +23,7 @@
 
                 <a th:href="@{/login}" class="btn btn-login" sec:authorize="isAnonymous()">로그인</a>
 
-                <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="margin: 0; dispaly: flex;">
+                <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="margin: 0; display: flex; align-items: center;">
                     <button type="submit" class="btn btn-logout">로그아웃</button>
                 </form>
 
