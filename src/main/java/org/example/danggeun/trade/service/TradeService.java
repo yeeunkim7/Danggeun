@@ -56,14 +56,10 @@ public class TradeService {
                 .userId2(1L)
                 .categoryId(1L)
                 .build();
-
-
         Write saved = writeRepository.save(write);
         Long savedId = saved.getProductId();
 
         session.setAttribute("postId", savedId);
-
-        System.out.println("저장된 product_id: " + savedId);
 
         return savedId;
     }
@@ -85,7 +81,6 @@ public class TradeService {
         if (views != null) {
             session.setAttribute("views", views + 1);
         }
-
         return dto;
     }
 

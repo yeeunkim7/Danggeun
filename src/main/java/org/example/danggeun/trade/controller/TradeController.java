@@ -70,7 +70,7 @@ public class TradeController {
 
         if (postId == null || userId == null) return "redirect:/trade";
 
-        // ✅ 채팅 카운트 증가: 세션 키 기반 중복 방지
+        //채팅 카운트 증가: 세션 키 기반 중복 방지
         String chatKey = "chatted_" + postId + "_" + userId;
         if (session.getAttribute(chatKey) == null) {
             Write post = writeRepository.findById(postId)
@@ -110,5 +110,4 @@ public class TradeController {
         tradeService.updatePost(id, tradeDto, file);
         return "redirect:/trade/post/" + id;
     }
-
 }
