@@ -90,13 +90,12 @@ table { border-collapse: collapse; border-spacing: 0; }
 
 .image_1 { margin-top: 120px; }
 .image_2 { margin-right: 60px; }
+
+/*하단 버튼(더보기, 인기매물 키워드 이동)*/
 .more_item_wrap, .keyword_wrap { display: flex; justify-content: center; }
-.more_item_btn, .keyword_title {
-    border: none; background: #fff; font-weight: bold; text-decoration: underline; font-size: medium;
-}
-/*더보기 버튼*/
+.more_item_btn, .keyword_title {  border: none; background: #fff; font-weight: bold; text-decoration: underline; font-size: medium;}
 .more_item_btn { margin-bottom: 150px; }
 .keyword_title { margin: 100px 0 50px 0; }
 .keyword_wrap_row { display: flex; flex-direction: row; justify-content: space-around; }
 .keyword_btn { background: transparent; border: none; font-size: medium; margin-bottom: 50px; margin-left: 20px; gap:10px }
-.keyword_btn:hover { background-color: #ff6f0f;}
+.keyword_btn:hover { background-color: #f5f6f8;}

@@ -30,7 +30,7 @@
     <div class="body_wrap">
       <h2 class="medium">우리 동네 <br>중고 직거래 마켓</h2>
       <p class="small">동네 주민들과 가깝고 따뜻한 거래를 지금 경험해 보세요.</p>
-      <button class="gray_button">인기매물 보기</button>
+      <a th:href="@{/trade}" class="gray_button"><b>인기매물보기</b></a>
     </div>
   </div>
 
@@ -42,7 +42,7 @@
       <br>
       <div class="row">
         <div class="card">
-          <img class="naver" src="https://raw.githubusercontent.com/Jaekyung89/Danggeun/refs/heads/MainPage/src/main/resources/static/asset/main2_1.png" alt="우리동네질문" style="width:56 height:56">
+          <img class="naver" src="https://raw.githubusercontent.com/Jaekyung89/Danggeun/refs/heads/MainPage/src/main/resources/static/asset/main2_1.png" alt="우리동네질문" style="width:56px; height:56px">
           <div class="text">
           <p class="naver_small"><br><strong>우리동네질문</strong><br>
             궁금한 게 있을 땐 이웃에게 물어보세요.</p>
@@ -50,7 +50,7 @@
         </div>
 
         <div class="card">
-          <img class="naver" src="https://raw.githubusercontent.com/Jaekyung89/Danggeun/refs/heads/MainPage/src/main/resources/static/asset/main2_2.png" alt="동네분실센터" style="width:56 height:56">
+          <img class="naver" src="https://raw.githubusercontent.com/Jaekyung89/Danggeun/refs/heads/MainPage/src/main/resources/static/asset/main2_2.png" alt="동네분실센터" style="width:56px; height:56px">
           <div class="text">
             <p class="naver_small"><br><strong>동네분실센터</strong><br>
               무언가를 잃어버렸을 때,함께 찾을수있어요.</p>
@@ -58,7 +58,7 @@
         </div>
 
         <div class="card">
-          <img class="naver" src="https://raw.githubusercontent.com/Jaekyung89/Danggeun/refs/heads/MainPage/src/main/resources/static/asset/main2_3.png" alt="동네모임" style="width:56 height:56">
+          <img class="naver" src="https://raw.githubusercontent.com/Jaekyung89/Danggeun/refs/heads/MainPage/src/main/resources/static/asset/main2_3.png" alt="동네모임" style="width:56px; height:56px">
           <div class="text">
           <p class="naver_small"><br><strong>동네모임</strong><br>
             관심사가 비슷한 이웃과 온오프라인으로 만나요.</p>
@@ -78,10 +78,10 @@
     <div class="body_wrap">
       <h2 class="medium">내 근처에서 찾는<br>동네가게</h2>
       <p class="small">우리 동네 가게를 찾고 있나요?<br>동네 주민이 남긴 진짜 후기를 함께 확인해보세요!</p>
+<!--      지도 구현되면 지도 페이지로 넘어가게 a th:href= 코드로 변경예정-->
       <button class="gray_button" style="margin-top: 30px;">동네가게 찾기</button>
     </div>
   </div>
-<!--타임리프 연동으로 DB 관리 예정-->
   <div>
     <h1 class="top_title">중고거래 인기매물</h1>
     <div class="item-grid">

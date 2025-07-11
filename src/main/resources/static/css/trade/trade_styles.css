@@ -83,6 +83,11 @@ a {
 }
 
 .item-card {
+    width: 210px;
+    height: 210px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     cursor: pointer;
 }
 
