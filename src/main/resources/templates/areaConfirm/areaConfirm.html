@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>동네 인증</title>
+  <style>
+    body {
+        background-color: #fff8dc;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 50px;
+    }
+    .container {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        width: 600px;
+        margin: 0 auto;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input[type="text"] {
+        width: 80%;
+        padding: 10px;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    button {
+        padding: 10px 20px;
+        background-color: #ff7e00;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    #map {
+        width: 100%;
+        height: 300px;
+        margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h3>어디에 살고 계신가요?</h3>
+  <input type="text" id="address" placeholder="예) 서울 강서구 화곡동" readonly/>
+  <button onclick="setLocation()">내 동네 설정</button>
+
+  <h4>현재 위치로 동네 인증하기</h4>
+  <div id="map"></div>
+
+  <p id="locationText"></p>
+  <button onclick="confirmArea()">동네인증 완료하기</button>
+</div>
+
+<!-- 구글맵 API 추가 -->
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_API_KEY"></script>
+//위 코드에서 YOUR_GOOGLE_API_KEY 부분을 실제 API 키로 교체해야 지도가 표시.
+<script src="/js/areaConfirm.js"></script>
+</body>
+</html>
