@@ -127,12 +127,21 @@
 
   <div class="button-group">
     <div></div>
-    <div class="action-links">
-      <a th:href="@{'/trade/delete/' + ${dto.productId}}">삭제하기</a> |
-      <a th:href="@{'/trade/edit/' + ${dto.productId}}">수정하기</a>
+    <div class="action-links" th:if="${session.userId != null and session.userId == dto.userId2}">
+      <a href="javascript:void(0);" onclick="confirmDelete([[${dto.productId}]])">삭제하기</a> |
+      <form th:action="@{'/trade/update/' + ${dto.productId}}" method="get">
+        <a th:href="@{'/trade/edit/' + ${dto.productId}}">수정하기</a>
+      </form>
     </div>
   </div>
 </div>
 <script src="/js/tradePost.js"></script>
+<script>
+  function confirmDelete(postId) {
+    if (confirm("정말 삭제하시겠습니까?")) {
+      window.location.href = '/trade/delete/' + postId;
+    }
+  }
+</script>
 </body>
 </html>

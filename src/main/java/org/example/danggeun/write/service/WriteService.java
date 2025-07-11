@@ -21,8 +21,8 @@ public class WriteService {
         String originalFilename = dto.getProductImage().getOriginalFilename();
         String storedFileName = UUID.randomUUID() + "_" + originalFilename;
 
-        // ✅ 실제 이미지 저장할 외부 절대 경로
-        String uploadDir = "/Users/user/uploads"; // ⚠️ 사용자 경로에 맞게 수정 필요
+        //  실제 이미지 저장할 외부 절대 경로
+        String uploadDir = "/Users/user/uploads";
         String fullPath = uploadDir + "/" + storedFileName;
 
         File dest = new File(fullPath);

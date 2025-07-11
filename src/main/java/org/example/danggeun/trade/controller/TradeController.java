@@ -32,11 +32,23 @@ public class TradeController {
     }
 
     @GetMapping("/trade/post/{id}")
-    public String showPostDetail(@PathVariable Long id, Model model) {
+    public String showPostDetail(@PathVariable Long id, Model model, HttpSession session) {
         Write post = writeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("게시글 없음"));
+
+        Long userId = (Long) session.getAttribute("userId");
+
+        //  조회수 증가: 세션 키 기반으로 중복 방지
+        String viewKey = "viewed_" + id + "_" + userId;
+        if (session.getAttribute(viewKey) == null) {
+            post.setViews(post.getViews() + 1);
+            writeRepository.save(post);
+            session.setAttribute(viewKey, true); // 이미 봤다고 기록
+        }
+
         model.addAttribute("dto", post);
-        return "trade/tradePost";  // templates/trade/tradePost.html
+        model.addAttribute("sessionUserId", userId);
+        return "trade/tradePost";
     }
 
     // 비동기 fetch POST용 API 메서드 (JSON 요청 처리)
@@ -54,12 +66,49 @@ public class TradeController {
     @PostMapping("/trade/chat")
     public String chat(HttpSession session) {
         Long postId = (Long) session.getAttribute("postId");
-        tradeService.increaseChatInSession(session);
+        Long userId = (Long) session.getAttribute("userId");
 
-        if (postId == null) {
-            return "redirect:/trade";  // ID 없으면 리스트 페이지 등으로 이동
+        if (postId == null || userId == null) return "redirect:/trade";
+
+        // ✅ 채팅 카운트 증가: 세션 키 기반 중복 방지
+        String chatKey = "chatted_" + postId + "_" + userId;
+        if (session.getAttribute(chatKey) == null) {
+            Write post = writeRepository.findById(postId)
+                    .orElseThrow(() -> new RuntimeException("게시글 없음"));
+            post.setChats(post.getChats() + 1);
+            writeRepository.save(post);
+            session.setAttribute(chatKey, true); // 이미 채팅했다는 표시
         }
 
-        return "redirect:/trade/post/" + postId;  // ID 포함 이동
+        return "redirect:/trade/post/" + postId;
     }
+
+    // 게시글 삭제
+    @PostMapping("/trade/delete/{id}")
+    public String deletePost(@PathVariable Long id, HttpSession session) {
+        Write post = writeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 게시글을 찾을 수 없습니다."));
+
+        writeRepository.deleteById(id);
+        return "redirect:/trade";
+    }
+
+    @GetMapping("/trade/edit/{id}")
+    public String showEditPage(@PathVariable Long id, Model model) {
+        Write post = writeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("게시글 없음"));
+        model.addAttribute("dto", post);
+        return "trade/updateTradePost";
+    }
+
+    @PostMapping("/trade/edit/{id}")
+    public String updatePost(
+            @PathVariable Long id,
+            @ModelAttribute TradeDto tradeDto,
+            @RequestParam(value = "productImage", required = false) MultipartFile file
+    ) {
+        tradeService.updatePost(id, tradeDto, file);
+        return "redirect:/trade/post/" + id;
+    }
+
 }

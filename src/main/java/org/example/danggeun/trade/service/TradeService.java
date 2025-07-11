@@ -59,7 +59,7 @@ public class TradeService {
 
 
         Write saved = writeRepository.save(write);
-        Long savedId = saved.getProductId(); // ← 여기 추가
+        Long savedId = saved.getProductId();
 
         session.setAttribute("postId", savedId);
 
@@ -87,6 +87,31 @@ public class TradeService {
         }
 
         return dto;
+    }
+
+    public void updatePost(Long id, TradeDto dto, MultipartFile file) {
+        Write post = writeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("수정할 게시글이 없습니다."));
+
+        post.setProductNm(dto.getTitle());
+        post.setProductPrice(dto.getProductPrice());
+        post.setProductDetail(dto.getProductDetail());
+        post.setAddress(dto.getAddress());
+
+        if (file != null && !file.isEmpty()) {
+            String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
+            String uploadPath = new File("target/classes/static/uploads").getAbsolutePath();
+            File saveFile = new File(uploadPath, filename);
+            try {
+                saveFile.getParentFile().mkdirs();
+                file.transferTo(saveFile);
+                post.setProductImg("/uploads/" + filename);
+            } catch (IOException e) {
+                throw new RuntimeException("이미지 업로드 실패", e);
+            }
+        }
+
+        writeRepository.save(post);
     }
 
     public void increaseChatInSession(HttpSession session) {
