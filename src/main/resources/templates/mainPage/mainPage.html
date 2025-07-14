@@ -3,38 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="stylesheet" href="/css/mainpage/mainPage_styles.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+
+  <link rel="stylesheet" href="/css/mainpage/mainPage_styles.css">
+  <link rel="stylesheet" href="/css/header/header.css">
 </head>
 <body>
-<div id="header">
-  <div id="header_wrap">
-    <div class="header_content">
-      <img src="https://github.com/Jaekyung89/Danggeun/blob/MainPage/src/main/resources/static/asset/logo.png?raw=true" alt="로고 이미지" width="71" height="34"></div>
-    <div class="header_content">
-      <button class="header_menu_selected">중고거래</button>
-    </div>
-    <div class="header_content">
-      <button class="header_menu">동네가게</button>
-    </div>
-    <div class="header_content">
-      <button class="header_menu">알바</button>
-    </div>
-    <div class="header_content">
-      <button class="header_menu">부동산 직거래</button>
-    </div>
-    <div class="header_content">
-      <button class="header_menu">중고차 직거래</button>
-    </div>
-    <div class="header_content">
-      <form onsubmit="submitForm(event)">
-        <input class="search_input" type="text" placeholder="물품이나 동네를 검색해보세요" aria-label="검색어 입력">
-        <button type="submit" class="chat_button">채팅하기</button>
-      </form>
-    </div>
-  </div>
-</div>
+
+<div th:replace="~{fragments/header :: headerFragment}"></div>
+
 <div id="body">
   <div class="body_content_1">
     <div class="body_wrap">

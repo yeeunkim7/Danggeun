@@ -3,3 +3,16 @@ server:
 
 file:
   upload-dir: /Users/user/Downloads/Danggeun/uploads
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/danggeun
+    username: postgres
+    password: 1234
+
