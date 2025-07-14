@@ -28,4 +28,16 @@ public class AreaService {
         areaRepository.save(area);
         return "인증 완료";
     }
+
+    public AreaDto findAreaByUserId(Long userId) {
+        Area area = areaRepository.findTopByUserIdOrderByConfirmedAtDesc(userId)
+                .orElseThrow(() -> new IllegalArgumentException("인증된 위치가 없습니다."));
+
+        return AreaDto.builder()
+                .userId(area.getUserId())
+                .address(area.getAddress())
+                .latitude(area.getLatitude())
+                .longitude(area.getLongitude())
+                .build();
+    }
 }

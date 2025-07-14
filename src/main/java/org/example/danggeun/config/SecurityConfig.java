@@ -24,6 +24,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                .userDetailsService(customUserDetailsService)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/", "/login", "/register", "/header", "/favicon.ico", "/css/**", "/js/**", "/images/**", "/asset/**").permitAll()
                         .anyRequest().authenticated()
@@ -42,6 +43,7 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
+
                 );
 
         return http.build();

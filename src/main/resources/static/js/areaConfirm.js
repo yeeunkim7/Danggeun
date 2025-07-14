@@ -1,25 +1,30 @@
 let map, marker, circle, geocoder;
 let autocomplete;
 
+window.addEventListener('DOMContentLoaded', () => {
+    // 항상 브라우저의 현재 GPS 위치를 사용해 지도 초기화
+    setLocation();
+});
+
 function showPosition(position) {
     const lat = position.coords.latitude;
     const lng = position.coords.longitude;
+    initMap(lat, lng);
+}
 
+function initMap(lat, lng, address = null) {
     const mapContainer = document.getElementById('map');
 
-    // 지도 초기화
     map = new google.maps.Map(mapContainer, {
         center: { lat: lat, lng: lng },
         zoom: 16
     });
 
-    // 마커 생성
     marker = new google.maps.Marker({
         position: { lat: lat, lng: lng },
         map: map
     });
 
-    // 원 생성
     circle = new google.maps.Circle({
         map: map,
         center: { lat: lat, lng: lng },
@@ -30,33 +35,16 @@ function showPosition(position) {
         fillColor: '#cceeff',
         fillOpacity: 0.6
     });
-    circle.setMap(map);
 
-    // 지오코더 준비
     geocoder = new google.maps.Geocoder();
 
-    const presetAddress = document.getElementById("address").value;
-    if (presetAddress) {
-        geocoder.geocode({ address: presetAddress }, function (results, status) {
-            if (status === "OK" && results[0]) {
-                const location = results[0].geometry.location;
-                map.setCenter(location);
-                marker.setPosition(location);
-                circle.setCenter(location);
-
-                document.getElementById("locationText").innerText = "초기 위치는 " + results[0].formatted_address + "입니다.";
-
-                window.currentAddress = results[0].formatted_address;
-                window.currentLat = location.lat();
-                window.currentLng = location.lng();
-            }
-        });
+    if (address) {
+        document.getElementById("address").value = address;
+        document.getElementById("locationText").innerText = "현재 위치 주소: " + address;
     } else {
-        // 초기 위치 주소 변환
         geocodeLatLng(lat, lng);
     }
 
-    // 지도 클릭 이벤트
     map.addListener('click', function (event) {
         const clickLat = event.latLng.lat();
         const clickLng = event.latLng.lng();
@@ -89,7 +77,7 @@ function initAutocomplete() {
         marker.setPosition(place.geometry.location);
         circle.setCenter(place.geometry.location);
 
-        document.getElementById("locationText").innerText = "선택한 위치는 " + place.formatted_address + "입니다.";
+        document.getElementById("locationText").innerText = "현재 위치 주소: " + place.formatted_address;
 
         window.currentAddress = place.formatted_address;
         window.currentLat = lat;
@@ -105,9 +93,8 @@ function geocodeLatLng(lat, lng) {
             if (results[0]) {
                 const address = results[0].formatted_address;
                 document.getElementById("address").value = address;
-                document.getElementById("locationText").innerText = "선택한 위치는 " + address + "입니다.";
+                document.getElementById("locationText").innerText = "현재 위치 주소: " + address;
 
-                // 전역 변수로 저장
                 window.currentAddress = address;
                 window.currentLat = lat;
                 window.currentLng = lng;
@@ -119,6 +106,7 @@ function geocodeLatLng(lat, lng) {
         }
     });
 }
+
 function confirmArea() {
     const data = {
         userId: currentUserId,
@@ -144,7 +132,6 @@ function confirmArea() {
     });
 }
 
-// 위치 요청 함수
 function setLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition, () => {
@@ -173,7 +160,7 @@ function searchAddress() {
             marker.setPosition(location);
             circle.setCenter(location);
 
-            document.getElementById("locationText").innerText = "입력한 위치는 " + results[0].formatted_address + "입니다.";
+            document.getElementById("locationText").innerText = "현재 위치 주소: " + results[0].formatted_address;
 
             window.currentAddress = results[0].formatted_address;
             window.currentLat = lat;

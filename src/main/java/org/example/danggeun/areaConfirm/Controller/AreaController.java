@@ -16,4 +16,9 @@ public class AreaController {
     public String confirmArea(@RequestBody AreaDto dto) {
         return areaService.saveArea(dto);
     }
+
+    @GetMapping("/me")
+    public AreaDto getMyArea(@RequestParam("userId") Long userId) {
+        return areaService.findAreaByUserId(userId);
+    }
 }

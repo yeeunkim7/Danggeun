@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
   <title>동네 인증</title>
@@ -40,6 +40,11 @@
   </style>
 </head>
 <body>
+<!-- 로그인된 사용자 ID를 JavaScript로 전달 -->
+<script th:if="${user != null}">
+  const currentUserId = [[${user.id}]];
+</script>
+
 <div class="container">
   <h3>어디에 살고 계신가요?</h3>
   <input type="text" id="address" placeholder="예) 서울 강서구 화곡동" readonly/>
