@@ -26,8 +26,8 @@
         margin-bottom: 30px;
     }
     .image-section img {
-        width: 600px;
-        height: 400px;
+        width: 1000px;
+        height: 500px;
         object-fit: cover;
         border-radius: 8px;
         background-color: #ddd;
@@ -35,7 +35,9 @@
     .meta {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         margin-bottom: 10px;
+        padding: 0 10px;
     }
     .meta .user {
         font-weight: bold;
@@ -50,6 +52,7 @@
         padding: 10px 20px;
         border: none;
         border-radius: 6px;
+        width: 150px;
         cursor: pointer;
     }
     .post-header {
@@ -99,6 +102,9 @@
 </head>
 <body>
 <div class="container">
+  <div style="margin-top: -10px; margin-left: -10px; margin-bottom: 20px;">
+    <a href="/trade.html" style="font-size: 14px; color: #666; text-decoration: none; display: inline-block;">← 뒤로가기</a>
+  </div>
   <div class="image-section">
     <img th:src="@{${dto.productImg}}" th:alt="${dto.productNm}" />
   </div>
@@ -111,6 +117,7 @@
       <button class="chat-btn" type="submit">채팅하기</button>
     </form>
   </div>
+  <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
 
   <div class="post-header">
     <div class="left-title" th:text="${dto.productNm}"></div>
@@ -127,12 +134,10 @@
 
   <div class="button-group">
     <div></div>
-    <div class="action-links" th:if="${session.userId != null and session.userId == dto.userId2}">
-      <a href="javascript:void(0);" onclick="confirmDelete([[${dto.productId}]])">삭제하기</a> |
-      <form th:action="@{'/trade/update/' + ${dto.productId}}" method="get">
-        <a th:href="@{'/trade/edit/' + ${dto.productId}}">수정하기</a>
-      </form>
-    </div>
+  </div>
+  <div class="action-links" th:if="${session.userId != null and session.userId == dto.userId2}" style="text-align: right; margin-top: 20px;">
+    <a href="javascript:void(0);" onclick="confirmDelete([[${dto.productId}]])">삭제하기</a> |
+    <a th:href="@{'/trade/edit/' + ${dto.productId}}">수정하기</a>
   </div>
 </div>
 <script src="/js/tradePost.js"></script>
