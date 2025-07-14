@@ -33,6 +33,3 @@ build/
 .vscode/
 src/main/resources/application.properties
 src/main/resources/application.properties
-
-#  업로드된 이미지 포함
-!/src/main/resources/static/uploads/

@@ -2,7 +2,7 @@ package org.example.danggeun.write.controller;
 
 import jakarta.websocket.Session;
 import lombok.RequiredArgsConstructor;
-import org.example.danggeun.write.controller.Dto.WriteUserDto;
+import org.example.danggeun.write.Dto.WriteUserDto;
 import org.example.danggeun.write.service.WriteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -17,7 +17,7 @@ public class WriteController {
 
     @GetMapping("/write")
     public String writePage(Session session){
-        return "write";
+        return "write/write";
     }
 
     @ResponseStatus(HttpStatus.CREATED)

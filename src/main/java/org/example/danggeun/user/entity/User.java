@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "users")  // 예약어 회피용으로 테이블명 변경
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "users")
+
 public class User {
 
     @Id
@@ -16,7 +18,12 @@ public class User {
     private Long id;
 
     private String email;
-    private String name;
+    private String username;
+    private String password;
     private String provider;
     private String providerId;
+    private String role;
+
+    public void setName(String name) {
+    }
 }

@@ -10,7 +10,7 @@
     width: 100%;
     background-color: #ffffff;
     border-bottom: 1px solid #e9ecef;
-    padding: 12px 0;
+    padding: 10px 0;
     z-index: 1000;
 }
 
@@ -18,19 +18,21 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    max-width: 1200px;   /* 콘텐츠의 최대 너비 제한 */
-    margin: 0 auto;     /* 화면 중앙 정렬 */
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 0 15px;
 }
 
-.header-left, .header-right {
+.header-left,
+.header-right {
     display: flex;
     align-items: center;
+    gap: 15px;
+    min-width: 300px;
 }
 
 .logo img {
-    width: 70px; /* 로고 사이즈 조정 */
+    width: 70px;
     height: auto;
     vertical-align: middle;
 }
@@ -58,6 +60,7 @@
     background-color: #f1f3f5;
     border-radius: 6px;
     font-size: 14px;
+    align-self: center;
 }
 
 .search-bar:focus {
@@ -65,20 +68,67 @@
     background-color: #e9ecef;
 }
 
-.header-buttons button {
-    background: none;
-    border: 1px solid #dee2e6;
-    padding: 7px 15px;
-    margin-left: 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 700;
+/* ===== 버튼 공통 스타일 ===== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 0 15px;
     font-size: 14px;
-    color: #495057;
+    font-weight: 700;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    text-decoration: none;
     white-space: nowrap;
+    background-color: white;
+    color: #495057;
+    cursor: pointer;
+    line-height: 1;
+    box-sizing: border-box;
+    vertical-align: middle;
 }
 
+/* ===== 버튼 그룹 정렬 (핵심 수정 완료) ===== */
+.header-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+}
+
+.header-buttons a,
+.header-buttons form {
+    display: flex;
+    align-items: center;
+    margin: 0; /* form 줄바꿈 방지 */
+}
+
+/* ===== 버튼 종류별 스타일 ===== */
 .header-buttons .btn-chat {
     border-color: #ff8a3d;
     color: #ff8a3d;
+    background-color: white;
+}
+
+.btn-login {
+    background-color: #ff8a3d;
+    color: white;
+    border: 1px solid transparent;
+}
+
+.btn-login:hover {
+    background-color: #fff5ec;
+    color: #ff8a3d;
+}
+
+.btn-logout {
+    background-color: #f2f3f6;
+    color: #212529;
+    border: 1px solid #ddd;
+}
+
+.btn:hover {
+    opacity: 0.9;
+    transition: opacity 0.2s ease-in-out;
 }

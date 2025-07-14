@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>게시글 상세</title>
   <style>
-    /* 기존 스타일 유지 */
     body {
         background-color: #f5f6f8;
         font-family: Arial, sans-serif;
@@ -26,8 +25,8 @@
         margin-bottom: 30px;
     }
     .image-section img {
-        width: 1000px;
-        height: 500px;
+        width: 600px;
+        height: 400px;
         object-fit: cover;
         border-radius: 8px;
         background-color: #ddd;
@@ -35,9 +34,7 @@
     .meta {
         display: flex;
         justify-content: space-between;
-        align-items: center;
         margin-bottom: 10px;
-        padding: 0 10px;
     }
     .meta .user {
         font-weight: bold;
@@ -52,7 +49,6 @@
         padding: 10px 20px;
         border: none;
         border-radius: 6px;
-        width: 150px;
         cursor: pointer;
     }
     .post-header {
@@ -102,51 +98,38 @@
 </head>
 <body>
 <div class="container">
-  <div style="margin-top: -10px; margin-left: -10px; margin-bottom: 20px;">
-    <a href="/trade.html" style="font-size: 14px; color: #666; text-decoration: none; display: inline-block;">← 뒤로가기</a>
-  </div>
   <div class="image-section">
-    <img th:src="@{${dto.productImg}}" th:alt="${dto.productNm}" />
+    <img th:src="@{${dto.imageUrl}}" alt="업로드된 이미지" />
   </div>
 
   <div class="meta">
     <div>
-      <div class="user" th:text="${dto.userId2 != null ? '작성자 ID: ' + dto.userId2 : '아이디 정보 없음'}">아이디 정보 없음</div>
+      <div class="user">아이디</div>
+      <div class="location">부평 1동</div>
     </div>
     <form th:action="@{/trade/chat}" method="post">
       <button class="chat-btn" type="submit">채팅하기</button>
     </form>
   </div>
-  <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
 
   <div class="post-header">
-    <div class="left-title" th:text="${dto.productNm}"></div>
+    <div class="left-title" th:text="${dto.title}">글 제목입니다.</div>
     <div class="right-info">
-      <div class="price" th:text="${#numbers.formatInteger(dto.productPrice, 3, 'COMMA') + ' 원'}">50,000 원</div>
+      <div class="price" th:text="${dto.productPrice} + ' 원'">50,000 원</div>
       <div class="subinfo" th:text="'조회 ' + ${dto.views} + ' | 채팅 ' + ${dto.chats}">조회 5 | 채팅 2</div>
     </div>
   </div>
 
   <div class="description" th:text="${dto.productDetail}">글 내용입니다.</div>
 
-
   <input type="text" class="location-input" th:value="${dto.address}" readonly />
 
   <div class="button-group">
     <div></div>
-  </div>
-  <div class="action-links" th:if="${session.userId != null and session.userId == dto.userId2}" style="text-align: right; margin-top: 20px;">
-    <a href="javascript:void(0);" onclick="confirmDelete([[${dto.productId}]])">삭제하기</a> |
-    <a th:href="@{'/trade/edit/' + ${dto.productId}}">수정하기</a>
+    <div class="action-links">
+      <a href="#">삭제하기</a> | <a href="#">수정하기</a>
+    </div>
   </div>
 </div>
-<script src="/js/tradePost.js"></script>
-<script>
-  function confirmDelete(postId) {
-    if (confirm("정말 삭제하시겠습니까?")) {
-      window.location.href = '/trade/delete/' + postId;
-    }
-  }
-</script>
 </body>
 </html>
