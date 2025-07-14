@@ -2,14 +2,12 @@ package org.example.danggeun.trade.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.UUID;
 import jakarta.servlet.http.HttpSession;
 import org.example.danggeun.trade.dto.TradeDto;
-import org.example.danggeun.write.entity.Write;
-import org.example.danggeun.write.repository.WriteRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,56 +16,55 @@ public class TradeService {
 
     private static final Logger log = LoggerFactory.getLogger(TradeService.class);
 
-    private final WriteRepository writeRepository;
+    @Value("${file.upload-dir}")
+    private String uploadDir;
 
-    public TradeService(WriteRepository writeRepository) {
-        this.writeRepository = writeRepository;
-    }
+    /**
+     * DTO로부터 받은 데이터를 파일로 저장하고, 나머지 정보를 HttpSession에 저장합니다.
+     * @param tradeDto 사용자가 입력한 폼 데이터
+     * @param session HTTP 세션
+     */
+    public void submitAndStoreInSession(TradeDto tradeDto, HttpSession session) {
+        MultipartFile imageFile = tradeDto.getProductImg();
 
-    public Long submitAndStoreInSession(TradeDto dto, MultipartFile imageFile, HttpSession session) {
         if (imageFile == null || imageFile.isEmpty()) {
-            throw new IllegalArgumentException("이미지는 필수입니다.");
+            throw new IllegalArgumentException("상품 이미지는 필수입니다.");
         }
 
+        // 1. 파일 저장
         String originalFilename = imageFile.getOriginalFilename();
-        String storedFileName = UUID.randomUUID() + "_" + originalFilename;
-
-        // 클래스패스 기준 static/uploads 경로
-        String uploadPath = new File("target/classes/static/uploads").getAbsolutePath();
-        File saveFile = new File(uploadPath, storedFileName);
+        String storedFileName = UUID.randomUUID().toString() + "_" + originalFilename;
+        String fileUrl = "/uploads/" + storedFileName;
 
         try {
-            saveFile.getParentFile().mkdirs();
-            imageFile.transferTo(saveFile);
+            File dest = new File(uploadDir + File.separator + storedFileName);
+            dest.getParentFile().mkdirs();
+            imageFile.transferTo(dest);
+            log.info("파일 저장 성공: {}", dest.getAbsolutePath());
         } catch (IOException e) {
             log.error("파일 저장 실패", e);
-            throw new RuntimeException("파일 저장 실패", e);
+            throw new RuntimeException("이미지 저장에 실패했습니다.", e);
         }
 
-        String imageUrl = "/uploads/" + storedFileName;
-
-        Write write = Write.builder()
-                .productNm(dto.getTitle())
-                .productPrice(dto.getProductPrice())
-                .productDetail(dto.getProductDetail())
-                .address(dto.getAddress())
-                .productImg("/uploads/" + storedFileName)
-                .productCreatedAt(LocalDateTime.now())
-                .userId2(1L)
-                .categoryId(1L)
-                .build();
-        Write saved = writeRepository.save(write);
-        Long savedId = saved.getProductId();
-
-        session.setAttribute("postId", savedId);
-
-        return savedId;
+        // 2. 세션에 데이터 저장
+        session.setAttribute("title", tradeDto.getTitle());
+        session.setAttribute("productPrice", tradeDto.getProductPrice());
+        session.setAttribute("productDetail", tradeDto.getProductDetail());
+        session.setAttribute("address", tradeDto.getAddress());
+        session.setAttribute("imageUrl", fileUrl); // 저장된 파일의 URL
+        session.setAttribute("views", 1); // 최초 조회수 1로 설정
+        session.setAttribute("chats", 0); // 최초 채팅수 0으로 설정
     }
 
+    /**
+     * HttpSession에서 게시글 정보를 읽어와 DTO로 반환합니다.
+     * @param session HTTP 세션
+     * @return 세션 정보를 담은 DTO
+     */
     public TradeDto getPostFromSession(HttpSession session) {
         TradeDto dto = new TradeDto();
         dto.setTitle((String) session.getAttribute("title"));
-        dto.setProductPrice((Long) session.getAttribute("productPrice"));
+        dto.setProductPrice((String) session.getAttribute("productPrice"));
         dto.setProductDetail((String) session.getAttribute("productDetail"));
         dto.setAddress((String) session.getAttribute("address"));
         dto.setImageUrl((String) session.getAttribute("imageUrl"));
@@ -78,39 +75,24 @@ public class TradeService {
         Integer chats = (Integer) session.getAttribute("chats");
         dto.setChats(chats != null ? chats : 0);
 
-        if (views != null) {
+        // 상세 페이지를 볼 때마다 조회수 증가
+        if(views != null) {
             session.setAttribute("views", views + 1);
         }
+
         return dto;
     }
 
-    public void updatePost(Long id, TradeDto dto, MultipartFile file) {
-        Write post = writeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("수정할 게시글이 없습니다."));
-
-        post.setProductNm(dto.getTitle());
-        post.setProductPrice(dto.getProductPrice());
-        post.setProductDetail(dto.getProductDetail());
-        post.setAddress(dto.getAddress());
-
-        if (file != null && !file.isEmpty()) {
-            String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
-            String uploadPath = new File("target/classes/static/uploads").getAbsolutePath();
-            File saveFile = new File(uploadPath, filename);
-            try {
-                saveFile.getParentFile().mkdirs();
-                file.transferTo(saveFile);
-                post.setProductImg("/uploads/" + filename);
-            } catch (IOException e) {
-                throw new RuntimeException("이미지 업로드 실패", e);
-            }
-        }
-
-        writeRepository.save(post);
-    }
-
+    /**
+     * 세션의 채팅 수를 1 증가시킵니다.
+     * @param session HTTP 세션
+     */
     public void increaseChatInSession(HttpSession session) {
         Integer chats = (Integer) session.getAttribute("chats");
-        session.setAttribute("chats", chats == null ? 1 : chats + 1);
+        if (chats == null) {
+            session.setAttribute("chats", 1);
+        } else {
+            session.setAttribute("chats", chats + 1);
+        }
     }
 }
