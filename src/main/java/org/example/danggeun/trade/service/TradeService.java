@@ -1,98 +1,57 @@
-package org.example.danggeun.trade.service;
+package org.example.danggeun.trade.service; // 패키지 경로 변경
 
-import java.io.File;
-import java.io.IOException;
-import java.util.UUID;
-import jakarta.servlet.http.HttpSession;
-import org.example.danggeun.trade.dto.TradeDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
+import org.example.danggeun.category.entity.Category;
+import org.example.danggeun.category.repository.CategoryRepository;
+import org.example.danggeun.common.FileStore;
+import org.example.danggeun.trade.dto.ProductCreateRequestDto;
+import org.example.danggeun.trade.dto.ProductListResponseDto;
+import org.example.danggeun.trade.entity.Trade;
+import org.example.danggeun.trade.repository.TradeRepository;
+import org.example.danggeun.user.entity.User;
+import org.example.danggeun.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor // final 필드 생성자 자동 주입
+@Transactional(readOnly = true) // 기본적으로 읽기 전용으로 설정
 public class TradeService {
 
-    private static final Logger log = LoggerFactory.getLogger(TradeService.class);
+    private final TradeRepository productRepository;
+    private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
+    private final FileStore fileStore; // 파일 저장 컴포넌트 주입
 
-    @Value("${file.upload-dir}")
-    private String uploadDir;
+    @Transactional // 쓰기 작업이므로 readOnly=false 적용
+    public Long createProduct(ProductCreateRequestDto requestDto, Long userId) throws IOException {
+        // 1. 엔티티 조회 (판매자, 카테고리)
+        User seller = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        Category category = categoryRepository.findById(requestDto.getCategoryId())
+                .orElseThrow(() -> new IllegalArgumentException("카테고리를 찾을 수 없습니다."));
 
-    /**
-     * DTO로부터 받은 데이터를 파일로 저장하고, 나머지 정보를 HttpSession에 저장합니다.
-     * @param tradeDto 사용자가 입력한 폼 데이터
-     * @param session HTTP 세션
-     */
-    public void submitAndStoreInSession(TradeDto tradeDto, HttpSession session) {
-        MultipartFile imageFile = tradeDto.getProductImg();
+        // 2. 파일 저장 및 URL 획득
+        String imageUrl = fileStore.storeFile(requestDto.getImage());
 
-        if (imageFile == null || imageFile.isEmpty()) {
-            throw new IllegalArgumentException("상품 이미지는 필수입니다.");
-        }
+        // 3. DTO를 엔티티로 변환하여 DB에 저장
+        Trade trade = requestDto.toEntity(seller, category, imageUrl);
+        Trade savetrade = productRepository.save(trade);
 
-        // 1. 파일 저장
-        String originalFilename = imageFile.getOriginalFilename();
-        String storedFileName = UUID.randomUUID().toString() + "_" + originalFilename;
-        String fileUrl = "/uploads/" + storedFileName;
-
-        try {
-            File dest = new File(uploadDir + File.separator + storedFileName);
-            dest.getParentFile().mkdirs();
-            imageFile.transferTo(dest);
-            log.info("파일 저장 성공: {}", dest.getAbsolutePath());
-        } catch (IOException e) {
-            log.error("파일 저장 실패", e);
-            throw new RuntimeException("이미지 저장에 실패했습니다.", e);
-        }
-
-        // 2. 세션에 데이터 저장
-        session.setAttribute("title", tradeDto.getTitle());
-        session.setAttribute("productPrice", tradeDto.getProductPrice());
-        session.setAttribute("productDetail", tradeDto.getProductDetail());
-        session.setAttribute("address", tradeDto.getAddress());
-        session.setAttribute("imageUrl", fileUrl); // 저장된 파일의 URL
-        session.setAttribute("views", 1); // 최초 조회수 1로 설정
-        session.setAttribute("chats", 0); // 최초 채팅수 0으로 설정
+        return savetrade.getId();
     }
 
-    /**
-     * HttpSession에서 게시글 정보를 읽어와 DTO로 반환합니다.
-     * @param session HTTP 세션
-     * @return 세션 정보를 담은 DTO
-     */
-    public TradeDto getPostFromSession(HttpSession session) {
-        TradeDto dto = new TradeDto();
-        dto.setTitle((String) session.getAttribute("title"));
-        dto.setProductPrice((String) session.getAttribute("productPrice"));
-        dto.setProductDetail((String) session.getAttribute("productDetail"));
-        dto.setAddress((String) session.getAttribute("address"));
-        dto.setImageUrl((String) session.getAttribute("imageUrl"));
+    public List<ProductListResponseDto> findAllProducts() {
+        // Repository에서 Fetch Join을 사용한 메소드 호출
+        List<Trade> products = productRepository.findAllWithSeller();
 
-        Integer views = (Integer) session.getAttribute("views");
-        dto.setViews(views != null ? views : 0);
-
-        Integer chats = (Integer) session.getAttribute("chats");
-        dto.setChats(chats != null ? chats : 0);
-
-        // 상세 페이지를 볼 때마다 조회수 증가
-        if(views != null) {
-            session.setAttribute("views", views + 1);
-        }
-
-        return dto;
+        return products.stream()
+                .map(ProductListResponseDto::new) // DTO 변환
+                .collect(Collectors.toList());
     }
 
-    /**
-     * 세션의 채팅 수를 1 증가시킵니다.
-     * @param session HTTP 세션
-     */
-    public void increaseChatInSession(HttpSession session) {
-        Integer chats = (Integer) session.getAttribute("chats");
-        if (chats == null) {
-            session.setAttribute("chats", 1);
-        } else {
-            session.setAttribute("chats", chats + 1);
-        }
-    }
 }
