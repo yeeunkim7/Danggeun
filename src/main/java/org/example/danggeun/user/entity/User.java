@@ -24,6 +24,4 @@ public class User {
     private String providerId;
     private String role;
 
-    public void setName(String name) {
-    }
 }
