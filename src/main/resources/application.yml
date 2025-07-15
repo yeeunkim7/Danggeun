@@ -13,8 +13,15 @@ spring:
             client-id: test-client-id
             client-secret: test-client-secret
             scope: [ email, profile ]
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+
   datasource:
+    driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/danggeun
     username: postgres
-    password: 2327
-    driver-class-name: org.postgresql.Driver
+    password: 1234
+
