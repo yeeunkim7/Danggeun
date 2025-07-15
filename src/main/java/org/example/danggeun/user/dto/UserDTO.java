@@ -1,4 +1,1 @@
-package org.example.danggeun.user.dto;
-
-public class UserDto {
-}
+a
