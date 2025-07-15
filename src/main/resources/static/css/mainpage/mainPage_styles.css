@@ -41,70 +41,7 @@ table {
     border-collapse: collapse;
     border-spacing: 0;
 }
-
-/*시작*/
-#header{
-    height: 6.4rem
-}
-#header_wrap{
-    height : 100%;
-    width: 1024px;
-    margin: auto;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-}
-
-#header_content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#header_content form {
-    display: flex;
-    flex-direction: row;
-    justify-content:space-evenly;
-    align-items: center;
-}
-
-img{
-    display: block;
-    margin: 0 auto;
-}
-
-.header_menu_selected{
-    color: #ff6f0f;
-    font-style: normal;
-    font-weight: 700;
-    font-size:large;
-    background-color: white;
-    border: none;
-}
-
-.header_menu{
-    color: #4d5159;
-    font-style: normal;
-    font-weight: 700;
-    font-size:large;
-    background-color: white;
-    border: none;
-}
-
-.chat_button{
-    border: 0.5px solid #b8bcc3;
-    border-radius: 0.3rem;
-    font-size: 1.0rem;
-    font-weight: 600;
-    margin:auto;
-    width: 80px;
-    height: 40px;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
-}
-
+/*시작 부분 수정(헤드는 따로 css)*/
 .body_content_1{
     height: 700px;
     width: 1024px;
@@ -348,12 +285,15 @@ img{
     justify-content: space-around;
 }
 
-.keyword{
+.keyword_btn{
     border: none;
     background-color: white;
     font-size: medium;
     margin-bottom: 50px;
     margin-left: 20px;
+}
+.keyword_btn:hover {
+    background-color: #dcddde;
 }
 
 .bottom-nav {
