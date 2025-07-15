@@ -1,6 +1,7 @@
 package org.example.danggeun.config;
 
 import lombok.RequiredArgsConstructor;
+import org.example.danggeun.security.CustomLoginSuccessHandler;
 import org.example.danggeun.security.CustomOAuth2UserService;
 import org.example.danggeun.security.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,7 @@ public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomUserDetailsService customUserDetailsService;
+    private final CustomLoginSuccessHandler customLoginSuccessHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -31,7 +33,8 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/mainPage", true)
+                        .loginProcessingUrl("/login")
+                        .successHandler(customLoginSuccessHandler)
                         .permitAll()
                 )
                 .oauth2Login(oauth -> oauth
@@ -52,6 +55,11 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return customUserDetailsService;
     }
 
 }
