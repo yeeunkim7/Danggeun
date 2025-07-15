@@ -4,7 +4,7 @@ package org.example.danggeun.user.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.danggeun.address.entity.Address;
-import org.example.danggeun.product.entity.Product;
+import org.example.danggeun.trade.entity.Trade;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class User {
 
     // 한 명의 유저는 여러 개의 상품을 판매할 수 있음
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Product> products = new ArrayList<>();
+    private List<Trade> products = new ArrayList<>();
 
     // 한 명의 유저는 여러 개의 주소를 가질 수 있음
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
