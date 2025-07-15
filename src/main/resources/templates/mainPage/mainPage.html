@@ -91,7 +91,6 @@
     <div th:each="item : ${items}" >
       <div th:if="${item != null}" th:replace="~{fragments/tradeItem :: tradeItemFragment(item=${item})}"> </div>
       <br>
-      <br>
         <!-- 아이템 카드 (Sample) - 이 부분을 반복합니다. -->
         <article class="item-card">
           <div class="item-image"></div>
@@ -109,6 +108,9 @@
   <br>
   <br>
   <a th:href="@{/trade}" class="more_item_btn"><b>인기매물 더보기</b></a>
+  <br>
+  <br>
+  <br>
 </div>
 
 <div class="content_5">
@@ -123,7 +125,6 @@
       <button class="keyword_btn" onclick="searchKeyword('맥북')">맥북</button>
       <button class="keyword_btn" onclick="searchKeyword('카메라')">카메라</button>
       <button class="keyword_btn" onclick="searchKeyword('스타벅스')">스타벅스</button>
-      <br>
       <br>
     </div>
   </div>

@@ -65,9 +65,9 @@ table { border-collapse: collapse; border-spacing: 0; }
 .body_content_1, .body_content_2, .body_content_3, .body_content_4 {
     flex-direction: row;
 }
-.body_content_1 { background-color: #fffae0; }
+.body_content_1 { background-color: #fffae0; width: 100vw; height:807px; box-sizing: border-box; padding: 50px 0 0 500px; }
 .body_content_2, .body_content_4 { background-color: white; }
-.body_content_3 { background-color: #E6F3E6; }
+.body_content_3 { background-color: #E6F3E6;width: 100vw; height:807px; box-sizing: border-box; padding: 50px 0 0 500px; }
 .body_content_5 {
     background-color: #F8F9FA;
     flex-direction: column;
@@ -164,7 +164,7 @@ table { border-collapse: collapse; border-spacing: 0; }
     font-weight: bold; text-decoration: underline;
     font-size: medium;
 }
-.more_item_btn { margin-bottom: 150px; }
+.more_item_btn { margin-top: 50px; margin-bottom: 150px; }
 
 /*인기검색어*/
 .keyword_title {
