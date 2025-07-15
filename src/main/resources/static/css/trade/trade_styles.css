@@ -79,19 +79,29 @@ a {
 .item-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 30px 20px;
+    gap: 24px 16px;
+    justify-content: center;
+    max-width: 960px;    /* 최대 너비 제한 */
+    width: 100%;         /* 부모 영역 내에서만 100% */
+    margin: 0 auto;      /* 항상 가운데 정렬 */
 }
 
 .item-card {
+    max-width: 160px;
+    margin: 0 auto;
     cursor: pointer;
 }
 
 .item-image {
     width: 100%;
-    padding-bottom: 100%; /* 1:1 비율 */
+    max-width: 210px;
+    max-height: 210px;
+    aspect-ratio: 1 / 1;
     background-color: #DBDCE2;
     border-radius: 8px;
     margin-bottom: 12px;
+    margin: 0 auto 12px auto;
+    display: block;
     /* TODO: 실제 이미지를 background-image로 넣거나, img 태그를 사용하세요. */
 }
 
@@ -140,3 +150,13 @@ a {
     transform: scale(1.05);
 }
 
+/*반응형 아이템부분 크기 조정*/
+@media (max-width: 1200px) {
+    .item-grid { max-width: 800px; grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 900px) {
+    .item-grid { max-width: 600px; grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 600px) {
+    .item-grid { max-width: 100%; grid-template-columns: repeat(2, 1fr); }
+}
