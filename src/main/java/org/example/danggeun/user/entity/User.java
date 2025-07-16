@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "\"user\"") // PostgreSQL에서 소문자 테이블명 매핑
+@Table(name = "\"user\"")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,20 +23,20 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "user_nm", length = 50, nullable = false)
-    private String username; // 사용자 이름
+    @Column(name = "User_Nm", length = 50, nullable = false)
+    private String username;
 
-    @Column(name = "user_password", length = 100, nullable = false)
-    private String password; // 비밀번호
+    @Column(name = "User_Password", length = 100, nullable = false)
+    private String password;
 
-    @Column(name = "user_email", length = 100, unique = true, nullable = false)
-    private String email; // 이메일
+    @Column(name = "User_Email", length = 100, unique = true, nullable = false)
+    private String email;
 
-    @Column(name = "user_phone", length = 50)
-    private String phone; // 전화번호
+    @Column(name = "User_Phone", length = 50)
+    private String phone;
 
-    @Column(name = "user_createdat")
-    private LocalDateTime createdAt; // 가입일자
+    @Column(name = "User_CreatedAt")
+    private LocalDateTime createdAt;
 
     @Column(nullable = true)
     private String provider;
