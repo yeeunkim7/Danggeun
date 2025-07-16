@@ -6,7 +6,6 @@ import org.example.danggeun.trade.entity.Trade;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 public class ProductDetailResponseDto {
 
     private final Long id;
@@ -23,7 +22,7 @@ public class ProductDetailResponseDto {
     private final String categoryName;
 
     // Entity를 DTO로 변환하는 생성자
-    public ProductDetailResponseDto(Trade entity, int views, int chats) {
+    public ProductDetailResponseDto(Trade entity) {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.name = entity.getName();
@@ -34,9 +33,10 @@ public class ProductDetailResponseDto {
         this.createdAt = entity.getCreatedAt();
 
         // 연관된 엔티티에서 필요한 정보를 추출합니다.
-        this.sellerName = entity.getSeller().getName();
+        this.sellerName = entity.getSeller().getUsername();
         this.categoryName = entity.getCategory().getName();
         this.views = entity.getViews();
         this.chats = entity.getChats();
+
     }
 }

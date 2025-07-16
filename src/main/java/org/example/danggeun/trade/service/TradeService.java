@@ -5,6 +5,7 @@ import org.example.danggeun.category.entity.Category;
 import org.example.danggeun.category.repository.CategoryRepository;
 import org.example.danggeun.common.FileStore;
 import org.example.danggeun.trade.dto.ProductCreateRequestDto;
+import org.example.danggeun.trade.dto.ProductDetailResponseDto;
 import org.example.danggeun.trade.dto.ProductListResponseDto;
 import org.example.danggeun.trade.entity.Trade;
 import org.example.danggeun.trade.repository.TradeRepository;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true) // 기본적으로 읽기 전용으로 설정
 public class TradeService {
 
-    private final TradeRepository productRepository;
+    private final TradeRepository tradeRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final FileStore fileStore; // 파일 저장 컴포넌트 주입
@@ -40,18 +41,27 @@ public class TradeService {
 
         // 3. DTO를 엔티티로 변환하여 DB에 저장
         Trade trade = requestDto.toEntity(seller, category, imageUrl);
-        Trade savetrade = productRepository.save(trade);
+        Trade savetrade = tradeRepository.save(trade);
 
         return savetrade.getId();
     }
 
     public List<ProductListResponseDto> findAllProducts() {
-        // Repository에서 Fetch Join을 사용한 메소드 호출
-        List<Trade> products = productRepository.findAllWithSeller();
+        List<Trade> products = tradeRepository.findAllWithSeller();
 
         return products.stream()
                 .map(ProductListResponseDto::new) // DTO 변환
                 .collect(Collectors.toList());
     }
+
+    public ProductDetailResponseDto findTradeById(Long productId) {
+        // 2. 클래스 이름(TradeRepository)이 아닌, 주입된 객체(tradeRepository)를 사용하도록 수정
+        Trade trade = tradeRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 상품을 찾을 수 없습니다. id=" + productId));
+
+        // 3. ProductDetailResponseDto 생성자가 (Trade entity)만 받도록 수정되었다고 가정
+        return new ProductDetailResponseDto(trade);
+    }
+
 
 }

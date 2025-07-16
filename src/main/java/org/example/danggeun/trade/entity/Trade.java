@@ -4,12 +4,12 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.danggeun.category.entity.Category;
 import org.example.danggeun.user.entity.User;
-import org.springframework.web.multipart.MultipartFile;
+// import org.springframework.web.multipart.MultipartFile; // 엔티티는 웹 기술(MultipartFile)에 의존하지 않아야 합니다.
 
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
+@Setter // 엔티티의 무분별한 수정을 막기 위해 @Setter는 사용하지 않는 것이 좋습니다. 꼭 필요한 경우에만 특정 필드에 대한 수정 메소드를 만드세요.
 @Entity
 @Builder
 @Table(name = "product")
@@ -19,44 +19,44 @@ public class Trade {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Product_ID")
-    private Long id; // 상품ID
+    @Column(name = "product_id") // 수정: product_id (소문자 스네이크 케이스)
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Category_ID", nullable = false)
-    private Category category; // 카테고리ID (FK)
+    @JoinColumn(name = "category_id", nullable = false) // 수정: category_id
+    private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "User_Id", nullable = false)
-    private User seller; // 판매자ID (FK)
+    @JoinColumn(name = "user_id", nullable = false) // 수정: user_nm -> user_id 로 통일성 부여
+    private User seller;
 
-    @Column(name = "Product_Nm", length = 50)
-    private String name; // 상품이름
+    @Column(name = "product_name", length = 50) // 수정: product_nm -> product_name 으로 명확하게
+    private String name;
 
-    @Column(name = "Product_price")
-    private Long price; // 상품가격
+    @Column(name = "product_price")
+    private Long price;
 
     @Lob
-    @Column(name = "Product_detail")
-    private String detail; // 상품설명
+    @Column(name = "product_detail")
+    private String detail;
 
-    @Column(name = "Product_State", length = 2)
-    private String state = "00"; // 판매여부 (00:판매중, 01:예약중, 02:판매완료)
+    @Column(name = "product_state", length = 2)
+    private String state = "00";
 
-    @Column(name = "Product_CreatedAt")
-    private LocalDateTime createdAt; // 상품등록일자
+    @Column(name = "product_created_at") // 수정: created_at (가장 일반적인 이름)
+    private LocalDateTime createdAt;
 
-    @Column(name = "Product_Img_Url") // ERD의 Product_Img_Url 컬럼 반영
-    private String imageUrl; // 상품이미지 URL
+    @Column(name = "image_url") // 수정: image_url
+    private String imageUrl;
 
-    @Column(name = "Product_Title")
+    @Column(name = "title") // 수정: product_title -> title (테이블명 접두사는 불필요)
     private String title;
 
-    @Column(name = "views", columnDefinition = "INT DEFAULT 0")
-    private int views = 0; // 조회수
+    @Column(columnDefinition = "INT DEFAULT 0") // 'views'는 예약어일 수 있으므로 그대로 둠
+    private int views = 0;
 
-    @Column(name = "chats", columnDefinition = "INT DEFAULT 0")
-    private int chats = 0; // 채팅수
+    @Column(columnDefinition = "INT DEFAULT 0") // 'chats'도 마찬가지
+    private int chats = 0;
 
     public void increaseViewCount() {
         this.views++;

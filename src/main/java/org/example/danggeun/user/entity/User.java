@@ -21,34 +21,37 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "User_ID")
-    private Long id; // 사용자ID
+    @Column(name = "user_id")
+    private Long id;
 
-    @Column(name = "User_Nm", length = 50, nullable = false)
-    private String name; // 사용자이름
+    @Column(name = "user_email")
+    private String email;
 
-    @Column(name = "User_Password", length = 100, nullable = false)
-    private String password; // 비밀번호
+    @Column(name = "user_nm")
+    private String username;
 
-    @Column(name = "User_Email", length = 100, unique = true, nullable = false)
-    private String email; // 이메일
+    @Column(name = "user_password")
+    private String password;
 
-    @Column(name = "User_Phone", length = 50)
-    private String phone; // 전화번호
+    @Column(name = "user_phone")
+    private String phone;
 
-    @Column(name = "User_CreatedAt")
-    private LocalDateTime createdAt; // 가입일자
+    @Column(name = "user_createdat")
+    private String createdAt;
 
-    // 한 명의 유저는 여러 개의 상품을 판매할 수 있음
+    @Column(nullable = true)
+    private String provider;
+
+    @Column(nullable = true)
+    private String providerId;
+
+    @Column(nullable = true)
+    private String role;
+
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Trade> products = new ArrayList<>();
 
-    // 한 명의 유저는 여러 개의 주소를 가질 수 있음
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> address = new ArrayList<>();
 
-
-    private String provider;
-    private String providerId;
-    private String role;
 }
