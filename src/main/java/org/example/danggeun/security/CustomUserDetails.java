@@ -20,7 +20,8 @@ public class CustomUserDetails implements UserDetails {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public Collection<? extends GrantedAuthority>
+    getAuthorities() {
         return Collections.emptyList(); // 권한 없음
     }
 

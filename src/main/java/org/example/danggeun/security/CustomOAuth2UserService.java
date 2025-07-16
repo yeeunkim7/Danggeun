@@ -26,17 +26,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         // OAuth2 기본 유저 정보 가져오기 (구글 API 호출 포함)
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
-        // 어떤 플랫폼(구글/네이버 등)인지
         String provider = userRequest.getClientRegistration().getRegistrationId(); // google
 
-        // 플랫폼이 제공하는 유저 고유 ID
-        String providerId = oAuth2User.getAttribute("sub"); // 구글은 "sub"
+        String providerId = oAuth2User.getAttribute("sub");
 
-        // 공통 정보
         String email = oAuth2User.getAttribute("email");
         String name = oAuth2User.getAttribute("name");
 
-        // DB에 해당 이메일 유저가 없으면 새로 저장, 있으면 기존 유저 사용
         User user = userRepository.findByEmail(email)
                 .orElseGet(() -> {
                     User newUser = new User();

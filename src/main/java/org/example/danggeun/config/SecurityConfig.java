@@ -41,8 +41,6 @@ public class SecurityConfig {
                         .successHandler(customLoginSuccessHandler)
                         .failureHandler(customLoginFailureHandler)
                         .permitAll()
-                        .defaultSuccessUrl("/",true)
-                        .successForwardUrl("/")
                 )
                 .oauth2Login(oauth -> oauth
                         .loginPage("/login")

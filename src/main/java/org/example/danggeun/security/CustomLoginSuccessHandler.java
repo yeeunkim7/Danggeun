@@ -42,7 +42,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
         } else if (principal instanceof UserDetails userDetails) {
             String username = userDetails.getUsername();
-            User user = userRepository.findByUsername(username).orElse(null);
+            User user = userRepository.findByEmail(username).orElse(null);
 
             if (user != null) {
                 UserDTO userDTO = new UserDTO(user.getUsername(), user.getEmail());
