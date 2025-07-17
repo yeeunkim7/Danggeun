@@ -11,7 +11,9 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -37,8 +39,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .orElseGet(() -> {
                     User newUser = new User();
                     newUser.setEmail(email);
+                    newUser.setUsername(name);
                     newUser.setProvider(provider);
                     newUser.setProviderId(providerId);
+                    newUser.setPassword(UUID.randomUUID().toString());
+                    newUser.setCreatedAt(LocalDateTime.now());
                     return userRepository.save(newUser);
                 });
 
