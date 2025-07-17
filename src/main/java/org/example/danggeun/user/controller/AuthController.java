@@ -49,7 +49,7 @@ public class AuthController {
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .role("ROLE_USER")
-                .createdAt(LocalDateTime.now().toString())
+                .createdAt(LocalDateTime.now())
                 .build();
 
         userRepository.save(user);

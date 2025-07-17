@@ -1,0 +1,69 @@
+[33m99ecc1d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mLoginPage[m[33m, [m[1;31morigin/LoginPage[m[33m)[m 로그인, 회원가입 성공 시 메인페이지로 리다이렉트되게 수정, depaendency에 .env관련 추가
+[33m234af57[m User 테이블 구조 수정 및 로그인 기능 통합 구현
+[33m3370b1a[m UserDTO 구조 수정
+[33mdd99609[m 사용자 로그인 성공시 세션에 UserDTO 저장 로직 구현
+[33m242cf22[m PostgreSQL 전체 덤프 파일 추가
+[33m98fe0b8[m[33m ([m[1;32mDevelop1[m[33m)[m 충돌 해결 후 병합 완료
+[33m7732196[m 충돌 해결 후 병합 완료
+[33me9d31b2[m 뒤로가기 버튼 생성
+[33mcdfaeb8[m maiPage 기능 html, css 수정 버튼기능들 타임리프로 연동
+[33m6d23b68[m 동네인증 api뺴고 완료 -> api만 받아와서 입력하면 끝 writePage 브런치에 같이 푸시
+[33m73e36e4[m 로그인 페이지에서 채팅하기, 로그인 버튼 위치 및 크기 CSS 수정
+[33m6d03a00[m DB 저장 후 깃에 이미지 저장(.gitignore 에 !/src/main/resources/static/uploads/ 추가) 해당 게시글이 userId2가 일치하면 수정, 삭제 버튼 보이기
+[33m06cb93d[m 채팅하기 버튼 클릭 이벤트 처리 못함 조회&채팅 자동 수 증가 못함 삭제하기(작성자만 보이게) | 수정하기 못함
+[33m1b546f5[m 업로드 이미지 Git에 추가
+[33m0422b74[m LoginPage, RegisterPage CSS 수정
+[33m44ca7a6[m mainpage 인기매물관련 타임리프+controller작성
+[33mfd8a522[m 채팅하기 버튼 클릭 이벤트 처리 못함 조회&채팅 자동 수 증가 못함 삭제하기(작성자만 보이게) | 수정하기 못함
+[33mea417a6[m login, registerPage에 header.html 파일 연동
+[33mbebe24c[m 로그인 실패시 오류 문구 위치 수정
+[33mbd3b4c0[m 메인페이지 하단 html+css 리팩토링 및 페이지연동(7/9)
+[33me6d86b2[m 이미지 사진만 불러오지 못한 상황
+[33m6b92d41[m login / register 페이지 구현. Spring Security와 연동된 로그인 처리 로직 작성. CustomUserDetailsService 구현. BCryptPasswordEncoder를 사용한 비밀번호 암호화 적용
+[33m5ca83ae[m Spring security 로그인 페이지 구현 및 구글 OAuth 로그인 구현, 테스트 계정 등록(ID:test / PW:1234)
+[33m99dc4b8[m loginPage.html, loginPage.css 생성
+[33mddc1f31[m user entity의 Table 이름 user->users 변경 maven-plugin 플러그 변경 write에서 작성하여 api를 tradePost에서 받아 보이게 하기위해 trade 내 클래스들 수정(작성은 되나 아직 안보여지는 단계)
+[33m47f422f[m[33m ([m[1;31morigin/MainPage[m[33m)[m 메인페이지html+css+controller수정(7/8오전)
+[33me37a13f[m 오류 발생하여 develop1으로 push했습니다
+[33mb85eaa4[m 오류 발생하여 develop1으로 push했습니다
+[33m0d6f92d[m Write / Trade 폴더 최신화 된 버전으로 Develop1 브랜치로 푸시(Develop에는 최신화가 안되어있었음)
+[33md5e0542[m test1 브랜치 생성해서 오류 테스트
+[33mfd0f79c[m[33m ([m[1;31morigin/TradePage[m[33m)[m WritePage 와 TradePost Page 를 합쳐서 커밋 했습니다.
+[33m456784c[m 오류 해결 2
+[33m5292cef[m 오류 해결
+[33mb2363dc[m[33m ([m[1;31morigin/Develop[m[33m)[m 경로 수정
+[33m325ec96[m 수정
+[33mb3926ce[m 다 합치고 경로 설정
+[33m490fa27[m 다 합치고 경로 설정
+[33m131119a[m 다 합치고 경로 설정
+[33ma53f414[m Merge remote-tracking branch 'origin/WritePage' into Develop
+[33m380a6b1[m TradePage merge
+[33m89bc5ea[m Merge remote-tracking branch 'origin/LoginPage' into Develop
+[33ma4d905b[m search 추가
+[33mfbe529a[m 버튼 수정+URL연동
+[33m86cc7d9[m WritePage 와 TradePost Page 를 합쳐서 작업했습니다.
+[33md56984e[m Main png크기조정 0704PM
+[33md635acf[m WritePage 와 TradePost Page 를 합쳐서 작업했습니다.
+[33mbabfa12[m Main png 파일 변경0704PM
+[33mf450cbf[m Main html_css파일통합0704PM
+[33m7c9057c[m Main html_css파일통합0704PM
+[33me6466ec[m delete Security
+[33m76aed73[m LoginPage HTMl 구조 생성
+[33m311900c[m Main html_css0703
+[33m625f24e[m OAuth 민감 정보 제거 및 보안 설정
+[33ma9f53cd[m delete Security
+[33maa6e1ad[m delete Security
+[33m93c6d6d[m delete Security
+[33m7705aad[m delete Security
+[33m7226d8e[m 2025/07/03 add trade.html, header.html, css
+[33mf76e6fc[m delete Security
+[33m3e97646[m delete Security
+[33mfc551b7[m delete Security
+[33mfb569f6[m delete Security
+[33m321a787[m[33m ([m[1;31morigin/test1[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m delete Security
+[33m2c44e66[m Add Security Id, Password
+[33m4a1a68d[m TradePage
+[33m55ff83d[m Merge remote-tracking branch 'origin/master'
+[33m5a8ef8b[m add Spring Security
+[33m4c89aa0[m Create README.md
+[33m3061ee4[m Initial commit
