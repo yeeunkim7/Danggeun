@@ -23,19 +23,19 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "User_Nm", length = 50, nullable = false)
+    @Column(name = "user_nm", length = 50, nullable = false)
     private String username;
 
-    @Column(name = "User_Password", length = 100, nullable = false)
+    @Column(name = "user_password", length = 100, nullable = false)
     private String password;
 
-    @Column(name = "User_Email", length = 100, unique = true, nullable = false)
+    @Column(name = "user_email", length = 100, unique = true, nullable = false)
     private String email;
 
-    @Column(name = "User_Phone", length = 50)
+    @Column(name = "user_phone", length = 50)
     private String phone;
 
-    @Column(name = "User_CreatedAt")
+    @Column(name = "user_createdat")
     private LocalDateTime createdAt;
 
     @Column(nullable = true)
