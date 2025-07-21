@@ -20,7 +20,8 @@ public class CustomUserDetails implements UserDetails {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public Collection<? extends GrantedAuthority>
+    getAuthorities() {
         return Collections.emptyList(); // 권한 없음
     }
 
@@ -31,7 +32,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return user.getEmail();
     }
 
     @Override public boolean isAccountNonExpired() { return true; }

@@ -6,12 +6,15 @@ import org.example.danggeun.security.CustomOAuth2UserService;
 import org.example.danggeun.security.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -21,6 +24,7 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomLoginSuccessHandler customLoginSuccessHandler;
+    private final AuthenticationFailureHandler customLoginFailureHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -35,6 +39,7 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
                         .successHandler(customLoginSuccessHandler)
+                        .failureHandler(customLoginFailureHandler)
                         .permitAll()
                 )
                 .oauth2Login(oauth -> oauth
@@ -42,7 +47,10 @@ public class SecurityConfig {
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
                         )
+                                .defaultSuccessUrl("/")
+//                        .successHandler(customLoginSuccessHandler)
                 )
+
                 .logout(logout -> logout
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
@@ -58,8 +66,11 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        return customUserDetailsService;
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+                .userDetailsService(customUserDetailsService)
+                .passwordEncoder(passwordEncoder())
+                .and()
+                .build();
     }
-
 }

@@ -5,24 +5,40 @@ file:
   upload-dir: /Users/user/Downloads/Danggeun/uploads
 
 spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    cache: false
+
   security:
     oauth2:
       client:
         registration:
           google:
-            client-id: test-client-id
-            client-secret: test-client-secret
+            client-id: ${OAUTH_GOOGLE_CLIENT_ID}
+            client-secret: ${OAUTH_GOOGLE_CLIENT_SECRET}
             scope: [ email, profile ]
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      dialect: org.hibernate.dialect.PostgreSQLDialect
+        provider:
+          google:
+            user-name-attribute: sub
 
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/danggeun
     username: postgres
-    password: 1234
+    password: ${DATABASE_PASSWORD}
 
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace

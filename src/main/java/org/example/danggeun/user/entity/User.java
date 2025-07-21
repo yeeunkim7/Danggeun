@@ -1,4 +1,3 @@
-// User.java
 package org.example.danggeun.user.entity;
 
 import jakarta.persistence.*;
@@ -11,12 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "User") // ERD의 테이블명 "User"와 일치시킴
+@Table(name = "\"user\"")
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class User {
 
     @Id
@@ -24,20 +23,20 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "user_email")
-    private String email;
-
-    @Column(name = "user_nm")
+    @Column(name = "user_nm", length = 50, nullable = false)
     private String username;
 
-    @Column(name = "user_password")
+    @Column(name = "user_password", length = 100, nullable = false)
     private String password;
 
-    @Column(name = "user_phone")
+    @Column(name = "user_email", length = 100, unique = true, nullable = false)
+    private String email;
+
+    @Column(name = "user_phone", length = 50)
     private String phone;
 
     @Column(name = "user_createdat")
-    private String createdAt;
+    private LocalDateTime createdAt;
 
     @Column(nullable = true)
     private String provider;
@@ -53,5 +52,4 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> address = new ArrayList<>();
-
 }
