@@ -11,6 +11,9 @@ import org.example.danggeun.user.service.UserService;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,12 +46,30 @@ public class ChatController {
     }
 
     @GetMapping("/chat")
-    public String chatPage(Principal principal, Model model) {
-        User loginUser = userService.findByEmail(principal.getName())
-                .orElseThrow(() -> new IllegalStateException("존재하지 않는 사용자: " + principal.getName()));
+    public String chatPage(
+            Authentication authentication,
+            Model model
+    ) {
+        // principal 타입 검사해서 이메일 꺼내기
+        Object principal = authentication.getPrincipal();
+        String loginEmail;
+        if (principal instanceof OAuth2User oauth2User) {
+            loginEmail = oauth2User.getAttribute("email");
+        } else if (principal instanceof UserDetails userDetails) {
+            loginEmail = userDetails.getUsername();
+        } else {
+            throw new IllegalStateException("알 수 없는 인증 타입: " + principal.getClass());
+        }
+
+        // 유저 엔티티 조회
+        User loginUser = userService.findByEmail(loginEmail)
+                .orElseThrow(() -> new IllegalStateException("존재하지 않는 사용자: " + loginEmail));
+
+        // AI 챗방 조회 또는 생성
         Chat aiChat = chatService.findOrCreateAiChat(loginUser.getId());
+
         model.addAttribute("chatId", aiChat.getId());
-        model.addAttribute("loginUser", loginUser);
+        model.addAttribute("loginEmail", loginEmail);
         return "chat/chat";
     }
 }

@@ -1,8 +1,11 @@
 package org.example.danggeun.trade.controller; // 패키지 경로를 product로 변경하는 것을 권장합니다.
 
 import lombok.RequiredArgsConstructor;
+import org.example.danggeun.category.dto.CategoryCreateRequestDto;
+import org.example.danggeun.category.dto.CategoryDto;
 import org.example.danggeun.category.entity.Category;
 import org.example.danggeun.category.repository.CategoryRepository;
+import org.example.danggeun.category.service.CategoryService;
 import org.example.danggeun.trade.dto.ProductCreateRequestDto;
 import org.example.danggeun.trade.dto.ProductDetailResponseDto;
 import org.example.danggeun.trade.dto.ProductListResponseDto;
@@ -13,7 +16,10 @@ import org.example.danggeun.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +30,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor // final 필드에 대한 생성자 자동 주입
@@ -31,7 +38,8 @@ public class TradeController {
 
     private final TradeService tradeService;
     private final UserRepository userRepository;
-    private final CategoryRepository categoryRepository;
+    private final UserService userService;
+    private final CategoryService categoryService;
 
     @GetMapping("/trade")
     public String listProducts(Model model) {
@@ -41,34 +49,57 @@ public class TradeController {
     }
 
     @PostMapping("/write")
-    public ResponseEntity<String> createProduct(@ModelAttribute ProductCreateRequestDto requestDto, HttpSession session) {
-        try {
-            Long userId = (Long) session.getAttribute("userId");
-            if (userId == null) {
-                // 인증되지 않은 사용자는 401 Unauthorized 오류 반환
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
-            }
+    public String createProduct(
+            @ModelAttribute ProductCreateRequestDto product,
+            Authentication authentication  // 이미 인증된 상태이니, 세션 검사 생략
+    ) throws IOException {
+        Object p = authentication.getPrincipal();
+        String loginEmail;
+        if (p instanceof OAuth2User oauth2) {
+            loginEmail = oauth2.getAttribute("email");
+        } else {
+            loginEmail = ((UserDetails) p).getUsername();
+        }
+        User loginUser = userService.findByEmail(loginEmail)
+                .orElseThrow(() -> new IllegalStateException("존재하지 않는 사용자: " + loginEmail));
 
-            // DTO의 image 필드에 파일이 잘 담겼는지 확인 (디버깅용)
-            if (requestDto.getImage() == null || requestDto.getImage().isEmpty()) {
-                return ResponseEntity.badRequest().body("이미지 파일이 없습니다.");
-            }
-
-            tradeService.createProduct(requestDto, userId);
-
-            // 성공 시 200 OK 응답
-            return ResponseEntity.ok("작성 완료");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            // 서버 내부 오류 발생 시 500 Internal Server Error 응답
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 처리 중 오류 발생");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류 발생");
+        if (product.getImage() == null || product.getImage().isEmpty()) {
+            throw new IllegalArgumentException("이미지 파일이 없습니다.");
         }
 
+        Long productId = tradeService.createProduct(product, loginUser.getId());
+
+        return "redirect:/trade/" + productId;
     }
+
+
+    @GetMapping("/write")
+    public String showWriteForm(
+            Authentication authentication,
+            Model model
+    ) {
+        // principal 에서 이메일 추출 (폼/소셜 로그인 공통 처리)
+        Object principal = authentication.getPrincipal();
+        String loginEmail;
+        if (principal instanceof OAuth2User o) {
+            loginEmail = o.getAttribute("email");
+        } else if (principal instanceof UserDetails u) {
+            loginEmail = u.getUsername();
+        } else {
+            throw new IllegalStateException("알 수 없는 인증 타입");
+        }
+
+        model.addAttribute("loginEmail", loginEmail);
+        model.addAttribute("product", new ProductCreateRequestDto());
+
+        List<CategoryDto> cats = categoryService.findAll().stream()
+                .map(c -> new CategoryDto(c.getId(), c.getName()))
+                .collect(Collectors.toList());
+        model.addAttribute("categories", cats);
+
+        return "write/write";
+    }
+
 
     @PostMapping("/trade/submit")
     public String createProduct(@ModelAttribute("product") ProductCreateRequestDto requestDto) throws IOException {
