@@ -1,8 +1,9 @@
 server:
-  port: 80
+  port: 8080
+  address: 0.0.0.0
 
 file:
-  upload-dir: /Users/user/Downloads/Danggeun/uploads
+  upload-dir: /home/ec2-user/uploads
 
 spring:
   thymeleaf:
@@ -16,9 +17,10 @@ spring:
       client:
         registration:
           google:
-            client-id: ${OAUTH_GOOGLE_CLIENT_ID}
-            client-secret: ${OAUTH_GOOGLE_CLIENT_SECRET}
+            client-id: { "YOUR_GOOGLE_CLIENT_ID" }
+            client-secret: "YOUR_GOOGLE_CLIENT_SECRET" }
             scope: [ email, profile ]
+            redirect-uri: "http://13.60.13.30.nip.io/login/oauth2/code/{registrationId}"
         provider:
           google:
             user-name-attribute: sub
@@ -27,7 +29,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/danggeun
     username: postgres
-    password: ${DATABASE_PASSWORD}
+    password: 1234
 
   jpa:
     hibernate:
@@ -42,3 +44,12 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace
+
+
+  aws:
+    access-key-id: { "your id" }
+    secret-access-key: { "your secret" }
+    region: ap-northeast-2
+    s3:
+      bucket-name: my-java-app-files-2024
+

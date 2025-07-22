@@ -1,0 +1,47 @@
+package org.example.danggeun.message.service;
+
+import lombok.RequiredArgsConstructor;
+import org.example.danggeun.chat.entity.Chat;
+import org.example.danggeun.chat.repository.ChatRepository;
+import org.example.danggeun.message.entity.Message;
+import org.example.danggeun.message.repository.MessageRepository;
+import org.example.danggeun.user.entity.User;
+import org.example.danggeun.user.repository.UserRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class MessageService {
+
+    private final MessageRepository messageRepository;
+    private final ChatRepository chatRepository;
+    private final UserRepository userRepository;
+
+    /** 새 메시지 저장 */
+    @Transactional
+    public Message saveMessage(Long chatId, Long userId, String messageContent) {
+        Chat chat = chatRepository.findById(chatId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid chatId"));
+        User sender = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid userId"));
+
+        Message msg = Message.builder()
+                .chat(chat)
+                .sender(sender)
+                .content(messageContent)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        return messageRepository.save(msg);
+    }
+
+    /** 특정 채팅방의 모든 메시지 조회 */
+    @Transactional(readOnly = true)
+    public List<Message> getMessages(Long chatId) {
+        return messageRepository.findAllByChatIdOrderByCreatedAtAsc(chatId);
+    }
+}
