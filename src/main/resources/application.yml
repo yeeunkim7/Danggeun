@@ -16,8 +16,8 @@ spring:
       client:
         registration:
           google:
-            client-id: { "YOUR_GOOGLE_CLIENT_ID" }
-            client-secret: "YOUR_GOOGLE_CLIENT_SECRET" }
+            client-id: ${"YOUR_GOOGLE_CLIENT_ID"}
+            client-secret: ${"YOUR_GOOGLE_CLIENT_SECRET"}
             scope: [ email, profile ]
             redirect-uri: "http://13.60.13.30.nip.io/login/oauth2/code/{registrationId}"
         provider:
@@ -46,8 +46,8 @@ logging:
 
 
   aws:
-    access-key-id: { "your id" }
-    secret-access-key: { "your secret" }
+    access-key-id: ${"YOUR_AWS_ACCESS_KEY_ID"}
+    secret-access-key: ${"YOUR_AWS_SECRET_ACCESS_KEY"}
     region: ap-northeast-2
     s3:
       bucket-name: my-java-app-files-2024
