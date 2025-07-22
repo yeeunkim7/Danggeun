@@ -6,6 +6,7 @@ import org.example.danggeun.category.dto.CategoryDto;
 import org.example.danggeun.category.entity.Category;
 import org.example.danggeun.category.repository.CategoryRepository;
 import org.example.danggeun.category.service.CategoryService;
+import org.example.danggeun.s3.S3Service;
 import org.example.danggeun.trade.dto.ProductCreateRequestDto;
 import org.example.danggeun.trade.dto.ProductDetailResponseDto;
 import org.example.danggeun.trade.dto.ProductListResponseDto;
@@ -102,16 +103,16 @@ public class TradeController {
 
 
     @PostMapping("/trade/submit")
-    public String createProduct(@ModelAttribute("product") ProductCreateRequestDto requestDto) throws IOException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName(); // 항상 email로 저장됨
+    public String createProduct(@ModelAttribute("product") ProductCreateRequestDto dto) throws IOException {
+        // 로그인 사용자 조회
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long userId = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."))
+                .getId();
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-        Long userId = user.getId();
-
-        Long productId = tradeService.createProduct(requestDto, userId);
-        return "redirect:/tradePost?id=" + productId;
+        // 서비스에 그대로 넘김 → 파일 업로드도 서비스가 처리
+        tradeService.createProduct(dto, userId);
+        return "redirect:/trade";
     }
 
     @GetMapping("/trade/{productId}")
@@ -119,5 +120,12 @@ public class TradeController {
         ProductDetailResponseDto productDto = tradeService.findTradeById(productId);
         model.addAttribute("product", productDto);
         return "trade/tradePost";
+    }
+
+    @GetMapping("/trade/update/{productId}")
+    public String showUpdateForm(@PathVariable Long productId, Model model) {
+        ProductDetailResponseDto dto = tradeService.findTradeById(productId);
+        model.addAttribute("product", dto);
+        return "trade/updateTradePost";   // ← 뷰 이름(updateTradePost.html) 반환
     }
 }

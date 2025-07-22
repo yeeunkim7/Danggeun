@@ -67,18 +67,19 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const res = await fetch(form.action, {
                 method: form.method,
-                body: fd
+                body: new FormData(form)
             });
 
             if (!res.ok) {
-                // 서버가 응답한 본문(예: 예외 메시지, HTML 등)을 텍스트로 꺼내서 찍어 봅니다.
                 const errText = await res.text();
                 console.error(`서버 에러 ${res.status}:`, errText);
                 throw new Error(`서버 에러 ${res.status}`);
             }
 
+            await res.text();
             alert("작성 완료!");
-            window.location.href = "/trade/post";
+            window.location.href = '/trade';
+
         } catch (err) {
             console.error("작성 중 오류 발생:", err);
             alert("작성 중 문제가 발생했습니다. (콘솔을 확인하세요)");

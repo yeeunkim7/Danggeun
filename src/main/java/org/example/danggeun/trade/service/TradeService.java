@@ -5,7 +5,7 @@ import org.example.danggeun.address.entity.Address;
 import org.example.danggeun.address.repository.AddressRepository;
 import org.example.danggeun.category.entity.Category;
 import org.example.danggeun.category.repository.CategoryRepository;
-import org.example.danggeun.common.FileStore;
+import org.example.danggeun.s3.S3Service;
 import org.example.danggeun.trade.dto.ProductCreateRequestDto;
 import org.example.danggeun.trade.dto.ProductDetailResponseDto;
 import org.example.danggeun.trade.dto.ProductListResponseDto;
@@ -13,8 +13,11 @@ import org.example.danggeun.trade.entity.Trade;
 import org.example.danggeun.trade.repository.TradeRepository;
 import org.example.danggeun.user.entity.User;
 import org.example.danggeun.user.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,34 +32,39 @@ public class TradeService {
     private final TradeRepository tradeRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
-    private final FileStore fileStore;
     private final AddressRepository addressRepository;
+    private final S3Service s3Service;
 
-    @Transactional // 쓰기 작업이므로 readOnly=false 적용
-    public Long createProduct(ProductCreateRequestDto requestDto, Long userId) throws IOException {
-        // 1. 엔티티 조회 (판매자, 카테고리)
+
+    @Transactional  // 쓰기 작업이므로 readOnly=false
+    public Long createProduct(ProductCreateRequestDto dto, Long userId) throws IOException {
+        // 1) 판매자, 카테고리 조회
         User seller = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-        Category category = categoryRepository.findById(requestDto.getCategoryId())
+        Category category = categoryRepository.findById(dto.getCategoryId())
                 .orElseThrow(() -> new IllegalArgumentException("카테고리를 찾을 수 없습니다."));
 
-        // 2. 파일 저장 및 URL 획득
-        String imageUrl = fileStore.storeFile(requestDto.getImage());
-
-        // 3. DTO를 엔티티로 변환하여 DB에 저장
-        Trade trade = requestDto.toEntity(seller, category, imageUrl);
-
-        if (requestDto.getAddress() != null && !requestDto.getAddress().isBlank()) {
-            Address newAddress = Address.builder()
-                    .detail(requestDto.getAddress()) // DTO에서 주소 문자열을 가져옴
-                    .user(seller)                   // 현재 판매자(User)와 연결
-                    .build();
-            addressRepository.save(newAddress);
+        // 2) S3에 파일 업로드 후 URL 받기
+        String imageUrl = null;
+        MultipartFile image = dto.getImage();
+        if (image != null && !image.isEmpty()) {
+            imageUrl = s3Service.uploadFile(image);  // IOException 발생 가능
         }
 
-        Trade savetrade = tradeRepository.save(trade);
+        // 3) DTO → 엔티티 변환 & 저장
+        Trade trade = dto.toEntity(seller, category, imageUrl);
+        Trade saved = tradeRepository.save(trade);
 
-        return savetrade.getId();
+        // 4) (선택) 주소 저장
+        if (dto.getAddress() != null && !dto.getAddress().isBlank()) {
+            Address addr = Address.builder()
+                    .detail(dto.getAddress())
+                    .user(seller)
+                    .build();
+            addressRepository.save(addr);
+        }
+
+        return saved.getId();
     }
 
     public List<ProductListResponseDto> findAllProducts() {
@@ -76,6 +84,15 @@ public class TradeService {
         return new ProductDetailResponseDto(trade);
     }
 
+    public Page<ProductListResponseDto> findAllProducts(Pageable pageable) {
+        return tradeRepository.findAll(pageable)
+                .map(ProductListResponseDto::new);
+    }
+
+    public Page<ProductListResponseDto> searchProducts(String keyword, Pageable pageable) {
+        return tradeRepository.findByTitleContainingIgnoreCase(keyword, pageable)
+                .map(ProductListResponseDto::new);
+    }
 
     public Optional<Trade> findById(Long id) {
         return tradeRepository.findById(id);

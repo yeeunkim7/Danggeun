@@ -3,6 +3,7 @@ package org.example.danggeun.chat.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.danggeun.chat.dto.ChatMessageDto;
+import org.example.danggeun.chat.dto.ChatRoomDto;
 import org.example.danggeun.chat.dto.ChatSummaryDto;
 import org.example.danggeun.chat.entity.Chat;
 import org.example.danggeun.chat.service.ChatService;
@@ -23,6 +24,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -133,4 +135,6 @@ public class ChatController {
         return userService.findByEmail(email)
                 .orElseThrow(() -> new IllegalStateException("사용자 없음: " + email));
     }
+
+
 }

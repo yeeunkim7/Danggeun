@@ -2,10 +2,11 @@ server:
   port: 8080
   address: 0.0.0.0
 
-file:
-  upload-dir: /home/ec2-user/uploads
-
 spring:
+  config:
+    import:
+      optional:dotenv:
+
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
@@ -17,8 +18,8 @@ spring:
       client:
         registration:
           google:
-            client-id: { "YOUR_GOOGLE_CLIENT_ID" }
-            client-secret: "YOUR_GOOGLE_CLIENT_SECRET" }
+            client-id: ${YOUR_GOOGLE_CLIENT_ID}
+            client-secret: ${YOUR_GOOGLE_CLIENT_SECRET}
             scope: [ email, profile ]
             redirect-uri: "http://13.60.13.30.nip.io/login/oauth2/code/{registrationId}"
         provider:
@@ -39,12 +40,14 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
+aws:
+  access-key-id: ${YOUR_AWS_ACCESS_KEY_ID}
+  secret-access-key: ${YOUR_AWS_SECRET_ACCESS_KEY}
+  region: eu-north-1
+  s3:
+    bucket-name: 2025-ipod
 
+file:
+  upload-dir: /home/ec2-user/uploads
 
-  aws:
-    access-key-id: { "your id" }
-    secret-access-key: { "your secret" }
-    region: ap-northeast-2
-    s3:
-      bucket-name: my-java-app-files-2024
 
