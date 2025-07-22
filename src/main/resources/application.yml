@@ -1,9 +1,8 @@
 server:
-  port: 8080
-  address: 0.0.0.0
+  port: 80
 
 file:
-  upload-dir: /home/ec2-user/uploads
+  upload-dir: /Users/user/Downloads/Danggeun/uploads
 
 spring:
   thymeleaf:
@@ -29,7 +28,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/danggeun
     username: postgres
-    password: 1234
+    password: ${DATABASE_PASSWORD}
 
   jpa:
     hibernate:

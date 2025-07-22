@@ -1,118 +1,102 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>글 작성</title>
-    <style>
-        body {
-            background-color: #f5f6f8;
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            justify-content: center;
-            padding: 40px;
-        }
-        .container {
-            background-color: #fff;
-            width: 720px;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .form-row {
-            display: flex;
-            gap: 20px;
-        }
-        .image-upload {
-            width: 140px;
-            height: 140px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #fff;
-            cursor: pointer;
-        }
-        .image-upload img {
-            width: 28px;
-            height: 28px;
-            opacity: 0.8;
-        }
-        .form-group {
-            flex: 1;
-        }
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            box-sizing: border-box;
-        }
-        .form-group label {
-            font-size: 13px;
-            font-weight: bold;
-            margin-bottom: 6px;
-            display: block;
-        }
-        .textarea-group textarea {
-            height: 120px;
-            resize: none;
-            background-color: #f7f8fa;
-        }
-        .submit-btn {
-            width: 100%;
-            margin-top: 24px;
-            padding: 14px;
-            background-color: #ff6f0f;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .input-gray {
-            background-color: #f7f8fa;
-            border-radius: 8px;
-            border: none;
-            padding: 12px;
-            font-size: 14px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/write/write_styles.css}">
+    <link rel="stylesheet" th:href="@{/css/header/header.css}">
 </head>
 <body>
-<div class="container">
-    <form th:action="@{/trade/submit}" method="post" enctype="multipart/form-data">
+<header th:replace="~{fragments/header :: headerFragment}"></header>
+
+<main class="container">
+
+    <form th:action="@{/trade/submit}"
+          th:object="${product}"
+          method="post"
+          enctype="multipart/form-data"
+          id="write-form">
+
         <div class="form-row">
             <label class="image-upload">
-                <img src="https://cdn-icons-png.flaticon.com/512/685/685655.png" alt="카메라 아이콘" />
-                <input type="file" name="productImage" accept="image/*" required style="display: none;" />
+                <img id="preview-image"
+                     src="https://cdn-icons-png.flaticon.com/512/685/685655.png"
+                     alt="카메라 아이콘" />
+                <input type="file"
+                       th:field="*{image}"
+                       accept="image/*"
+                       onchange="previewImage(event)"
+                       required
+                       style="display: none;" />
             </label>
+
             <div class="form-group">
                 <label for="title">글 제목</label>
-                <input type="text" id="title" name="title" placeholder="글 제목" class="input-gray" required />
+                <input type="text"
+                       th:field="*{title}"
+                       placeholder="글 제목"
+                       class="input-gray"
+                       required />
 
-                <label for="productPrice" style="margin-top: 14px;">가격</label>
-                <input type="text" id="productPrice" name="productPrice" placeholder="가격" class="input-gray" required />
+                <!-- 가격 -->
+                <label for="price" style="margin-top: 14px;">가격</label>
+                <input type="number"
+                       th:field="*{price}"
+                       placeholder="가격"
+                       class="input-gray"
+                       required />
+
+                <div class="form-group">
+                    <label for="category-select">카테고리</label>
+                    <div class="category-select-wrapper">
+                        <select id="category-select" name="categoryId" required>
+                            <option value="" disabled selected>카테고리를 선택해주세요</option>
+                            <option th:each="cat : ${categories}"
+                                    th:value="${cat.id}"
+                                    th:text="${cat.name}"></option>
+                        </select>
+                        <button type="button" class="category-add-btn">+ 새 카테고리</button>
+                    </div>
+                </div>
             </div>
         </div>
 
+        <!-- 설명 -->
         <div class="form-group textarea-group" style="margin-top: 24px;">
-            <label for="productDetail">물품 설명</label>
-            <textarea id="productDetail" name="productDetail" placeholder="게시글 내용을 작성해주세요." required></textarea>
+            <label for="detail">물품 설명</label>
+            <textarea th:field="*{detail}"
+                      placeholder="게시글 내용을 작성해주세요."
+                      required></textarea>
         </div>
 
+        <!-- 거래 장소 -->
         <div class="form-group" style="margin-top: 24px;">
             <label for="address">거래 희망 장소</label>
-            <input type="text" id="address" name="address" placeholder="거래를 희망하는 장소" class="input-gray" required />
+            <input type="text"
+                   th:field="*{address}"
+                   placeholder="거래를 희망하는 장소"
+                   class="input-gray"
+                   required />
         </div>
 
-        <button type="submit" class="submit-btn">완료</button>
+        <button type="submit" id="submit-btn" class="submit-btn">완료</button>
     </form>
+</main>
+
+<!-- 카테고리 추가 모달 -->
+<div id="category-modal" class="category-modal">
+    <div class="modal-content">
+        <span id="close-category-modal"
+              class="close-btn"
+              style="float:right;cursor:pointer;font-size:20px;"> × </span>
+        <h2>새 카테고리 추가</h2>
+        <input type="text" id="new-category-name" placeholder="카테고리 이름" class="input-gray" style="width:100%;margin:12px 0;">
+        <button id="save-category-btn" class="submit-btn" style="width:100%;">추가하기</button>
+    </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+<script th:src="@{/js/write.js}"></script>
 </body>
 </html>

@@ -22,25 +22,29 @@ public class Chat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Chat_ID")
-    private Long id; // 채팅방ID
+    @Column(name = "chat_id")
+    private Long id;
 
-    @Column(name = "Chat_CreatedAt")
-    private LocalDateTime createdAt; // 채팅생성일자
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Buyer_Id", nullable = false)
-    private User buyer; // 구매자ID (FK)
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Seller_Id", nullable = false)
-    private User seller; // 판매자ID (FK)
+    @JoinColumn(name = "buyer_id", nullable = false)
+    private User buyer;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Product_ID", nullable = false)
-    private Trade product; // 상품ID (FK)
+    @JoinColumn(name = "seller_id", nullable = false)
+    private User seller;
 
-    // 하나의 채팅방은 여러 메시지를 가질 수 있음
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = true)
+    private Trade product;
+
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> messages = new ArrayList<>();
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }
