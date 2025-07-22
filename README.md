@@ -53,17 +53,17 @@
 - Figma (디자인 참고)
 
 ---
-![img.png](img.png)
+![img.png](src/main/resources/static/asset/img.png)
 
 ## 2. 팀원 소개 및 역할
 ### 🔗 팀원 GitHub 및 프로필 이미지
 
-| 이름     | GitHub | 이미지 |
-|--------|--------|-|
-|👑<br/>김재경| [github.com/Jaekyung89](https://github.com/Jaekyung89) | ![img_12.png](img_12.png)|
-| 이소연    | [github.com/BlueGiraffe07](https://github.com/BlueGiraffe07) |![img_10.png](img_10.png) |
-| 김예은    | [github.com/yeeunkim7](https://github.com/yeeunkim7) | ![img_11.png](img_11.png)|
-| 김민형    | [github.com/KimTeaHyeong1](https://github.com/KimTeaHyeong1) |![img_13.png](img_13.png) |
+| 이름     | GitHub | 이미지                                                     |
+|--------|--------|---------------------------------------------------------|
+|👑<br/>김재경| [github.com/Jaekyung89](https://github.com/Jaekyung89) |![img12.png](src/main/resources/static/asset/img_12.png) |
+| 이소연    | [github.com/BlueGiraffe07](https://github.com/BlueGiraffe07) | ![img_10.png](src/main/resources/static/asset/img_10.png)                               |
+| 김예은    | [github.com/yeeunkim7](https://github.com/yeeunkim7) | ![img_11.png](src/main/resources/static/asset/img_11.png)                               |
+| 김민형    | [github.com/KimTeaHyeong1](https://github.com/KimTeaHyeong1) | ![img_13.png](src/main/resources/static/asset/img_13.png)                               |
 
 
 | 이름     | 담당 역할                               |
@@ -80,28 +80,28 @@
 ## 3. ERD 구조
 
 > 📌 ERD 다이어그램 (db 설계)
-
+![img.png](src/main/resources/static/asset/ERD.png)
 ---
 
 ## 4. 페이지 구성 및 주요 기능
 ### 4-1. 페이지 구성
 
 - 로그인(Login)
-![img_1.png](img_1.png)
+![img_1.png](src/main/resources/static/asset/img_1.png)
 - 회원가입(Register)
-![img_2.png](img_2.png)
+![img_2.png](src/main/resources/static/asset/img_2.png)
 - 메인페이지(MainPage)
-![img_3.png](img_3.png)
+![img_3.png](src/main/resources/static/asset/img_3.png)
 - 상품거래(Trade)
-![img_9.png](img_9.png)
+![img_9.png](src/main/resources/static/asset/img_9.png)
 - 상품 상세(Trdae-item)
-![img_5.png](img_5.png)
+![img_5.png](src/main/resources/static/asset/img_5.png)
 - 상품 등록(Trade-write)
-![img_7.png](img_7.png)
+![img_7.png](src/main/resources/static/asset/img_7.png)
 - AI채팅(Chatbot)
-![img_4.png](img_4.png)
+![img_4.png](src/main/resources/static/asset/img_4.png)
 - 위치(AreaConfirm)
-![img_8.png](img_8.png)
+![img_8.png](src/main/resources/static/asset/img_8.png)
 
 ### 4-2. 페이지 주요기능
 | 페이지 | 경로 | 주요 기능 |
