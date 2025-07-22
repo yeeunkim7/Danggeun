@@ -37,94 +37,32 @@
     <section class="popular-items-section container">
         <h2 class="section-title">중고거래 인기매물</h2>
 
-        <!--
-          TODO: Spring MVC에서 Model에 담겨온 상품 리스트(itemList)를
-          JSP의 <c:forEach> 또는 Thymeleaf의 th:each를 사용해 반복 출력하는 부분입니다.
-          아래 <article> 태그를 반복문 안에 넣어주세요.
-        -->
         <div class="item-grid">
-            <!-- 아이템 카드 (Sample) - 이 부분을 반복합니다. -->
-            <article class="item-card">
-                <div class="item-image"></div>
-                <div class="item-info">
-                    <h3 class="item-title">위닉스 제습기</h3>
-                    <p class="item-price">50,000원</p>
-                    <p class="item-location">인천 부평구 부평동</p>
-                    <p class="item-stats">조회 15 ∙ 채팅 41</p>
-                </div>
+            <article class="item-card" th:each="item : ${itemList}">
+                <a th:href="@{/trade/{id}(id=${item.id})}">
+                    <div class="item-image-container">
+                        <img th:src="${item.imageUrl != null ? item.imageUrl : '/images/default-product-image.png'}"
+                             alt="상품 이미지" class="item-image">
+                    </div>
+                    <div class="item-info">
+                        <h3 class="item-title" th:text="${item.title}">상품 제목</h3>
+                        <p class="item-price" th:text="${#numbers.formatInteger(item.price, 1, 'COMMA')} + '원'">가격</p>
+                        <p class="item-location" th:text="${item.address}">지역 정보</p>
+                        <p class="item-stats"
+                           th:text="'조회 ' + ${item.views} + ' ∙ 채팅 ' + ${item.chats}">관심 ∙ 채팅</p>
+                    </div>
+                </a>
             </article>
-            <!-- 반복 끝 -->
+        </div>
 
-            <!-- 아래는 UI 확인을 위한 샘플 데이터입니다. 실제 구현 시에는 반복문 하나만 남기고 삭제하세요. -->
-            <article class="item-card">
-                <div class="item-image"></div>
-                <div class="item-info">
-                    <h3 class="item-title">위닉스 제습기</h3>
-                    <p class="item-price">50,000원</p>
-                    <p class="item-location">인천 부평구 부평동</p>
-                    <p class="item-stats">조회 15 ∙ 채팅 41</p>
-                </div>
-            </article>
-            <article class="item-card">
-                <div class="item-image"></div>
-                <div class="item-info">
-                    <h3 class="item-title">위닉스 제습기</h3>
-                    <p class="item-price">50,000원</p>
-                    <p class="item-location">인천 부평구 부평동</p>
-                    <p class="item-stats">조회 15 ∙ 채팅 41</p>
-                </div>
-            </article>
-            <article class="item-card">
-                <div class="item-image"></div>
-                <div class="item-info">
-                    <h3 class="item-title">위닉스 제습기</h3>
-                    <p class="item-price">50,000원</p>
-                    <p class="item-location">인천 부평구 부평동</p>
-                    <p class="item-stats">조회 15 ∙ 채팅 41</p>
-                </div>
-            </article>
-            <article class="item-card">
-                <div class="item-image"></div>
-                <div class="item-info">
-                    <h3 class="item-title">위닉스 제습기</h3>
-                    <p class="item-price">50,000원</p>
-                    <p class="item-location">인천 부평구 부평동</p>
-                    <p class="item-stats">조회 15 ∙ 채팅 41</p>
-                </div>
-            </article>
-            <article class="item-card">
-                <div class="item-image"></div>
-                <div class="item-info">
-                    <h3 class="item-title">위닉스 제습기</h3>
-                    <p class="item-price">50,000원</p>
-                    <p class="item-location">인천 부평구 부평동</p>
-                    <p class="item-stats">조회 15 ∙ 채팅 41</p>
-                </div>
-            </article>
-            <article class="item-card">
-                <div class="item-image"></div>
-                <div class="item-info">
-                    <h3 class="item-title">위닉스 제습기</h3>
-                    <p class="item-price">50,000원</p>
-                    <p class="item-location">인천 부평구 부평동</p>
-                    <p class="item-stats">조회 15 ∙ 채팅 41</p>
-                </div>
-            </article>
-            <article class="item-card">
-                <div class="item-image"></div>
-                <div class="item-info">
-                    <h3 class="item-title">위닉스 제습기</h3>
-                    <p class="item-price">50,000원</p>
-                    <p class="item-location">인천 부평구 부평동</p>
-                    <p class="item-stats">조회 15 ∙ 채팅 41</p>
-                </div>
-            </article>
+        <div class="empty-list-message" th:if="${#lists.isEmpty(itemList)}">
+            <p>등록된 상품이 아직 없습니다. 첫 번째 상품을 등록해보세요!</p>
         </div>
     </section>
 </main>
 
 <!-- Floating Action Button -->
-<a href="#" class="fab">거래글쓰기</a>
+<a th:href="@{/trade/write}" class="fab">거래글쓰기</a>
 
 </body>
 </html>

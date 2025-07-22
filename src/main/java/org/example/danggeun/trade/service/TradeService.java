@@ -1,6 +1,8 @@
 package org.example.danggeun.trade.service; // 패키지 경로 변경
 
 import lombok.RequiredArgsConstructor;
+import org.example.danggeun.address.entity.Address;
+import org.example.danggeun.address.repository.AddressRepository;
 import org.example.danggeun.category.entity.Category;
 import org.example.danggeun.category.repository.CategoryRepository;
 import org.example.danggeun.common.FileStore;
@@ -26,7 +28,8 @@ public class TradeService {
     private final TradeRepository tradeRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
-    private final FileStore fileStore; // 파일 저장 컴포넌트 주입
+    private final FileStore fileStore;
+    private final AddressRepository addressRepository;
 
     @Transactional // 쓰기 작업이므로 readOnly=false 적용
     public Long createProduct(ProductCreateRequestDto requestDto, Long userId) throws IOException {
@@ -41,6 +44,15 @@ public class TradeService {
 
         // 3. DTO를 엔티티로 변환하여 DB에 저장
         Trade trade = requestDto.toEntity(seller, category, imageUrl);
+
+        if (requestDto.getAddress() != null && !requestDto.getAddress().isBlank()) {
+            Address newAddress = Address.builder()
+                    .detail(requestDto.getAddress()) // DTO에서 주소 문자열을 가져옴
+                    .user(seller)                   // 현재 판매자(User)와 연결
+                    .build();
+            addressRepository.save(newAddress);
+        }
+
         Trade savetrade = tradeRepository.save(trade);
 
         return savetrade.getId();

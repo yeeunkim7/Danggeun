@@ -33,6 +33,8 @@ public class SecurityConfig {
                 .userDetailsService(customUserDetailsService)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/", "/login", "/register", "/header", "/favicon.ico", "/css/**", "/js/**", "/images/**", "/asset/**").permitAll()
+                        .requestMatchers("/chat", "/ws-chat/**", "/app/**", "/topic/**")
+                        .authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

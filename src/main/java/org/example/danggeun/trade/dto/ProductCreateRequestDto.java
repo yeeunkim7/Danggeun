@@ -18,6 +18,7 @@ public class ProductCreateRequestDto {
     private String detail;
     private Long categoryId;
     private MultipartFile image;
+    private String address;
 
     // 이 DTO를 Product(Trade) 엔티티로 변환하는 메소드
     // Service 레이어에서 호출됩니다.
