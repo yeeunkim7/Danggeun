@@ -24,10 +24,10 @@ public class S3Service {
     public S3Service(@Value("${aws.access-key-id}") String accessKey,
                      @Value("${aws.secret-access-key}") String secretKey,
                      @Value("${aws.region}") String region,
-                     @Value("${aws.s3.bucket-name}") String bucketName, String region1) {
+                     @Value("${aws.s3.bucket-name}") String bucketName) {
 
         this.bucketName = bucketName;
-        this.region = region1;
+        this.region = region;
 
         AwsBasicCredentials credentials = AwsBasicCredentials.create(accessKey, secretKey);
 
