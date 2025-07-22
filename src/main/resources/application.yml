@@ -5,14 +5,6 @@ server:
 file:
   upload-dir: /home/ec2-user/uploads
 
-aws:
-  access-key-id: ${key}
-  secret-access-key: ${key}
-  region: ap-northeast-2
-  s3:
-    bucket-name: 2025-ipod
-
-
 spring:
   thymeleaf:
     prefix: classpath:/templates/
@@ -25,8 +17,8 @@ spring:
       client:
         registration:
           google:
-            client-id: ${key}
-            client-secret: ${key}
+            client-id: { "YOUR_GOOGLE_CLIENT_ID" }
+            client-secret: "YOUR_GOOGLE_CLIENT_SECRET" }
             scope: [ email, profile ]
             redirect-uri: "http://13.60.13.30.nip.io/login/oauth2/code/{registrationId}"
         provider:
@@ -54,4 +46,10 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: trace
 
 
+  aws:
+    access-key-id: { "your id" }
+    secret-access-key: { "your secret" }
+    region: ap-northeast-2
+    s3:
+      bucket-name: my-java-app-files-2024
 

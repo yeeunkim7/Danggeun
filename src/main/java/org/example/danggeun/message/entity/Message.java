@@ -9,7 +9,7 @@ import org.example.danggeun.user.entity.User;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Message")
+@Table(name = "message")
 @Getter
 @Setter
 @Builder
@@ -19,21 +19,26 @@ public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Message_ID")
-    private Long id; // 메시지ID
+    @Column(name = "message_id")
+    private Long id;
 
-    @Lob // TEXT 타입과 매핑
-    @Column(name = "Message_detail")
-    private String detail; // 메시지내용
+    @Lob
+    @Column(name = "message_content", nullable = false)
+    private String content;
 
-    @Column(name = "Message_CreatedAt")
-    private LocalDateTime createdAt; // 보낸시간
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "User_Id", nullable = false)
-    private User sender; // 보낸사람ID (FK)
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Chat_ID", nullable = false)
-    private Chat chat; // 채팅방ID (FK)
+    @JoinColumn(name = "sender_id", nullable = false)
+    private User sender;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chat_id", nullable = false)
+    private Chat chat;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }
