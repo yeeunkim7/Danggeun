@@ -79,7 +79,6 @@ public class TradeController {
             Authentication authentication,
             Model model
     ) {
-        // principal 에서 이메일 추출 (폼/소셜 로그인 공통 처리)
         Object principal = authentication.getPrincipal();
         String loginEmail;
         if (principal instanceof OAuth2User o) {
@@ -110,7 +109,6 @@ public class TradeController {
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."))
                 .getId();
 
-        // 서비스에 그대로 넘김 → 파일 업로드도 서비스가 처리
         tradeService.createProduct(dto, userId);
         return "redirect:/trade";
     }
@@ -126,6 +124,6 @@ public class TradeController {
     public String showUpdateForm(@PathVariable Long productId, Model model) {
         ProductDetailResponseDto dto = tradeService.findTradeById(productId);
         model.addAttribute("product", dto);
-        return "trade/updateTradePost";   // ← 뷰 이름(updateTradePost.html) 반환
+        return "trade/updateTradePost";
     }
 }

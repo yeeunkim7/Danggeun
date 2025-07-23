@@ -9,8 +9,8 @@ import lombok.*;
 @Builder
 public class ChatMessageDto {
     private Long chatId;
-    private Long senderId;   // 보내는 사람
-    private Long receiverId; // 받는 사람
+    private Long senderId;
+    private Long receiverId;
     private String content;
 
 }

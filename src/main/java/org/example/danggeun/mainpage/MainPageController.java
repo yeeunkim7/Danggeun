@@ -19,10 +19,9 @@ public class mainPageController {
 
     @GetMapping("/")
     public String showMainPage(Model model) {
-        // 인기매물용 리스트 가져오기 (페이징 없이 가장 간단하게)
         List<ProductListResponseDto> items = tradeService.findAllProducts();
         model.addAttribute("itemList", items);
-        return "mainPage/mainPage";  // 메인 페이지 템플릿 이름
+        return "mainPage/mainPage";
     }
 
 }
