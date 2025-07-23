@@ -1,8 +1,8 @@
-package org.example.danggeun.areaConfirm.Controller;
+package org.example.danggeun.areaconfirm.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.danggeun.areaConfirm.Dto.AreaDto;
-import org.example.danggeun.areaConfirm.service.AreaService;
+import org.example.danggeun.areaconfirm.dto.AreaRequestDto;
+import org.example.danggeun.areaconfirm.service.AreaService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,12 +13,12 @@ public class AreaController {
     private final AreaService areaService;
 
     @PostMapping("/confirm")
-    public String confirmArea(@RequestBody AreaDto dto) {
+    public String confirmArea(@RequestBody AreaRequestDto dto) {
         return areaService.saveArea(dto);
     }
 
     @GetMapping("/me")
-    public AreaDto getMyArea(@RequestParam("userId") Long userId) {
+    public AreaRequestDto getMyArea(@RequestParam("userId") Long userId) {
         return areaService.findAreaByUserId(userId);
     }
 }

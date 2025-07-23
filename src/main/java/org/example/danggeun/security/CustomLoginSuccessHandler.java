@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.example.danggeun.user.dto.UserDTO;
+import org.example.danggeun.user.dto.UserResponseDto;
 import org.example.danggeun.user.entity.User;
 import org.example.danggeun.user.repository.UserRepository;
 import org.springframework.security.core.Authentication;
@@ -36,7 +36,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
             User user = userRepository.findByEmail(email).orElse(null);
 
             if (user != null) {
-                UserDTO userDTO = new UserDTO(user.getUsername(), user.getEmail());
+                UserResponseDto userDTO = new UserResponseDto(user.getUsername(), user.getEmail());
                 session.setAttribute("loginUser", userDTO);
             }
 
@@ -45,7 +45,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
             User user = userRepository.findByEmail(username).orElse(null);
 
             if (user != null) {
-                UserDTO userDTO = new UserDTO(user.getUsername(), user.getEmail());
+                UserResponseDto userDTO = new UserResponseDto(user.getUsername(), user.getEmail());
                 session.setAttribute("loginUser", userDTO);
             }
         }

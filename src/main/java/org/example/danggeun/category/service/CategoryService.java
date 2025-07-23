@@ -21,13 +21,13 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    /** 이름 중복 체크 */
+
     @Transactional(readOnly = true)
     public boolean existsByName(String name) {
         return categoryRepository.existsByName(name);
     }
 
-    /** 새 카테고리 생성 */
+
     @Transactional
     public CategoryDto create(CategoryCreateRequestDto req) {
         Category cat = Category.builder()

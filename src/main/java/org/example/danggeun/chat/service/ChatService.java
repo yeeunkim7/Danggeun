@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ChatService {
 
-    // AI 챗봇 시스템 계정 이메일
     private static final String AI_EMAIL = "system@danggeun.com";
 
     private final UserService userService;
@@ -86,7 +85,7 @@ public class ChatService {
             User system = User.builder()
                     .username("chatbot")
                     .email(AI_EMAIL)
-                    .password("{noop}changeme")  // 실제로는 랜덤·안전하게 처리
+                    .password("{noop}changeme")
                     .build();
             return userService.save(system);
         });

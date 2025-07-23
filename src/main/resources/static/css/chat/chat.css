@@ -1,4 +1,3 @@
-/* 기본 스타일 초기화 */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -7,19 +6,17 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background-color: #FFFBF5; /* 이미지와 유사한 배경색 */
+    background-color: #FFFBF5;
 }
 
-/* 전체 채팅 페이지 컨테이너 */
 .chat-page-container {
     width: 100%;
     max-width: 980px;
-    margin: 20px auto; /* 헤더 아래 여백 및 가운데 정렬 */
-    height: calc(100vh - 100px); /* 헤더 높이를 제외한 뷰포트 높이, 100px은 예시 */
+    margin: 20px auto;
+    height: calc(100vh - 100px);
     min-height: 600px;
 }
 
-/* 채팅 UI 메인 레이아웃 */
 .chat-container {
     margin-top: 65px;
     display: flex;
@@ -28,10 +25,9 @@ body {
     border: 1px solid #E9ECEF;
     border-radius: 8px;
     background-color: #FFFFFF;
-    overflow: hidden; /* 자식 요소가 컨테이너를 벗어나지 않도록 */
+    overflow: hidden;
 }
 
-/* 왼쪽: 채팅방 목록 패널 */
 .chat-list-panel {
     flex: 0 0 320px;
     min-width: 320px;
@@ -58,7 +54,6 @@ body {
     align-items: center;
 }
 
-/* 토글 스위치 CSS */
 .switch {
     position: relative;
     display: inline-block;
@@ -95,7 +90,7 @@ input:checked + .slider:before { transform: translateX(14px); }
 .chat-list {
     list-style: none;
     overflow-y: auto;
-    flex-grow: 1; /* 남은 공간을 모두 차지 */
+    flex-grow: 1;
 }
 
 .chat-item {
@@ -118,7 +113,7 @@ input:checked + .slider:before { transform: translateX(14px); }
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background-color: #FF6F0F; /* 당근색 */
+    background-color: #FF6F0F;
     margin-right: 12px;
     display: flex;
     align-items: center;
@@ -127,7 +122,7 @@ input:checked + .slider:before { transform: translateX(14px); }
     font-weight: bold;
     font-size: 24px;
 }
-/* 로봇 아이콘 대신 텍스트로 대체 */
+
 .chat-avatar::before {
     content: "AI";
     font-size: 18px;
@@ -149,7 +144,6 @@ input:checked + .slider:before { transform: translateX(14px); }
     margin-top: 4px;
 }
 
-/* 오른쪽: 채팅방 패널 */
 .chat-room-panel {
     flex: 1;
     display: flex;
@@ -171,12 +165,12 @@ input:checked + .slider:before { transform: translateX(14px); }
     flex-grow: 1;
     padding: 20px;
     overflow-y: auto;
-    background-color: #F8F9FA; /* 채팅 배경색 */
+    background-color: #F8F9FA;
     display: flex;
     flex-direction: column;
 }
 
-/* 메시지 입력 폼 */
+
 .chat-input-form {
     display: flex;
     padding: 12px;
@@ -238,7 +232,6 @@ input:checked + .slider:before { transform: translateX(14px); }
     margin-bottom: 8px;
 }
 
-/* 내가 보낸 메시지 (오른쪽 정렬, 주황 배경) */
 .chat-messages .message-user {
     justify-content: flex-end;
 }
@@ -252,7 +245,6 @@ input:checked + .slider:before { transform: translateX(14px); }
     word-break: break-word;
 }
 
-/* 봇이 보낸 메시지 (왼쪽 정렬, 회색 배경) */
 .chat-messages .message-bot {
     justify-content: flex-start;
 }

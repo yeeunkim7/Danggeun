@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
-    // 특정 채팅방의 메시지 리스트(생성시간 순)
+
     List<Message> findAllByChatIdOrderByCreatedAtAsc(Long chatId);
 }

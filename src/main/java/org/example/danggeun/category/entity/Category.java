@@ -1,4 +1,3 @@
-// Category.java
 package org.example.danggeun.category.entity;
 
 import jakarta.persistence.*;
@@ -20,12 +19,11 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Category_ID")
-    private Long id; // 카테고리ID
+    private Long id;
 
     @Column(name = "Category_Nm", length = 50)
-    private String name; // 카테고리명
+    private String name;
 
-    // 하나의 카테고리는 여러 상품을 가질 수 있음
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Trade> products = new ArrayList<>();
 }

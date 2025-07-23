@@ -1,4 +1,3 @@
-// Chat.java
 package org.example.danggeun.chat.entity;
 
 import jakarta.persistence.*;

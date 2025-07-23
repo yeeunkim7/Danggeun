@@ -1,4 +1,3 @@
-// 이미지 미리보기
 function previewImage(event) {
     const reader = new FileReader();
     reader.onload = () => {
@@ -22,14 +21,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const saveCategoryBtn  = document.getElementById("save-category-btn");
     const newCategoryInput = document.getElementById("new-category-name");
 
-    // 모달 열기/닫기
     categoryAddBtn.onclick = () => { newCategoryInput.value = ""; modal.style.display = "flex"; };
     closeBtn.onclick = () => modal.style.display = "none";
     window.addEventListener("click", e => {
         if (e.target === modal) modal.style.display = "none";
     });
 
-    // 새 카테고리 API 호출 → select 에 추가
     saveCategoryBtn.onclick = async () => {
         const name = newCategoryInput.value.trim();
         if (!name) {
@@ -71,7 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (!res.ok) {
-                // 서버가 응답한 본문(예: 예외 메시지, HTML 등)을 텍스트로 꺼내서 찍어 봅니다.
                 const errText = await res.text();
                 console.error(`서버 에러 ${res.status}:`, errText);
                 throw new Error(`서버 에러 ${res.status}`);

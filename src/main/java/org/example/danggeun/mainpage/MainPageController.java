@@ -1,7 +1,6 @@
-package org.example.danggeun.mainpage.controller;
+package org.example.danggeun.mainpage;
 
-import io.micrometer.common.util.internal.logging.InternalLogger;
-import org.example.danggeun.item.dto.ItemDto;
+import org.example.danggeun.item.dto.ItemListResponseDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,13 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-public class mainPageController {
+public class MainPageController {
 
     @GetMapping("/")
     public String mainPage(Model model) {
-        List<ItemDto> items = new ArrayList<>();
+        List<ItemListResponseDto> items = new ArrayList<>();
 
-        ItemDto item1 = new ItemDto();
+        ItemListResponseDto item1 = new ItemListResponseDto();
         item1.setId(1L);
         item1.setTitle("위닉스제습기");
         item1.setPrice(50000);
@@ -26,7 +25,7 @@ public class mainPageController {
         item1.setImageUrl("/asset/repo.png");
         items.add(item1);
 
-        ItemDto item2 = new ItemDto();
+        ItemListResponseDto item2 = new ItemListResponseDto();
         item2.setId(2L);
         item2.setTitle("LG 모니터 팝니다");
         item2.setPrice(150000);
@@ -36,7 +35,7 @@ public class mainPageController {
         item2.setImageUrl("/asset/charater.png");
         items.add(item2);
 
-        ItemDto item3 = new ItemDto();
+        ItemListResponseDto item3 = new ItemListResponseDto();
         item3.setId(3L);
         item3.setTitle("닌텐도 스위치 2 마리오카트 월드 미개봉");
         item3.setPrice(650000);
@@ -46,7 +45,7 @@ public class mainPageController {
         item3.setImageUrl("/asset/charater.png");
         items.add(item3);
 
-        ItemDto item4 = new ItemDto();
+        ItemListResponseDto item4 = new ItemListResponseDto();
         item4.setId(4L);
         item4.setTitle("아이폰16pro");
         item4.setPrice(800000);
@@ -56,7 +55,7 @@ public class mainPageController {
         item4.setImageUrl("/asset/charater.png");
         items.add(item4);
 
-        ItemDto item5 = new ItemDto();
+        ItemListResponseDto item5 = new ItemListResponseDto();
         item5.setId(5L);
         item5.setTitle("이사로 정리합니다. 가구들 필요한거 가져가세요");
         item5.setPrice(999);
@@ -66,7 +65,7 @@ public class mainPageController {
         item5.setImageUrl("/asset/charater.png");
         items.add(item5);
 
-        ItemDto item6 = new ItemDto();
+        ItemListResponseDto item6 = new ItemListResponseDto();
         item6.setId(6L);
         item6.setTitle("워터밤 서울 2025 초대권");
         item6.setPrice(30000);
@@ -76,7 +75,7 @@ public class mainPageController {
         item6.setImageUrl("/asset/charater.png");
         items.add(item6);
 
-        ItemDto item7 = new ItemDto();
+        ItemListResponseDto item7 = new ItemListResponseDto();
         item7.setId(7L);
         item7.setTitle("캠핑테이블");
         item7.setPrice(10000);
@@ -86,7 +85,7 @@ public class mainPageController {
         item7.setImageUrl("/asset/charater.png");
         items.add(item7);
 
-        ItemDto item8 = new ItemDto();
+        ItemListResponseDto item8 = new ItemListResponseDto();
         item8.setId(8L);
         item8.setTitle("피시방 폐업 정리해요");
         item8.setPrice(30000);

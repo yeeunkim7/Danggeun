@@ -1,4 +1,3 @@
-// src/main/java/org/example/danggeun/category/controller/CategoryController.java
 package org.example.danggeun.category.controller;
 
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,6 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    /** 전체 카테고리 조회 → GET /api/categories */
     @GetMapping
     public List<CategoryDto> listAll() {
         return categoryService.findAll()
@@ -29,7 +27,7 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<CategoryDto> create(@RequestBody CategoryCreateRequestDto req) {
-        // 이름 중복 검사
+
         if (categoryService.existsByName(req.getName())) {
             return ResponseEntity
                     .badRequest()

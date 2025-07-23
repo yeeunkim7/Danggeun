@@ -2,7 +2,6 @@ let map, marker, circle, geocoder;
 let autocomplete;
 
 window.addEventListener('DOMContentLoaded', () => {
-    // 항상 브라우저의 현재 GPS 위치를 사용해 지도 초기화
     setLocation();
 });
 

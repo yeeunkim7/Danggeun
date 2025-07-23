@@ -1,4 +1,4 @@
-package org.example.danggeun.s3;
+package org.example.danggeun.s3.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -37,9 +37,6 @@ public class S3Service {
                 .build();
     }
 
-    /**
-     * 파일 업로드
-     */
     public String uploadFile(MultipartFile file) throws IOException {
         String fileName = generateFileName(file.getOriginalFilename());
 
@@ -54,17 +51,12 @@ public class S3Service {
         return getFileUrl(fileName);
     }
 
-    /**
-     * 파일 다운로드 URL 생성
-     */
+
     public String getFileUrl(String fileName) {
         return String.format("https://%s.s3.%s.amazonaws.com/%s",
                 bucketName, region, fileName);
     }
 
-    /**
-     * 파일 삭제
-     */
     public void deleteFile(String fileName) {
         DeleteObjectRequest request = DeleteObjectRequest.builder()
                 .bucket(bucketName)
@@ -74,9 +66,7 @@ public class S3Service {
         s3Client.deleteObject(request);
     }
 
-    /**
-     * 버킷의 모든 파일 목록 조회
-     */
+
     public List<String> listFiles() {
         ListObjectsV2Request request = ListObjectsV2Request.builder()
                 .bucket(bucketName)
@@ -89,9 +79,7 @@ public class S3Service {
                 .toList();
     }
 
-    /**
-     * 고유한 파일명 생성
-     */
+
     private String generateFileName(String originalFilename) {
         return UUID.randomUUID().toString() + "-" + originalFilename;
     }

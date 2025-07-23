@@ -21,7 +21,6 @@ public class LoginController {
         this.userRepository = userRepository;
     }
 
-    //1. 로그인 화면
     @GetMapping("/login")
     public String loginPage(@RequestParam(value = "error", required = false) String error,
                             Model model) {

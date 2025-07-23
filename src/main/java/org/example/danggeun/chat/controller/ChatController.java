@@ -50,7 +50,7 @@ public class ChatController {
             Authentication authentication,
             Model model
     ) {
-        // principal 타입 검사해서 이메일 꺼내기
+
         Object principal = authentication.getPrincipal();
         String loginEmail;
         if (principal instanceof OAuth2User oauth2User) {
@@ -61,11 +61,11 @@ public class ChatController {
             throw new IllegalStateException("알 수 없는 인증 타입: " + principal.getClass());
         }
 
-        // 유저 엔티티 조회
+
         User loginUser = userService.findByEmail(loginEmail)
                 .orElseThrow(() -> new IllegalStateException("존재하지 않는 사용자: " + loginEmail));
 
-        // AI 챗방 조회 또는 생성
+
         Chat aiChat = chatService.findOrCreateAiChat(loginUser.getId());
 
         model.addAttribute("chatId", aiChat.getId());

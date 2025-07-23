@@ -6,7 +6,7 @@ import org.example.danggeun.trade.entity.Trade; // 변환 대상 엔티티
 
 @Getter
 @Setter
-public class ProductListResponseDto {
+public class TradeListResponseDto {
 
     private final Long id;
     private final String title;
@@ -18,7 +18,7 @@ public class ProductListResponseDto {
     private final int chats;
 
     // Entity를 DTO로 변환하는 생성자
-    public ProductListResponseDto(Trade entity) {
+    public TradeListResponseDto(Trade entity) {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.price = entity.getPrice();

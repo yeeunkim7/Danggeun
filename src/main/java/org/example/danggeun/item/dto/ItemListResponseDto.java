@@ -5,12 +5,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ItemDto {
+public class ItemListResponseDto {
     private Long id;
     private String title;
     private int price;
     private String location;
     private int viewCount;
     private int chatCount;
-    private String imageUrl; // 상품 썸네일 이미지 URL
+    private String imageUrl;
 }

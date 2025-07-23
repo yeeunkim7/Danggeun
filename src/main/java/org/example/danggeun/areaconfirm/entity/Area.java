@@ -1,4 +1,4 @@
-package org.example.danggeun.areaConfirm.entity;
+package org.example.danggeun.areaconfirm.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,29 +28,26 @@ public class Area {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "area_id")
-    private Long areaId;                       // 동네 인증 PK
+    private Long areaId;
 
     @Column(name = "user_id", nullable = false)
-    private Long userId;                       // 인증한 사용자 ID (자체·구글 공통)
+    private Long userId;
 
     @Lob
     @Column(name = "address", length = 200)
-    private String address;                    // 주소(법정동·행정동 등)
+    private String address;
 
     @Column(name = "latitude", nullable = false)
-    private double latitude;                   // 위도
+    private double latitude;
 
     @Column(name = "longitude", nullable = false)
-    private double longitude;                  // 경도
+    private double longitude;
 
     @Column(name = "confirmed_at")
-    private LocalDateTime confirmedAt;         // 인증 일시
+    private LocalDateTime confirmedAt;
 
-    // ────────────────────────────────────────────────
-    // Entity Lifecycle
-    // ────────────────────────────────────────────────
     @PrePersist
-    protected void onCreate() {                // 저장 직전 자동 세팅
+    protected void onCreate() {
         this.confirmedAt = LocalDateTime.now();
     }
 }

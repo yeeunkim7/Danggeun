@@ -21,7 +21,6 @@ public class MessageService {
     private final ChatRepository chatRepository;
     private final UserRepository userRepository;
 
-    /** 새 메시지 저장 */
     @Transactional
     public Message saveMessage(Long chatId, Long userId, String messageContent) {
         Chat chat = chatRepository.findById(chatId)
@@ -39,7 +38,6 @@ public class MessageService {
         return messageRepository.save(msg);
     }
 
-    /** 특정 채팅방의 모든 메시지 조회 */
     @Transactional(readOnly = true)
     public List<Message> getMessages(Long chatId) {
         return messageRepository.findAllByChatIdOrderByCreatedAtAsc(chatId);

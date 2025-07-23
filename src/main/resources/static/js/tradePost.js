@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const products = await response.json();
 
     const container = document.getElementById('product-list');
-    if (!container) return; // 상품 리스트 컨테이너가 없으면 종료
+    if (!container) return;
     container.innerHTML = '';
 
     products.forEach(product => {

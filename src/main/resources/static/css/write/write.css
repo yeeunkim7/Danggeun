@@ -87,7 +87,6 @@ select {
     background-color: #e85a00;
 }
 
-/* 카테고리 선택 + 추가 버튼 wrapper */
 .category-select-wrapper {
     display: flex;
     gap: 8px;
@@ -111,7 +110,6 @@ select {
     background-color: #fff2e6;
 }
 
-/* 카테고리 추가 모달 */
 .category-modal {
     display: none;
     position: fixed;

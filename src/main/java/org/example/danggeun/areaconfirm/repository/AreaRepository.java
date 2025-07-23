@@ -1,6 +1,6 @@
-package org.example.danggeun.areaConfirm.repository;
+package org.example.danggeun.areaconfirm.repository;
 
-import org.example.danggeun.areaConfirm.entity.Area;
+import org.example.danggeun.areaconfirm.entity.Area;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

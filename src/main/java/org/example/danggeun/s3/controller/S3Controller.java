@@ -1,5 +1,6 @@
-package org.example.danggeun.s3;
+package org.example.danggeun.s3.controller;
 
+import org.example.danggeun.s3.service.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +16,6 @@ public class S3Controller {
     @Autowired
     private S3Service s3Service;
 
-    /**
-     * 파일 업로드
-     */
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
         try {
@@ -28,18 +26,14 @@ public class S3Controller {
         }
     }
 
-    /**
-     * 파일 목록 조회
-     */
+
     @GetMapping("/list")
     public ResponseEntity<List<String>> listFiles() {
         List<String> files = s3Service.listFiles();
         return ResponseEntity.ok(files);
     }
 
-    /**
-     * 파일 삭제
-     */
+
     @DeleteMapping("/{fileName}")
     public ResponseEntity<String> deleteFile(@PathVariable String fileName) {
         try {

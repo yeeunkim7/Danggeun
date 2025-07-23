@@ -1,12 +1,12 @@
 package org.example.danggeun.user.dto;
 
-public class UserDTO {
+public class UserResponseDto {
     private String username;
     private String email;
 
-    public UserDTO() {}
+    public UserResponseDto() {}
 
-    public UserDTO(String username, String email) {
+    public UserResponseDto(String username, String email) {
         this.username = username;
         this.email = email;
     }

@@ -17,10 +17,10 @@ spring:
       client:
         registration:
           google:
-            client-id: { "YOUR_GOOGLE_CLIENT_ID" }
-            client-secret: "YOUR_GOOGLE_CLIENT_SECRET" }
+            client-id: ${OAUTH_GOOGLE_CLIENT_ID}
+            client-secret: ${OAUTH_GOOGLE_CLIENT_SECRET}
             scope: [ email, profile ]
-            redirect-uri: "http://13.60.13.30.nip.io/login/oauth2/code/{registrationId}"
+            redirect-uri: http://${AWS_PUBLIC_DNS}/login/oauth2/code/{registrationId}
         provider:
           google:
             user-name-attribute: sub
@@ -29,7 +29,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/danggeun
     username: postgres
-    password: 1234
+    password: 2327
 
   jpa:
     hibernate:
@@ -45,11 +45,9 @@ logging:
     org.hibernate.SQL: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace
 
-
-  aws:
-    access-key-id: { "your id" }
-    secret-access-key: { "your secret" }
-    region: ap-northeast-2
-    s3:
-      bucket-name: my-java-app-files-2024
-
+aws:
+  access-key-id: ${AWS_ACCESS_KEY_ID}
+  secret-access-key: ${AWS_SECRET_ACCESS_KEY}
+  region: ap-northeast-2
+  s3:
+    bucket-name: my-java-app-files-2024
