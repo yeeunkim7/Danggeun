@@ -1,7 +1,8 @@
-package org.example.danggeun.search.controller;
+package org.example.danggeun.search;
 
 import lombok.RequiredArgsConstructor;
-import org.example.danggeun.trade.dto.ProductListResponseDto;
+import org.example.danggeun.trade.dto.TradeListResponseDto;
+import org.example.danggeun.trade.entity.Trade;
 import org.example.danggeun.trade.service.TradeService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +23,7 @@ public class SearchController {
             Pageable pageable,
             Model model
     ) {
-        Page<ProductListResponseDto> page;
+        Page<TradeListResponseDto> page;
         if (query != null && !query.isBlank()) {
             page = tradeService.searchProducts(query, pageable);
         } else {

@@ -6,10 +6,12 @@ import org.example.danggeun.category.dto.CategoryDto;
 import org.example.danggeun.category.entity.Category;
 import org.example.danggeun.category.repository.CategoryRepository;
 import org.example.danggeun.category.service.CategoryService;
-import org.example.danggeun.s3.S3Service;
-import org.example.danggeun.trade.dto.ProductCreateRequestDto;
-import org.example.danggeun.trade.dto.ProductDetailResponseDto;
-import org.example.danggeun.trade.dto.ProductListResponseDto;
+import org.example.danggeun.s3.service.S3Service;
+import org.example.danggeun.trade.dto.TradeCreateRequestDto;
+import org.example.danggeun.trade.dto.TradeDetailResponseDto;
+import org.example.danggeun.trade.dto.TradeListResponseDto;
+import org.example.danggeun.trade.dto.TradeDetailResponseDto;
+import org.example.danggeun.trade.entity.Trade;
 import org.example.danggeun.trade.service.TradeService;
 import org.example.danggeun.user.entity.User;
 import org.example.danggeun.user.repository.UserRepository;
@@ -44,14 +46,14 @@ public class TradeController {
 
     @GetMapping("/trade")
     public String listProducts(Model model) {
-        List<ProductListResponseDto> productList = tradeService.findAllProducts();
+        List<TradeListResponseDto> productList = tradeService.findAllProducts();
         model.addAttribute("itemList", productList);
         return "trade/trade"; // 기존의 목록 뷰를 그대로 사용
     }
 
     @PostMapping("/write")
     public String createProduct(
-            @ModelAttribute ProductCreateRequestDto product,
+            @ModelAttribute TradeCreateRequestDto product,
             Authentication authentication  // 이미 인증된 상태이니, 세션 검사 생략
     ) throws IOException {
         Object p = authentication.getPrincipal();
@@ -90,7 +92,7 @@ public class TradeController {
         }
 
         model.addAttribute("loginEmail", loginEmail);
-        model.addAttribute("product", new ProductCreateRequestDto());
+        model.addAttribute("product", new TradeCreateRequestDto());
 
         List<CategoryDto> cats = categoryService.findAll().stream()
                 .map(c -> new CategoryDto(c.getId(), c.getName()))
@@ -102,7 +104,7 @@ public class TradeController {
 
 
     @PostMapping("/trade/submit")
-    public String createProduct(@ModelAttribute("product") ProductCreateRequestDto dto) throws IOException {
+    public String createProduct(@ModelAttribute("product") TradeCreateRequestDto dto) throws IOException {
         // 로그인 사용자 조회
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Long userId = userRepository.findByEmail(email)
@@ -115,14 +117,14 @@ public class TradeController {
 
     @GetMapping("/trade/{productId}")
     public String showProductDetail(@PathVariable Long productId, Model model) {
-        ProductDetailResponseDto productDto = tradeService.findTradeById(productId);
+        TradeDetailResponseDto productDto = tradeService.findTradeById(productId);
         model.addAttribute("product", productDto);
         return "trade/tradePost";
     }
 
     @GetMapping("/trade/update/{productId}")
     public String showUpdateForm(@PathVariable Long productId, Model model) {
-        ProductDetailResponseDto dto = tradeService.findTradeById(productId);
+        TradeDetailResponseDto dto = tradeService.findTradeById(productId);
         model.addAttribute("product", dto);
         return "trade/updateTradePost";
     }

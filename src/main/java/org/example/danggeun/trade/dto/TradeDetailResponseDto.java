@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-public class ProductDetailResponseDto {
+public class TradeDetailResponseDto {
 
     private final Long id;
     private final String title;
@@ -24,7 +24,7 @@ public class ProductDetailResponseDto {
     private final String categoryName;
     private final String address;
 
-    public ProductDetailResponseDto(Trade entity) {
+    public TradeDetailResponseDto(Trade entity) {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.name = entity.getName();

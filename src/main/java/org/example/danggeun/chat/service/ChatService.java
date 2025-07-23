@@ -116,7 +116,7 @@ public class ChatService {
 
         List<ChatSummaryDto> result = new ArrayList<>();
         for (Chat chat : chats) {
-            // 마지막 메시지
+
             Message lastMsg = chat.getMessages().isEmpty() ? null
                     : chat.getMessages().get(chat.getMessages().size() - 1);
             String lastMessage   = (lastMsg != null ? lastMsg.getContent() : "");
@@ -124,12 +124,12 @@ public class ChatService {
             Long   sellerId      = chat.getSeller().getId();
             Long   opponentId    = buyerId.equals(userId) ? sellerId : buyerId;
 
-            // 상대방
+
             User otherUser = userId.equals(chat.getBuyer().getId())
                     ? chat.getSeller()
                     : chat.getBuyer();
 
-            // 타이틀: product가 있으면 상품명, 없으면 상대방 이름
+
             String title = chat.getProduct() != null
                     ? chat.getProduct().getTitle()
                     : otherUser.getUsername();

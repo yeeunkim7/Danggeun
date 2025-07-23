@@ -5,10 +5,10 @@ import org.example.danggeun.address.entity.Address;
 import org.example.danggeun.address.repository.AddressRepository;
 import org.example.danggeun.category.entity.Category;
 import org.example.danggeun.category.repository.CategoryRepository;
-import org.example.danggeun.s3.S3Service;
-import org.example.danggeun.trade.dto.ProductCreateRequestDto;
-import org.example.danggeun.trade.dto.ProductDetailResponseDto;
-import org.example.danggeun.trade.dto.ProductListResponseDto;
+import org.example.danggeun.s3.service.S3Service;
+import org.example.danggeun.trade.dto.TradeCreateRequestDto;
+import org.example.danggeun.trade.dto.TradeDetailResponseDto;
+import org.example.danggeun.trade.dto.TradeListResponseDto;
 import org.example.danggeun.trade.entity.Trade;
 import org.example.danggeun.trade.repository.TradeRepository;
 import org.example.danggeun.user.entity.User;
@@ -37,7 +37,7 @@ public class TradeService {
 
 
     @Transactional
-    public Long createProduct(ProductCreateRequestDto dto, Long userId) throws IOException {
+    public Long createProduct(TradeCreateRequestDto dto, Long userId) throws IOException {
         User seller = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
         Category category = categoryRepository.findById(dto.getCategoryId())
@@ -66,29 +66,29 @@ public class TradeService {
         return saved.getId();
     }
 
-    public List<ProductListResponseDto> findAllProducts() {
+    public List<TradeListResponseDto> findAllProducts() {
         List<Trade> products = tradeRepository.findAllWithSeller();
 
         return products.stream()
-                .map(ProductListResponseDto::new)
+                .map(TradeListResponseDto::new)
                 .collect(Collectors.toList());
     }
 
-    public ProductDetailResponseDto findTradeById(Long productId) {
+    public TradeDetailResponseDto findTradeById(Long productId) {
         Trade trade = tradeRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 상품을 찾을 수 없습니다. id=" + productId));
 
-        return new ProductDetailResponseDto(trade);
+        return new TradeDetailResponseDto(trade);
     }
 
-    public Page<ProductListResponseDto> findAllProducts(Pageable pageable) {
+    public Page<TradeListResponseDto> findAllProducts(Pageable pageable) {
         return tradeRepository.findAll(pageable)
-                .map(ProductListResponseDto::new);
+                .map(TradeListResponseDto::new);
     }
 
-    public Page<ProductListResponseDto> searchProducts(String keyword, Pageable pageable) {
+    public Page<TradeListResponseDto> searchProducts(String keyword, Pageable pageable) {
         return tradeRepository.findByTitleContainingIgnoreCase(keyword, pageable)
-                .map(ProductListResponseDto::new);
+                .map(TradeListResponseDto::new);
     }
 
     public Optional<Trade> findById(Long id) {

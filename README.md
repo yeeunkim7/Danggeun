@@ -70,7 +70,7 @@
 |--------|-------------------------------------|
 | 👑 김재경 | 팀장, 챗봇 연동, Trade 페이지                |
 | 이소연    | 메인페이지, Notion, 발표자료(PPT), README 정리 |
-| 김예은    | 소셜 로그인, 회원가입, AWS S3 이미지 업로드        |
+| 김예은    | 소셜 로그인, 회원가입, AWS E2 배포             |
 | 김민형    | Post기능, 채팅페이지                       |
 
 > 🎨 [피그마 디자인 시안 바로가기](https://www.figma.com/design/kSMua8TOVGIIPbNH1jie1Q/%EC%98%A4%EB%A5%B4%EB%AF%B8-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EB%8B%B9%EA%B7%BC%EB%A7%88%EC%BC%93Web-%ED%81%B4%EB%A1%A0%EC%BD%94%EB%94%A9-?node-id=0-1&p=f)
