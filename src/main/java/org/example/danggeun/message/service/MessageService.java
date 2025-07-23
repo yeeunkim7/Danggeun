@@ -22,16 +22,17 @@ public class MessageService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Message saveMessage(Long chatId, Long userId, String messageContent) {
+    public Message saveMessage(Long chatId, Long senderId, Long receiverId, String content) {
         Chat chat = chatRepository.findById(chatId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid chatId"));
-        User sender = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid userId"));
+        User sender = userRepository.findById(senderId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid senderId"));
+        // receiverId는 필요하면 사용
 
         Message msg = Message.builder()
                 .chat(chat)
                 .sender(sender)
-                .content(messageContent)
+                .content(content)
                 .createdAt(LocalDateTime.now())
                 .build();
 
@@ -41,5 +42,9 @@ public class MessageService {
     @Transactional(readOnly = true)
     public List<Message> getMessages(Long chatId) {
         return messageRepository.findAllByChatIdOrderByCreatedAtAsc(chatId);
+    }
+
+    public List<Chat> findAllChatsByUser(User user) {
+        return chatRepository.findAllByBuyerOrSeller(user, user);
     }
 }

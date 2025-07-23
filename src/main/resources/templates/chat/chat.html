@@ -1,65 +1,64 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>채팅 - 당근마켓</title>
-    <!-- 분리된 CSS 파일을 연결합니다. -->
     <link rel="stylesheet" href="/css/chat/chat_styles.css">
     <link rel="stylesheet" href="/css/header/header.css">
 </head>
 <body>
-
-<header th:replace="~{fragments/header :: headerFragment}"></header>
+<header th:replace="fragments/header :: headerFragment"></header>
 
 <main class="chat-page-container">
     <div class="chat-container">
-        <!-- 왼쪽: 채팅방 목록 패널 -->
+
+        <!-- 좌측: 채팅방 리스트 -->
         <aside class="chat-list-panel">
             <div class="panel-header">
-                <span class="user-id" th:text="${loginUser.username}">내아이디</span>
-                <div class="toggle-switch-container">
-                    <span>읽지 않은 항목</span>
-                    <label class="switch">
-                        <input type="checkbox" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
+                <span th:text="${loginUser.username}">내아이디</span>
             </div>
             <ul class="chat-list">
-                <!-- AI 챗봇 채팅방 (활성화 상태) -->
-                <li class="chat-item active">
+                <li th:each="room : ${chatRooms}"
+                    class="chat-item"
+                    th:classappend="${room.chatId} == ${selectedChatId} ? ' active'"
+                    th:attr="data-chat-id=${room.chatId},data-opponent-id=${room.opponentId}">
                     <div class="chat-avatar"></div>
                     <div class="chat-info">
-                        <span class="chat-name">AI 챗봇</span>
-                        <p class="chat-preview">궁금한 내용을 물어보세요!</p>
+                        <span class="chat-name" th:text="${room.title}">상대방</span>
+                        <p class="chat-preview" th:text="${room.lastMessage}">최근 메시지</p>
                     </div>
                 </li>
             </ul>
         </aside>
 
+        <!-- 우측: 채팅창 -->
         <section class="chat-room-panel">
             <header class="chat-room-header">
-                <h3>AI 챗봇</h3>
+                <!-- 선택된 방 제목 -->
+                <h3 th:each="room : ${chatRooms}"
+                    th:if="${room.chatId} == ${selectedChatId}"
+                    th:text="${room.title}">
+                    채팅방
+                </h3>
             </header>
 
-            <!-- 메시지 표시 영역 -->
-            <div class="chat-messages">
-            </div>
+            <div class="chat-messages"></div>
 
-            <!-- 메시지 입력 폼 -->
-            <form class="chat-input-form" onsubmit="return false;">
+            <form class="chat-input-form">
                 <textarea placeholder="메시지를 입력해주세요"></textarea>
                 <button type="submit">전송</button>
             </form>
         </section>
+
     </div>
 </main>
+
 <script th:inline="javascript">
-    const chatId = /*[[${chatId}]]*/ 0;
-    const userId = /*[[${loginUser.id}]]*/ 0;
+    const userId         = /*[[${loginUser.id}]]*/      0;
+    const selectedChatId = /*[[${selectedChatId}]]*/    0;
+    const botId          = /*[[${botId}]]*/             0;
 </script>
-<!-- 분리된 채팅 로직 JS -->
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 <script src="/js/chat.js"></script>

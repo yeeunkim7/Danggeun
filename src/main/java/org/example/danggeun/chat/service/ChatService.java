@@ -4,15 +4,21 @@ import com.google.genai.Client;
 import com.google.genai.types.GenerateContentConfig;
 import com.google.genai.types.GenerateContentResponse;
 import jakarta.annotation.PostConstruct;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.danggeun.chat.dto.ChatSummaryDto;
 import org.example.danggeun.chat.entity.Chat;
 import org.example.danggeun.chat.repository.ChatRepository;
+import org.example.danggeun.message.entity.Message;
+import org.example.danggeun.trade.entity.Trade;
 import org.example.danggeun.user.entity.User;
 import org.example.danggeun.user.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -89,5 +95,62 @@ public class ChatService {
                     .build();
             return userService.save(system);
         });
+    }
+
+    @Transactional
+    public Chat findOrCreateTradeChat(User buyer, User seller, Trade trade) {
+        return chatRepository.findByBuyerAndSellerAndProduct(buyer, seller, trade)
+                .orElseGet(() -> chatRepository.save(
+                        Chat.builder()
+                                .buyer(buyer)
+                                .seller(seller)
+                                .product(trade)
+                                .build()
+                ));
+    }
+
+    @Transactional(readOnly = true)
+    public List<ChatSummaryDto> findAllChatsOfUser(Long userId) {
+        User user = userService.findById(userId);
+        List<Chat> chats = chatRepository.findAllByBuyerOrSeller(user, user);
+
+        List<ChatSummaryDto> result = new ArrayList<>();
+        for (Chat chat : chats) {
+            // 마지막 메시지
+            Message lastMsg = chat.getMessages().isEmpty() ? null
+                    : chat.getMessages().get(chat.getMessages().size() - 1);
+            String lastMessage   = (lastMsg != null ? lastMsg.getContent() : "");
+            Long   buyerId       = chat.getBuyer().getId();
+            Long   sellerId      = chat.getSeller().getId();
+            Long   opponentId    = buyerId.equals(userId) ? sellerId : buyerId;
+
+            // 상대방
+            User otherUser = userId.equals(chat.getBuyer().getId())
+                    ? chat.getSeller()
+                    : chat.getBuyer();
+
+            // 타이틀: product가 있으면 상품명, 없으면 상대방 이름
+            String title = chat.getProduct() != null
+                    ? chat.getProduct().getTitle()
+                    : otherUser.getUsername();
+
+            result.add(ChatSummaryDto.builder()
+                    .chatId(chat.getId())
+                    .title(title)
+                    .lastMessage(lastMessage)
+                    .buyerId(buyerId)
+                    .sellerId(sellerId)
+                    .opponentId(opponentId)
+                    .build()
+            );
+        }
+        return result;
+    }
+
+
+    @Transactional
+    public Chat findById(Long chatId) {
+        return chatRepository.findById(chatId)
+                .orElseThrow(() -> new IllegalArgumentException("채팅방을 찾을 수 없습니다."));
     }
 }

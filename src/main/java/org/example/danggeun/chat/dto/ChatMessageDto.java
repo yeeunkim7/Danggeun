@@ -9,11 +9,8 @@ import lombok.*;
 @Builder
 public class ChatMessageDto {
     private Long chatId;
-    private Long userId;
+    private Long senderId;   // 보내는 사람
+    private Long receiverId; // 받는 사람
     private String content;
-    private MessageType type;
 
-    public enum MessageType {
-        USER, BOT
-    }
 }

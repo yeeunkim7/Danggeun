@@ -257,3 +257,15 @@ input:checked + .slider:before { transform: translateX(14px); }
     max-width: 60%;
     word-break: break-word;
 }
+
+.chat-messages .message-other {
+    justify-content: flex-start;
+}
+.chat-messages .message-other p {
+    background-color: #FFF4E0;  /* 연한 오렌지/베이지톤 추천 */
+    color: #212529;
+    padding: 10px 14px;
+    border-radius: 18px 18px 18px 0;
+    max-width: 60%;
+    word-break: break-word;
+}

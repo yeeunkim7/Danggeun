@@ -2,10 +2,11 @@ server:
   port: 8080
   address: 0.0.0.0
 
-file:
-  upload-dir: /home/ec2-user/uploads
-
 spring:
+  config:
+    import:
+      optional:dotenv:
+
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
@@ -17,10 +18,10 @@ spring:
       client:
         registration:
           google:
-            client-id: ${OAUTH_GOOGLE_CLIENT_ID}
-            client-secret: ${OAUTH_GOOGLE_CLIENT_SECRET}
+            client-id: ${YOUR_GOOGLE_CLIENT_ID}
+            client-secret: ${YOUR_GOOGLE_CLIENT_SECRET}
             scope: [ email, profile ]
-            redirect-uri: http://${AWS_PUBLIC_DNS}/login/oauth2/code/{registrationId}
+            redirect-uri: "http://13.60.13.30.nip.io/login/oauth2/code/{registrationId}"
         provider:
           google:
             user-name-attribute: sub
@@ -29,25 +30,24 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/danggeun
     username: postgres
-    password: 2327
+    password: 1234
 
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
     properties:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
-logging:
-  level:
-    org.hibernate.SQL: debug
-    org.hibernate.type.descriptor.sql.BasicBinder: trace
-
 aws:
-  access-key-id: ${AWS_ACCESS_KEY_ID}
-  secret-access-key: ${AWS_SECRET_ACCESS_KEY}
-  region: ap-northeast-2
+  access-key-id: ${YOUR_AWS_ACCESS_KEY_ID}
+  secret-access-key: ${YOUR_AWS_SECRET_ACCESS_KEY}
+  region: eu-north-1
   s3:
-    bucket-name: my-java-app-files-2024
+    bucket-name: 2025-ipod
+
+file:
+  upload-dir: /home/ec2-user/uploads
+
+

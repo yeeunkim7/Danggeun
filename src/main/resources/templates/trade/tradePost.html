@@ -4,11 +4,12 @@
   <meta charset="UTF-8">
   <title>게시글 상세</title>
 
+  <link rel="stylesheet" href="/css/trade/tradePost_styles.css">
 </head>
 <body>
 <div class="container">
   <div class="image-section">
-    <img th:src="@{${product.imageUrl}}" alt="업로드된 이미지" />
+    <img th:src="${product.imageUrl}" alt="업로드된 이미지" />
   </div>
 
   <div class="meta">
@@ -16,7 +17,7 @@
       <div class="user" th:text="${product.sellerName}">아이디</div>
       <div class="location" th:text="${product.address}">부평 1동</div>
     </div>
-   } <form th:action="@{/chat/room/{postId}(postId=${product.id})}" method="get" style="display:inline;">
+      <form th:action="@{/chat/room/{postId}(postId=${product.id})}" method="get" style="display:inline;">
       <button class="chat-btn" type="submit">채팅하기</button>
     </form>
   </div>
@@ -25,7 +26,7 @@
     <div class="left-title" th:text="${product.title}">글 제목입니다.</div>
     <div class="right-info">
       <div class="price" th:text="${#numbers.formatInteger(product.price, 1, 'COMMA')} + ' 원'">50,000 원</div>
-      <div class="subinfo" th:text="'조회 ' + ${product.views} + ' | 채팅 ' + ${dto.chats}">조회 5 | 채팅 2</div>
+      <div class="subinfo" th:text="'조회 ' + ${product.views} + ' | 채팅 ' + ${product.chats}">조회 5 | 채팅 2</div>
     </div>
   </div>
 
@@ -36,7 +37,7 @@
   <div class="button-group">
     <div></div>
     <div class="action-links">
-      <a href="#">삭제하기</a> | <a href="#">수정하기</a>
+      <a href="#">삭제하기</a> | <a th:href="@{/trade/update/{productId}(productId=${product.id})}">수정하기</a>
     </div>
   </div>
 </div>

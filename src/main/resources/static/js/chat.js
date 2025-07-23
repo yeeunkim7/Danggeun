@@ -1,5 +1,4 @@
 (() => {
-
     const socket = new SockJS('/ws-chat');
     const stompClient = Stomp.over(socket);
 
@@ -7,7 +6,6 @@
         {},
         frame => {
             console.log('STOMP connected:', frame);
-
             stompClient.subscribe(`/topic/public/${chatId}`, message => {
                 const msg = JSON.parse(message.body);
                 console.log('Received:', msg);
@@ -30,7 +28,6 @@
         textarea.value = '';
         renderMessage(dto);
     });
-
 
     function renderMessage({ content, type }) {
         const container = document.querySelector('.chat-messages');
