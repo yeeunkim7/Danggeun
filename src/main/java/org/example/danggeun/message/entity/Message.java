@@ -1,4 +1,3 @@
-// Message.java
 package org.example.danggeun.message.entity;
 
 import jakarta.persistence.*;
@@ -21,6 +20,9 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "message_id")
     private Long id;
+
+    @Column(name = "message_uuid", unique = true, nullable = false)
+    private String messageId;
 
     @Lob
     @Column(name = "message_content", nullable = false)

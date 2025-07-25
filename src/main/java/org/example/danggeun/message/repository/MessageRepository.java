@@ -10,4 +10,8 @@ import java.util.List;
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
     List<Message> findAllByChatIdOrderByCreatedAtAsc(Long chatId);
+
+    int markMessagesAsRead(Long chatRoomId, String userId);
+
+    List<Message> findByChatRoomIdOrderByTimestampAsc(Long chatRoomId);
 }

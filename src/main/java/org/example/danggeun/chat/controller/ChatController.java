@@ -3,12 +3,12 @@ package org.example.danggeun.chat.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.danggeun.chat.dto.ChatMessageDto;
-import org.example.danggeun.chat.dto.ChatRoomDto;
 import org.example.danggeun.chat.dto.ChatSummaryDto;
 import org.example.danggeun.chat.entity.Chat;
 import org.example.danggeun.chat.service.ChatService;
+import org.example.danggeun.chat.service.ChatSocketMessageService;
+import org.example.danggeun.chat.websocket.dto.ChatSocketMessageDto;
 import org.example.danggeun.message.dto.MessageDto;
-import org.example.danggeun.message.service.MessageService;
 import org.example.danggeun.trade.entity.Trade;
 import org.example.danggeun.trade.service.TradeService;
 import org.example.danggeun.user.entity.User;
@@ -23,8 +23,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -32,34 +32,34 @@ import java.util.stream.Collectors;
 public class ChatController {
 
     private final ChatService chatService;
-    private final MessageService messageService;
+    private final ChatSocketMessageService messageService;
     private final SimpMessagingTemplate messagingTemplate;
     private final UserService userService;
     private final TradeService tradeService;
 
     /** WebSocket 메시지 핸들러 */
     @MessageMapping("/chat.send")
-    public void onMessageReceived(@Payload ChatMessageDto dto) {
+    public void onMessageReceived(@Payload ChatSocketMessageDto dto) {
         // 1) 메시지 저장
-        messageService.saveMessage(dto.getChatId(), dto.getSenderId(), dto.getReceiverId(), dto.getContent());
+        messageService.saveMessage(dto);
 
         // 2) AI방이면 답변 생성·전송
-        Chat chat = chatService.findById(dto.getChatId());
+        Chat chat = chatService.findById(dto.getChatRoomId());
         if (chat.getProduct() == null) {
             String aiReply = chatService.getAiResponse(dto.getContent());
-            Long botId    = chatService.getAiUserId();
+            Long botId = chatService.getAiUserId();
 
-            // 봇 답변 저장
-            messageService.saveMessage(dto.getChatId(), botId, dto.getSenderId(), aiReply);
+            // 봇 응답 메시지 생성 및 저장
+            ChatSocketMessageDto botMessage = new ChatSocketMessageDto();
+            botMessage.setChatRoomId(dto.getChatRoomId());
+            botMessage.setSenderId(botId);
+            botMessage.setContent(aiReply);
+            botMessage.setTimestamp(LocalDateTime.now());
+            botMessage.setType(ChatSocketMessageDto.MessageType.CHAT);
 
-            ChatMessageDto botDto = ChatMessageDto.builder()
-                    .chatId(dto.getChatId())
-                    .senderId(botId)
-                    .receiverId(dto.getSenderId())
-                    .content(aiReply)
-                    .build();
+            messageService.saveMessage(botMessage);
 
-            messagingTemplate.convertAndSend("/topic/public/" + dto.getChatId(), botDto);
+            messagingTemplate.convertAndSend("/topic/public/" + dto.getChatRoomId(), botMessage);
         }
     }
 
