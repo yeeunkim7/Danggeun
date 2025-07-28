@@ -3,8 +3,7 @@ server:
 
 spring:
   config:
-    import:
-      optional:dotenv:
+    import: optional:dotenv:.env # .env 파일 불러오기
 
   thymeleaf:
     prefix: classpath:/templates/
@@ -17,8 +16,8 @@ spring:
       client:
         registration:
           google:
-            client-id: ${YOUR_GOOGLE_CLIENT_ID}
-            client-secret: ${YOUR_GOOGLE_CLIENT_SECRET}
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
             scope: [ email, profile ]
             redirect-uri: "http://13.60.13.30.nip.io/login/oauth2/code/{registrationId}"
         provider:
@@ -29,7 +28,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/danggeun
     username: postgres
-    password: 1234
+    password: 2327
 
   jpa:
     hibernate:
@@ -39,14 +38,15 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
-aws:
-  access-key-id: ${YOUR_AWS_ACCESS_KEY_ID}
-  secret-access-key: ${YOUR_AWS_SECRET_ACCESS_KEY}
-  region: eu-north-1
-  s3:
-    bucket-name: 2025-ipod
+gemini:
+  api-key: dummy-key-for-local
+
+#aws:
+#  access-key-id: ${AWS_ACCESS_KEY_ID}
+#  secret-access-key: ${AWS_SECRET_ACCESS_KEY}
+#  region: eu-north-1
+#  s3:
+#    bucket-name: ${S3_BUCKET_NAME}
 
 file:
-  upload-dir: /home/ec2-user/uploads
-
-
+  upload-dir: ${FILE_UPLOAD_DIR}
