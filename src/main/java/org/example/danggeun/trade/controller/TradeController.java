@@ -6,6 +6,7 @@ import org.example.danggeun.category.dto.CategoryDto;
 import org.example.danggeun.category.entity.Category;
 import org.example.danggeun.category.repository.CategoryRepository;
 import org.example.danggeun.category.service.CategoryService;
+import org.example.danggeun.common.Constants;
 import org.example.danggeun.s3.service.S3Service;
 import org.example.danggeun.trade.dto.TradeCreateRequestDto;
 import org.example.danggeun.trade.dto.TradeDetailResponseDto;
@@ -72,7 +73,7 @@ public class TradeController {
 
         Long productId = tradeService.createProduct(product, loginUser.getId());
 
-        return "redirect:/trade/" + productId;
+        return "redirect:" + Constants.TRADE_URL_PREFIX + "/" + productId;
     }
 
 

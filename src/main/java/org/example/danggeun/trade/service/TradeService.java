@@ -5,6 +5,8 @@ import org.example.danggeun.address.entity.Address;
 import org.example.danggeun.address.repository.AddressRepository;
 import org.example.danggeun.category.entity.Category;
 import org.example.danggeun.category.repository.CategoryRepository;
+import org.example.danggeun.common.Constants;
+import org.example.danggeun.common.ErrorMessages;
 import org.example.danggeun.s3.service.S3Service;
 import org.example.danggeun.trade.dto.TradeCreateRequestDto;
 import org.example.danggeun.trade.dto.TradeDetailResponseDto;
@@ -39,9 +41,9 @@ public class TradeService {
     @Transactional
     public Long createProduct(TradeCreateRequestDto dto, Long userId) throws IOException {
         User seller = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessages.USER_NOT_FOUND));
         Category category = categoryRepository.findById(dto.getCategoryId())
-                .orElseThrow(() -> new IllegalArgumentException("카테고리를 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessages.CATEGORY_NOT_FOUND));
 
 
         String imageUrl = null;
@@ -54,7 +56,6 @@ public class TradeService {
         Trade trade = dto.toEntity(seller, category, imageUrl);
         Trade saved = tradeRepository.save(trade);
 
-        // 4) (선택) 주소 저장
         if (dto.getAddress() != null && !dto.getAddress().isBlank()) {
             Address addr = Address.builder()
                     .detail(dto.getAddress())
@@ -76,7 +77,7 @@ public class TradeService {
 
     public TradeDetailResponseDto findTradeById(Long productId) {
         Trade trade = tradeRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 상품을 찾을 수 없습니다. id=" + productId));
+                .orElseThrow(() -> new IllegalArgumentException(String.format(ErrorMessages.TRADE_NOT_FOUND, productId) + productId));
 
         return new TradeDetailResponseDto(trade);
     }
@@ -87,6 +88,11 @@ public class TradeService {
     }
 
     public Page<TradeListResponseDto> searchProducts(String keyword, Pageable pageable) {
+        if (keyword == null || keyword.trim().length() < Constants.MIN_SEARCH_LENGTH) {
+            throw new IllegalArgumentException(
+                    String.format(ErrorMessages.SEARCH_KEYWORD_TOO_SHORT, Constants.MIN_SEARCH_LENGTH)
+            );
+        }
         return tradeRepository.findByTitleContainingIgnoreCase(keyword, pageable)
                 .map(TradeListResponseDto::new);
     }

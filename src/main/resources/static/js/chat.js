@@ -9,6 +9,15 @@ class ChatClient {
         this.currentChatRoomId = null;
         this.sentMessageIds = new Set();
 
+        // UI 관련 콜백 (필요시 외부에서 주입 가능)
+        this.displayChatMessage = (msg) => console.log('상대 메시지:', msg);
+        this.displayOwnMessage = (msg) => console.log('내 메시지:', msg);
+        this.displayPendingMessage = (msg) => console.log('대기 중 메시지:', msg);
+        this.displayError = (msg) => alert('에러: ' + msg);
+        this.updateReadStatus = (msg) => console.log('읽음 처리:', msg);
+        this.updateChatRoomList = (msg) => console.log('채팅방 목록 갱신:', msg);
+        this.sendHeartbeatResponse = () => console.log('하트비트 응답 전송');
+
         this.connect();
     }
 
@@ -66,28 +75,28 @@ class ChatClient {
             case 'CHAT':
                 if (!this.sentMessageIds.has(message.messageId)) {
                     this.displayChatMessage(message);
-                    this.updateChatRoomList?.(message);
+                    this.updateChatRoomList(message);
                 }
                 break;
 
             case 'READ':
-                this.updateReadStatus?.(message);
+                this.updateReadStatus(message);
                 break;
 
             case 'HEARTBEAT':
-                this.sendHeartbeatResponse?.();
+                this.sendHeartbeatResponse();
                 break;
 
             case 'ERROR':
-                this.displayError?.(message.message);
+                this.displayError(message.message);
                 break;
 
             case 'CONNECTED':
-                console.log(message.message);
+                console.log('서버 메시지:', message.message);
                 break;
 
             default:
-                console.log('Unknown message type:', message.type);
+                console.log('알 수 없는 메시지 타입:', message.type);
         }
     }
 
@@ -107,22 +116,35 @@ class ChatClient {
 
         if (this.isConnected && this.socket.readyState === WebSocket.OPEN) {
             this.socket.send(JSON.stringify(message));
-            this.displayOwnMessage?.(message);
+            this.displayOwnMessage(message);
         } else {
             this.messageQueue.push(message);
-            this.displayPendingMessage?.(message);
+            this.displayPendingMessage(message);
         }
     }
 
     joinChatRoom(chatRoomId) {
+        this.currentChatRoomId = chatRoomId;
+
+        if (this.isConnected && this.socket.readyState === WebSocket.OPEN) {
+            const joinMessage = {
+                type: 'JOIN',
+                chatRoomId: chatRoomId
+            };
+            this.socket.send(JSON.stringify(joinMessage));
+        }
+    }
+
+    markMessagesAsRead(chatRoomId) {
         if (!this.isConnected) return;
 
-        this.currentChatRoomId = chatRoomId;
-        const joinMessage = {
-            type: 'JOIN',
-            chatRoomId: chatRoomId
+        const readMessage = {
+            type: 'READ',
+            chatRoomId: chatRoomId,
+            timestamp: new Date().toISOString()
         };
-        this.socket.send(JSON.stringify(joinMessage));
+
+        this.socket.send(JSON.stringify(readMessage));
     }
 
     scheduleReconnect() {
@@ -146,50 +168,7 @@ class ChatClient {
         }
     }
 
-    markMessagesAsRead(chatRoomId) {
-        if (!this.isConnected) return;
-
-        const readMessage = {
-            type: 'READ',
-            chatRoomId: chatRoomId,
-            timestamp: new Date().toISOString()
-        };
-
-        this.socket.send(JSON.stringify(readMessage));
-    }
-
     generateMessageId() {
         return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     }
-
-
-    displayChatMessage(message) {
-        console.log('상대방 메시지:', message);
-    }
-
-    displayOwnMessage(message) {
-        console.log('내 메시지:', message);
-    }
-
-    displayPendingMessage(message) {
-        console.log('보낼 준비 중인 메시지:', message);
-    }
-
-    displayError(message) {
-        alert('에러: ' + message);
-    }
-
-    updateReadStatus(message) {
-        console.log('읽음 처리:', message);
-    }
-
-    sendHeartbeatResponse() {
-
-    }
-
-    updateChatRoomList(message) {
-
-    }
 }
-
-const chatClient = new ChatClient();
