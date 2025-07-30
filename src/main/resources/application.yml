@@ -2,6 +2,9 @@ server:
   port: 8080
 
 spring:
+  profiles:
+    active: local
+
   config:
     import: optional:dotenv:.env # .env 파일 불러오기
 

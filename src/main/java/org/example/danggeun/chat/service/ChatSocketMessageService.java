@@ -60,6 +60,7 @@ public class ChatSocketMessageService {
      */
     @Transactional(readOnly = true)
     public List<Message> getMessages(Long chatRoomId) {
-        return messageRepository.findByChatRoomIdOrderByTimestampAsc(chatRoomId);
+        return messageRepository.findByChatIdOrderByCreatedAtAsc(chatRoomId);
     }
-}
+
+    }

@@ -13,12 +13,13 @@ import java.util.List;
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
-    List<Message> findAllByChatIdOrderByCreatedAtAsc(Long chatId);
+    List< Message> findAllByChatIdOrderByCreatedAtAsc(Long chatId);
 
     @Transactional
     @Modifying
-    @Query("UPDATE Message m SET m.read = true WHERE m.chatRoom.id = :chatRoomId AND m.receiver.id = :userId")
+    @Query("UPDATE Message m SET m.read = true WHERE m.chat.id = :chatRoomId AND m.sender.id != :userId")
     int markMessagesAsRead(@Param("chatRoomId") Long chatRoomId, @Param("userId") String userId);
 
-    List<Message> findByChatRoomIdOrderByTimestampAsc(Long chatRoomId);
+    List<Message> findByChatIdOrderByCreatedAtAsc(Long chatId);
+
 }
