@@ -1,4 +1,4 @@
-package org.example.danggeun.item.dto;
+package org.example.danggeun.trade.dto;
 
 import lombok.Getter;
 import lombok.Setter;

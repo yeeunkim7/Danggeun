@@ -47,6 +47,12 @@ public class User {
     @Column(nullable = true)
     private String role;
 
+    private String nickname;
+
+    private String profileImageUrl;
+
+    private String region;
+
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Trade> products = new ArrayList<>();
 
