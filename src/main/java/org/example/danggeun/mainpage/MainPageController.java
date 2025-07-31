@@ -18,7 +18,7 @@ public class MainPageController {
 
     @GetMapping("/")
     public String showMainPage(Model model) {
-        List<TradeListResponseDto> items = tradeService.findAllProducts(); // 수정된 부분
+        List<TradeListResponseDto> items = tradeService.findAllProducts();
         model.addAttribute("itemList", items);
         return "mainPage/mainPage";
     }

@@ -25,7 +25,6 @@ blockquote::before, blockquote::after, q::before, q::after {
 }
 table { border-collapse: collapse; border-spacing: 0; }
 
-
 .orange_button, .gray_button, .white_button {
     border-radius: 10px;
     font-size: medium;
@@ -58,14 +57,29 @@ table { border-collapse: collapse; border-spacing: 0; }
 }
 
 .body_content_1, .body_content_2, .body_content_3, .body_content_4, .body_content_5 {
-    height: 700px; width: 1024px; margin: auto; display: flex;
+    height: 700px;
+    width: 1024px;
+    margin: auto;
+    display: flex;
 }
 .body_content_1, .body_content_2, .body_content_3, .body_content_4 {
     flex-direction: row;
 }
-.body_content_1 { background-color: #fffae0; width: 100vw; height:807px; box-sizing: border-box; padding: 50px 0 0 500px; }
+.body_content_1 {
+    background-color: #fffae0;
+    width: 100vw;
+    height:807px;
+    box-sizing: border-box;
+    padding: 50px 0 0 500px;
+}
 .body_content_2, .body_content_4 { background-color: white; }
-.body_content_3 { background-color: #E6F3E6;width: 100vw; height:807px; box-sizing: border-box; padding: 50px 0 0 500px; }
+.body_content_3 {
+    background-color: #E6F3E6;
+    width: 100vw;
+    height:807px;
+    box-sizing: border-box;
+    padding: 50px 0 0 500px;
+}
 .body_content_5 {
     background-color: #F8F9FA;
     flex-direction: column;
@@ -198,4 +212,71 @@ table { border-collapse: collapse; border-spacing: 0; }
 }
 .download-btn-group {
     display: flex; gap: 10px;
+}
+
+/* 📱 반응형 */
+@media (max-width: 768px) {
+  .body_content_1,
+  .body_content_2,
+  .body_content_3,
+  .body_content_4 {
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px;
+    width: 100%;
+    height: auto;
+    box-sizing: border-box;
+  }
+
+  .big, .medium {
+    font-size: 2rem;
+    padding-top: 2rem;
+    text-align: center;
+  }
+
+  .item-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .bottom-nav {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    height: auto;
+  }
+
+  .bottom-nav-left {
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .bottom-nav-right {
+    align-items: center;
+  }
+
+  .orange_button, .gray_button, .white_button {
+    width: 100%;
+    font-size: 1rem;
+    height: auto;
+  }
+
+  .image_2 {
+    width: 100%;
+    height: auto;
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 576px) {
+  .item-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .search_input {
+    margin-left: 0;
+    width: 100%;
+  }
 }
