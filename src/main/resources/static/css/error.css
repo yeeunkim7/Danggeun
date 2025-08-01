@@ -1,0 +1,46 @@
+.error-container {
+    max-width: 600px;
+    margin: 60px auto;
+    text-align: center;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.error-icon img {
+    width: 100px;
+    margin-bottom: 20px;
+}
+
+.error-title {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.error-message {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.error-actions .btn {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    color: white;
+}
+
+.btn-primary {
+    background-color: #FF7E36;
+}
+
+.btn-secondary {
+    background-color: #aaa;
+}
+
+.error-details {
+    text-align: left;
+    margin-top: 20px;
+}

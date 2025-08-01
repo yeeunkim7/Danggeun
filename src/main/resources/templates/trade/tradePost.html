@@ -9,7 +9,7 @@
 <body>
 <div class="container">
   <div class="image-section">
-    <img th:src="${product.imageUrl}" alt="업로드된 이미지" />
+    <img th:src="${product.imageUrl} ?? '/img/sample1.jpeg'" alt="업로드된 이미지" />
   </div>
 
   <div class="meta">

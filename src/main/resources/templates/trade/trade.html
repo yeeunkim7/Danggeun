@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,7 +41,8 @@
             <article class="item-card" th:each="item : ${itemList}">
                 <a th:href="@{/trade/{id}(id=${item.id})}">
                     <div class="item-image-container">
-                        <img th:src="${item.imageUrl != null ? item.imageUrl : '/images/default-product-image.png'}"
+                        <img th:src="${item.imageUrl} ?: '/images/default-product-image.png'"
+                             alt="상품 이미지" class="item-image" />
                              alt="상품 이미지" class="item-image">
                     </div>
                     <div class="item-info">

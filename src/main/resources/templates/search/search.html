@@ -27,7 +27,7 @@
       <div class="item-card" th:each="item : ${result.items.content}">
         <a th:href="@{/trade/{id}(id=${item.id})}">
           <div class="item-image"
-               th:style="'background-image: url(' + ${item.imageUrl} + '); background-size: cover;'">
+               th:style="'background-image: url(' + (item.imageUrl != null ? item.imageUrl : '/img/sample1.jpeg') + '); background-size: cover;'">
           </div>
           <div class="item-info">
             <div class="item-title" th:utext="${item.title}">제목</div>

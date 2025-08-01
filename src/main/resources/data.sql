@@ -1,20 +1,61 @@
--- 유저 (존재하지 않으면 필요)
-INSERT INTO "user" (id, email, nickname, profile_image_url, region)
-VALUES (1, 'testuser@example.com', '테스트유저', '/images/default-profile.png', '서울시 마포구');
+DELETE FROM chat;
+DELETE FROM product;
+DELETE FROM item;
+DELETE FROM message;
+DELETE FROM category;
+DELETE FROM "user";
 
--- 카테고리
-INSERT INTO category (id, name)
-VALUES (1, '자전거'), (2, '가구'), (3, '도서');
+-- 유저 (user_id = 1)
+INSERT INTO "user" (
+  user_id, provider, provider_id, role,
+  user_createdat, user_email, user_nm, user_password,
+  user_phone, user_created_at, nickname, profile_image_url, region
+) VALUES (
+  1, 'local', 'local_1', 'USER',
+  NOW(), 'test@example.com', '테스트유저', '1234',
+  '010-0000-0000', NOW(), 'testnick', NULL, '서울시 강남구'
+);
 
--- 상품 아이템 (item)
-INSERT INTO item (id, title, content, price, first_image_url, location, status, category_id, seller_id, created_at)
-VALUES
-(1, '자전거 팝니다', '새 자전거 판매합니다.', 100000, '/img/sample1.jpeg', '서울시 마포구', 'SALE', 1, 1, NOW()),
-(2, '책상 판매', '사용감 적은 책상입니다.', 50000, '/img/sample2.jpeg', '서울시 강남구', 'SALE', 2, 1, NOW()),
-(3, '수능 참고서 모음', '국어, 수학, 영어 참고서 포함', 20000, '/img/sample3.jpeg', '서울시 은평구', 'SALE', 3, 1, NOW());
+-- 카테고리 (1~3번)
+INSERT INTO category (category_id, category_nm) VALUES (1, '전자기기');
+INSERT INTO category (category_id, category_nm) VALUES (2, '가구');
+INSERT INTO category (category_id, category_nm) VALUES (3, '도서');
 
--- item_image 테이블이 존재한다면 (없다면 생략)
--- INSERT INTO item_image (image_url, item_id) VALUES
--- ('/img/sample1.jpeg', 1),
--- ('/img/sample2.jpeg', 2),
--- ('/img/sample3.jpeg', 3);
+-- 상품: 노트북
+INSERT INTO product (
+  product_state, category_id, product_created_at,
+  product_price, user_id2, product_nm,
+  address, product_detail, product_img,
+  chats, image_url, product_name, title, views, user_id
+) VALUES (
+  'S', 1, NOW(),
+  500000, 1, '노트북 상품',
+  NULL, NULL, NULL,
+  0, NULL, '삼성 노트북', '삼성 갤럭시북 노트북 팝니다', 0, 1
+);
+
+-- 상품: 책상
+INSERT INTO product (
+  product_state, category_id, product_created_at,
+  product_price, user_id2, product_nm,
+  address, product_detail, product_img,
+  chats, image_url, product_name, title, views, user_id
+) VALUES (
+  'S', 2, NOW(),
+  30000, 1, '책상 상품',
+  NULL, NULL, NULL,
+  0, NULL, '심플한 책상', '이케아 책상 저렴하게 팝니다', 0, 1
+);
+
+-- 상품: 참고서
+INSERT INTO product (
+  product_state, category_id, product_created_at,
+  product_price, user_id2, product_nm,
+  address, product_detail, product_img,
+  chats, image_url, product_name, title, views, user_id
+) VALUES (
+  'S', 3, NOW(),
+  10000, 1, '참고서 상품',
+  NULL, NULL, NULL,
+  0, NULL, '정보처리기사 참고서', '2024 최신판 정보처리기사 필기 참고서 팝니다', 0, 1
+);

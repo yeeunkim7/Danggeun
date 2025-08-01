@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오류 - 당근마켓</title>
+    <link rel="stylesheet" href="/css/error.css">
+</head>
+<body>
+<div class="error-container">
+    <div class="error-icon">
+        <img src="/images/error-icon.svg" alt="Error">
+    </div>
+
+    <h1 class="error-title" th:text="${status == 404 ? '페이지를 찾을 수 없습니다' : '오류가 발생했습니다'}">
+        오류가 발생했습니다
+    </h1>
+
+    <p class="error-message" th:text="${message ?: '요청을 처리하는 중 문제가 발생했습니다.'}">
+        요청을 처리하는 중 문제가 발생했습니다.
+    </p>
+
+    <div class="error-actions">
+        <button onclick="history.back()" class="btn btn-secondary">
+            이전 페이지로
+        </button>
+        <a href="/" class="btn btn-primary">
+            홈으로 가기
+        </a>
+    </div>
+
+    <details class="error-details" th:if="${trace}">
+        <summary>상세 정보</summary>
+        <pre th:text="${trace}"></pre>
+    </details>
+</div>
+</body>
+</html>

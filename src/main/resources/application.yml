@@ -12,7 +12,12 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
     mode: HTML
+    encoding: UTF-8
     cache: false
+    error:
+      whitelabel:
+        enabled: false
+      path: /error
 
   sql:
     init:
