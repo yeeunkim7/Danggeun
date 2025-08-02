@@ -52,7 +52,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
 gemini:
-  api-key: dummy-key-for-local
+  api-key: ${GEMINI_API_KEY}
 
 #aws:
 #  access-key-id: ${AWS_ACCESS_KEY_ID}
