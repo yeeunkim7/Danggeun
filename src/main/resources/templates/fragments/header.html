@@ -14,16 +14,24 @@
             </nav>
         </div>
         <div class="header-right">
-            <input type="text" class="search-bar" placeholder="물품이나 동네를 검색해보세요">
+            <!-- 검색 폼 추가 -->
+            <div class="search-container">
+                <input type="text"
+                       id="search-input"
+                       class="search-bar"
+                       placeholder="물품이나 동네를 검색해보세요">
+                <button type="button"
+                        id="search-button"
+                        class="search-btn">🔍</button>
+                <!-- 자동완성 리스트 -->
+                <ul id="autocomplete-list" class="autocomplete-list"></ul>
+            </div>
             <div class="header-buttons">
                 <a th:href="@{/chat}" class="btn btn-chat">채팅하기</a>
-
                 <a th:href="@{/login}" class="btn btn-login" sec:authorize="isAnonymous()">로그인</a>
-
                 <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="margin: 0; display: flex; align-items: center;">
                     <button type="submit" class="btn btn-logout">로그아웃</button>
                 </form>
-
             </div>
         </div>
     </div>

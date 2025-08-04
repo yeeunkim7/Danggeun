@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/", "/login", "/register", "/header",
-                                "/css/**", "/js/**", "/images/**", "/asset/**", "/favicon.ico"
+                                "/css/**", "/js/**", "/images/**", "/asset/**", "/favicon.ico", "/search", "/search/**"
                         ).permitAll()
                         .requestMatchers("/chat", "/ws-chat/**", "/app/**", "/topic/**", "/api/categories").authenticated()
                         .anyRequest().authenticated()

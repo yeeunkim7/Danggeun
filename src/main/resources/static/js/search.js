@@ -1,7 +1,6 @@
-// public/js/search.js
-
 class SearchManager {
     constructor() {
+        // 헤더 검색창, 버튼, 자동완성, 결과 영역 요소
         this.searchInput = document.getElementById('search-input');
         this.searchButton = document.getElementById('search-button');
         this.autoCompleteList = document.getElementById('autocomplete-list');
@@ -12,39 +11,63 @@ class SearchManager {
         this.isLoading = false;
 
         this.init();
+
+        // 전역 함수로 등록 (HTML의 onclick 등 지원)
+        window.searchKeyword = this.searchKeywordFunc.bind(this);
     }
 
     init() {
-        this.searchInput.addEventListener('input', (e) => {
-            this.handleInput(e.target.value);
-        });
+        // 검색창 자동완성
+        if (this.searchInput) {
+            this.searchInput.addEventListener('input', (e) => {
+                this.handleInput(e.target.value);
+            });
 
-        this.searchButton.addEventListener('click', () => {
-            this.performSearch();
-        });
-
-        this.searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
+            // 엔터로 검색
+            this.searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.performSearch();
+                }
+            });
+        }
+        // 검색 버튼(존재 시)로 검색
+        if (this.searchButton) {
+            this.searchButton.addEventListener('click', () => {
                 this.performSearch();
-            }
-        });
+            });
+        }
 
+        // 무한 스크롤용
         window.addEventListener('scroll', () => {
             if (this.shouldLoadMore()) {
                 this.loadMoreResults();
             }
         });
+
+        // 인기검색어 버튼 자동 이벤트 연결
+        document.querySelectorAll('.keyword_btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                this.searchKeywordFunc(btn.textContent.trim());
+            });
+        });
+    }
+
+    // 인기검색어 클릭이나 외부에서 호출하는 함수
+    searchKeywordFunc(keyword) {
+        if (!keyword || keyword.length < 2) {
+            alert('검색어는 2자 이상 입력해주세요.');
+            return;
+        }
+        window.location.href = `/search?query=${encodeURIComponent(keyword)}&type=ALL`;
     }
 
     handleInput(value) {
         clearTimeout(this.debounceTimer);
-
         if (value.length < 2) {
             this.hideAutoComplete();
             return;
         }
-
         this.debounceTimer = setTimeout(() => {
             this.fetchAutoComplete(value);
         }, 300);
@@ -54,7 +77,6 @@ class SearchManager {
         try {
             const response = await fetch(`/api/search/autocomplete?q=${encodeURIComponent(prefix)}`);
             const suggestions = await response.json();
-
             this.showAutoComplete(suggestions);
         } catch (error) {
             console.error('자동완성 오류:', error);
@@ -62,17 +84,15 @@ class SearchManager {
     }
 
     showAutoComplete(suggestions) {
-        if (suggestions.length === 0) {
+        if (!this.autoCompleteList) return;
+        if (!suggestions || suggestions.length === 0) {
             this.hideAutoComplete();
             return;
         }
-
         this.autoCompleteList.innerHTML = suggestions
             .map(s => `<li class="autocomplete-item" data-value="${s}">${this.escapeHtml(s)}</li>`)
             .join('');
-
         this.autoCompleteList.style.display = 'block';
-
         this.autoCompleteList.querySelectorAll('.autocomplete-item').forEach(item => {
             item.addEventListener('click', () => {
                 this.searchInput.value = item.dataset.value;
@@ -83,46 +103,37 @@ class SearchManager {
     }
 
     hideAutoComplete() {
+        if (!this.autoCompleteList) return;
         this.autoCompleteList.style.display = 'none';
         this.autoCompleteList.innerHTML = '';
     }
 
-    async performSearch() {
+    performSearch() {
+        if (!this.searchInput) return;
         const keyword = this.searchInput.value.trim();
-
         if (keyword.length < 2) {
             alert('검색어는 2자 이상 입력해주세요.');
             return;
         }
-
-        this.currentPage = 0;
-        this.searchResults.innerHTML = '';
-
-        await this.fetchSearchResults(keyword, 0);
-
-        const url = new URL(window.location);
-        url.searchParams.set('q', keyword);
-        window.history.pushState({}, '', url);
+        window.location.href = `/search?query=${encodeURIComponent(keyword)}&type=ALL`;
     }
 
     async loadMoreResults() {
+        if (!this.searchInput) return;
         const keyword = this.searchInput.value.trim();
         await this.fetchSearchResults(keyword, this.currentPage + 1);
     }
 
     async fetchSearchResults(keyword, page) {
         if (this.isLoading) return;
-
         this.isLoading = true;
         this.showLoadingIndicator();
 
         try {
-            const response = await fetch(`/api/search?q=${encodeURIComponent(keyword)}&page=${page}&size=20`);
+            const response = await fetch(`/api/search?query=${encodeURIComponent(keyword)}&type=ALL&page=${page}&size=20`);
             const data = await response.json();
-
             this.renderSearchResults(data);
             this.currentPage = page;
-
         } catch (error) {
             console.error('검색 오류:', error);
             this.showError('검색 중 오류가 발생했습니다.');
@@ -133,7 +144,8 @@ class SearchManager {
     }
 
     renderSearchResults(data) {
-        if (data.items.length === 0 && this.currentPage === 0) {
+        if (!this.searchResults) return;
+        if (!data.items || (data.items.length === 0 && this.currentPage === 0)) {
             this.searchResults.innerHTML = `
                 <div class="no-results">
                     <p>검색 결과가 없습니다.</p>
@@ -142,7 +154,6 @@ class SearchManager {
             `;
             return;
         }
-
         const html = data.items.map(item => `
             <div class="search-result-item">
                 <a href="/items/${item.id}" class="result-link">
@@ -160,7 +171,6 @@ class SearchManager {
                 </a>
             </div>
         `).join('');
-
         this.searchResults.insertAdjacentHTML('beforeend', html);
     }
 
@@ -179,7 +189,8 @@ class SearchManager {
     }
 
     showError(message) {
-        this.searchResults.innerHTML = `<p class="error-message">${this.escapeHtml(message)}</p>`;
+        if (this.searchResults)
+            this.searchResults.innerHTML = `<p class="error-message">${this.escapeHtml(message)}</p>`;
     }
 
     formatPrice(price) {

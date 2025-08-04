@@ -24,21 +24,27 @@ public class SearchController {
      * - 검색어와 타입에 따라 상품, 사용자 또는 전체 검색 수행
      */
     @GetMapping("/search")
-    public String search(@RequestParam("query") String query,
-                         @RequestParam("type") SearchType type,
-                         @RequestParam(defaultValue = "0") int page,
-                         @RequestParam(defaultValue = "12") int size,
-                         Model model) {
+    public String search(
+            @RequestParam(value = "query", required = false, defaultValue = "") String query,
+            @RequestParam(value = "type", required = false, defaultValue = "ALL") SearchType type,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size,
+            Model model) {
 
         Pageable pageable = PageRequest.of(page, size);
-        // SearchService에서 리턴된 결과를 변수에 저장
-        SearchResultDto result = searchService.search(query, type, pageable);
+        SearchResultDto result;
 
-        // 모델에 검색 조건 및 결과 추가
+        if (query.isBlank()) {
+            result = SearchResultDto.empty(); // 빈 결과 객체 반환
+        } else {
+            result = searchService.search(query, type, pageable);
+        }
+
         model.addAttribute("query", query);
         model.addAttribute("type", type);
         model.addAttribute("result", result);
 
         return "search/search";
     }
+
 }

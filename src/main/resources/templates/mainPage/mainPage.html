@@ -151,20 +151,5 @@
   </div>
 </div>
 <hr style="color:#495057">
-<script>
-  function submitForm(event) {
-    event.preventDefault(); // 기본 제출 이벤트 막기
-
-    // 입력된 값 가져오기
-    const search_input = document.getElementsByClassName("search_input")[0].value;
-    // 입력된 값 출력
-    alert(`검색어: ${search_input}`);
-  }
-
-  function searchKeyword(keyword) {
-    // 검색 페이지로 이동 (GET 파라미터로 키워드 전달)
-    window.location.href = '/search?query=' + encodeURIComponent(keyword);
-  }
-</script>
 </body>
 </html>

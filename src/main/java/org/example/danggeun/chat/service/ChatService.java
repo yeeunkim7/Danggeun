@@ -6,17 +6,21 @@ import com.google.genai.types.GenerateContentResponse;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.danggeun.category.entity.Category;
+import org.example.danggeun.category.repository.CategoryRepository;
 import org.example.danggeun.chat.dto.ChatSummaryDto;
 import org.example.danggeun.chat.entity.Chat;
 import org.example.danggeun.chat.repository.ChatRepository;
 import org.example.danggeun.message.entity.Message;
 import org.example.danggeun.trade.entity.Trade;
+import org.example.danggeun.trade.repository.TradeRepository;
 import org.example.danggeun.user.entity.User;
 import org.example.danggeun.user.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,10 +29,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatService {
 
+    private final TradeRepository tradeRepository;
+    private final CategoryRepository categoryRepository;
     private static final String AI_EMAIL = "system@danggeun.com";
 
     private final UserService userService;
     private final ChatRepository chatRepository;
+
 
     @Value("${GEMINI_API_KEY}")
     private String apiKey;
@@ -72,30 +79,43 @@ public class ChatService {
     public Chat findOrCreateAiChat(Long loginUserId) {
         User buyer = userService.findById(loginUserId);
         User aiUser = findOrCreateAiUser();
+        Trade dummyProduct = findOrCreateDummyProduct();
 
         return chatRepository
-                .findByBuyerAndSellerAndProductIsNull(buyer, aiUser)
+                .findByBuyerAndSellerAndProduct(buyer, aiUser, dummyProduct)
                 .orElseGet(() -> {
                     Chat chat = Chat.builder()
                             .buyer(buyer)
                             .seller(aiUser)
-                            .product(null)
+                            .product(dummyProduct)  // null이 아니라 dummyProduct 사용
                             .build();
                     return chatRepository.save(chat);
                 });
     }
 
     @Transactional
-    protected User findOrCreateAiUser() {
-        return userService.findByEmail(AI_EMAIL).orElseGet(() -> {
-            User system = User.builder()
-                    .username("chatbot")
-                    .email(AI_EMAIL)
-                    .password("{noop}changeme")
-                    .build();
-            return userService.save(system);
-        });
+    public Trade findOrCreateDummyProduct() {
+        // 예시: 기본 카테고리, 판매자 조회 코드
+        Category defaultCategory = categoryRepository.findById(1L)
+                .orElseThrow(() -> new IllegalStateException("기본 카테고리가 없습니다."));
+        User defaultSeller = userService.findByEmail("system@danggeun.com")
+                .orElseThrow(() -> new IllegalStateException("시스템 판매자가 없습니다."));
+
+        return tradeRepository.findByTitle("AI Dummy Product")
+                .orElseGet(() -> tradeRepository.save(
+                        Trade.builder()
+                                .category(defaultCategory)
+                                .seller(defaultSeller)
+                                .name("AI Dummy Product Name")
+                                .title("AI Dummy Product")
+                                .price(0L)
+                                .detail("This is an AI dummy product for chat.")
+                                .state("00")
+                                .createdAt(LocalDateTime.now())
+                                .build()
+                ));
     }
+
 
     @Transactional
     public Chat findOrCreateTradeChat(User buyer, User seller, Trade trade) {
@@ -119,10 +139,10 @@ public class ChatService {
 
             Message lastMsg = chat.getMessages().isEmpty() ? null
                     : chat.getMessages().get(chat.getMessages().size() - 1);
-            String lastMessage   = (lastMsg != null ? lastMsg.getContent() : "");
-            Long   buyerId       = chat.getBuyer().getId();
-            Long   sellerId      = chat.getSeller().getId();
-            Long   opponentId    = buyerId.equals(userId) ? sellerId : buyerId;
+            String lastMessage = (lastMsg != null ? lastMsg.getContent() : "");
+            Long buyerId = chat.getBuyer().getId();
+            Long sellerId = chat.getSeller().getId();
+            Long opponentId = buyerId.equals(userId) ? sellerId : buyerId;
 
 
             User otherUser = userId.equals(chat.getBuyer().getId())

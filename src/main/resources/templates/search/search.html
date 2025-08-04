@@ -43,8 +43,8 @@
   <div th:if="${result.users != null}">
     <h2>사용자 결과</h2>
     <ul>
-      <li th:each="user : ${result.users}">
-        <img th:src="${user.profileImageUrl}" alt="프로필" width="40" height="40" />
+      <li th:each="user : ${result.users.content}">
+      <img th:src="${user.profileImageUrl}" alt="프로필" width="40" height="40" />
         <span th:text="${user.nickname}">닉네임</span> /
         <span th:text="${user.region}">지역</span>
       </li>
@@ -67,5 +67,6 @@
   </div>
 
 </div>
+<script src="/js/search.js"></script>
 </body>
 </html>
