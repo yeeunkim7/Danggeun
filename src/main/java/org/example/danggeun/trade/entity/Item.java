@@ -31,6 +31,7 @@ public class Item {
     private String firstImageUrl;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "product_state")
     private Status status;
 
     private LocalDateTime createdAt;

@@ -19,11 +19,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
         AND (
             i.title ILIKE '%' || :keyword || '%'
             OR i.content ILIKE '%' || :keyword || '%'
-            OR EXISTS (
-                SELECT 1 FROM category c
-                WHERE c.id = i.category_id
-                AND c.name ILIKE '%' || :keyword || '%'
-            )
         )
         ORDER BY 
             CASE 

@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<!-- 헤더 프래그먼트 -->
 <header class="main-header" th:fragment="headerFragment">
     <div class="header-container">
         <div class="header-left">
@@ -14,18 +13,22 @@
             </nav>
         </div>
         <div class="header-right">
-            <!-- 검색 폼 추가 -->
-            <div class="search-container">
+            <!-- 검색 폼: method="get" 동작하는 기본 폼으로 변경 -->
+            <form th:action="@{/search}" method="get" class="search-container">
                 <input type="text"
                        id="search-input"
+                       name="query"
                        class="search-bar"
-                       placeholder="물품이나 동네를 검색해보세요">
-                <button type="button"
+                       placeholder="물품이나 동네를 검색해보세요"
+                       th:value="${query}" />
+
+                <button type="submit"
                         id="search-button"
                         class="search-btn">🔍</button>
                 <!-- 자동완성 리스트 -->
                 <ul id="autocomplete-list" class="autocomplete-list"></ul>
-            </div>
+            </form>
+
             <div class="header-buttons">
                 <a th:href="@{/chat}" class="btn btn-chat">채팅하기</a>
                 <a th:href="@{/login}" class="btn btn-login" sec:authorize="isAnonymous()">로그인</a>

@@ -29,13 +29,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatService {
 
-    private final TradeRepository tradeRepository;
-    private final CategoryRepository categoryRepository;
     private static final String AI_EMAIL = "system@danggeun.com";
 
     private final UserService userService;
     private final ChatRepository chatRepository;
-
+    private final TradeRepository tradeRepository;
+    private final CategoryRepository categoryRepository;
 
     @Value("${GEMINI_API_KEY}")
     private String apiKey;
@@ -87,18 +86,29 @@ public class ChatService {
                     Chat chat = Chat.builder()
                             .buyer(buyer)
                             .seller(aiUser)
-                            .product(dummyProduct)  // null이 아니라 dummyProduct 사용
+                            .product(dummyProduct)
                             .build();
                     return chatRepository.save(chat);
                 });
     }
 
     @Transactional
+    protected User findOrCreateAiUser() {
+        return userService.findByEmail(AI_EMAIL).orElseGet(() -> {
+            User system = User.builder()
+                    .username("chatbot")
+                    .email(AI_EMAIL)
+                    .password("{noop}changeme")
+                    .build();
+            return userService.save(system);
+        });
+    }
+
+    @Transactional
     public Trade findOrCreateDummyProduct() {
-        // 예시: 기본 카테고리, 판매자 조회 코드
         Category defaultCategory = categoryRepository.findById(1L)
                 .orElseThrow(() -> new IllegalStateException("기본 카테고리가 없습니다."));
-        User defaultSeller = userService.findByEmail("system@danggeun.com")
+        User defaultSeller = userService.findByEmail(AI_EMAIL)
                 .orElseThrow(() -> new IllegalStateException("시스템 판매자가 없습니다."));
 
         return tradeRepository.findByTitle("AI Dummy Product")
@@ -115,7 +125,6 @@ public class ChatService {
                                 .build()
                 ));
     }
-
 
     @Transactional
     public Chat findOrCreateTradeChat(User buyer, User seller, Trade trade) {
@@ -166,7 +175,6 @@ public class ChatService {
         }
         return result;
     }
-
 
     @Transactional
     public Chat findById(Long chatId) {
