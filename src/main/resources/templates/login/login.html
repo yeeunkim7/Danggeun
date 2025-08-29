@@ -1,50 +1,54 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>로그인</title>
 
-    <!-- 로그인 전용 CSS -->
+    <!-- CSS -->
     <link rel="stylesheet" href="/css/login/login.css">
     <link rel="stylesheet" href="/css/header/header.css">
+    <link rel="icon" th:href="@{/favicon.ico}">
 </head>
 <body>
-<!-- 헤더 고정 삽입 -->
+<!-- 공통 헤더 -->
 <div th:replace="fragments/header :: headerFragment"></div>
 
 <div class="login-wrapper">
-<form th:action="@{/login}" method="post" class="login-form">
-    <!-- 로그인 오류 메시지 표시 -->
-    <div class="error-message" th:if="${param.error}">
-        <p th:switch="${param.error}">
-            <span th:case="'invalid'">아이디 또는 비밀번호가 올바르지 않습니다.</span>
-            <span th:case="'expired'">세션이 만료되었습니다. 다시 로그인해주세요.</span>
-            <span th:case="*">알 수 없는 오류가 발생했습니다.</span>
-        </p>
+    <form th:action="@{/login}" method="post" class="login-form">
+        <h1 class="login-title">로그인</h1>
+
+        <!-- 로그인 오류 메시지 -->
+        <div class="error-message" th:if="${param.error} or ${error}">
+            <p th:text="${error != null ? error : '아이디 또는 비밀번호가 올바르지 않습니다.'}">
+                로그인 오류
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label for="email">이메일</label>
+            <!-- SecurityConfig.usernameParameter("email") 와 일치 -->
+            <input type="email" id="email" name="email"
+                   placeholder="이메일을 입력해주세요" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" name="password"
+                   placeholder="비밀번호를 입력해주세요" required>
+        </div>
+
+        <button type="submit" class="btn-login">로그인</button>
+
+        <a th:href="@{/oauth2/authorization/google}" class="btn-google-login">
+            <img th:src="@{/asset/googlelogo.png}" alt="Google 로고">
+            Google로 로그인
+        </a>
+    </form>
+
+    <div class="login-footer">
+        아직 회원이 아니신가요? <br>
+        <a th:href="@{/register}" class="register-link">회원가입</a>
     </div>
-
-    <div class="form-group">
-        <label for="email">이메일</label>
-        <input type="email" id="email" name="username" placeholder="이메일을 입력해주세요" required>
-    </div>
-
-    <div class="form-group">
-        <label for="password">비밀번호</label>
-        <input type="password" id="password" name="password" placeholder="비밀번호를 입력해주세요" required>
-    </div>
-
-    <button type="submit" class="btn-login">로그인</button>
-
-    <a th:href="@{/oauth2/authorization/google}" class="btn-google-login">
-        <img th:src="@{/asset/googlelogo.png}" alt="Google 로고">
-        Google로 로그인
-    </a>
-</form>
-
-<div class="login-footer">
-    당근마켓 회원이 아니신가요? <br>
-    <a th:href="@{/register}" class="register-link">회원가입</a>
-</div>
 </div>
 
 </body>

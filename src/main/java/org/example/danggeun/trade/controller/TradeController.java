@@ -1,4 +1,4 @@
-package org.example.danggeun.trade.controller; // 패키지 경로를 product로 변경하는 것을 권장합니다.
+package org.example.danggeun.trade.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.danggeun.category.dto.CategoryCreateRequestDto;
@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-@RequiredArgsConstructor // final 필드에 대한 생성자 자동 주입
+@RequiredArgsConstructor
 public class TradeController {
 
     private final TradeService tradeService;
@@ -49,13 +49,13 @@ public class TradeController {
     public String listProducts(Model model) {
         List<TradeListResponseDto> productList = tradeService.findAllProducts();
         model.addAttribute("itemList", productList);
-        return "trade/trade"; // 기존의 목록 뷰를 그대로 사용
+        return "trade/trade";
     }
 
     @PostMapping("/write")
     public String createProduct(
             @ModelAttribute TradeCreateRequestDto product,
-            Authentication authentication  // 이미 인증된 상태이니, 세션 검사 생략
+            Authentication authentication
     ) throws IOException {
         Object p = authentication.getPrincipal();
         String loginEmail;

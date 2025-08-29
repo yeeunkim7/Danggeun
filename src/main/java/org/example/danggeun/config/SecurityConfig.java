@@ -6,11 +6,11 @@ import org.example.danggeun.security.CustomOAuth2UserService;
 import org.example.danggeun.security.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,21 +27,27 @@ public class SecurityConfig {
     private final CustomLoginSuccessHandler customLoginSuccessHandler;
     private final AuthenticationFailureHandler customLoginFailureHandler;
 
-    // ✅ Security FilterChain 정의
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        // 정적리소스/에러/웰노운/스웨거 허용
                         .requestMatchers(
                                 "/", "/login", "/register", "/header",
-                                "/css/**", "/js/**", "/images/**", "/asset/**", "/favicon.ico", "/search", "/search/**"
+                                "/css/**", "/js/**", "/images/**", "/asset/**",
+                                "/favicon.ico", "/error", "/error/**", "/.well-known/**",
+                                "/webjars/**", "/swagger-ui/**", "/v3/api-docs/**"
                         ).permitAll()
-                        .requestMatchers("/chat", "/ws-chat/**", "/app/**", "/topic/**", "/api/categories").authenticated()
+                        // 트레이드 상세 페이지는 공개 GET 허용 (목록/상세 미로그인 열람)
+                        .requestMatchers(HttpMethod.GET, "/trade/**").permitAll()
+                        // STOMP/WebSocket 엔드포인트 등은 인증
+                        .requestMatchers("/chat", "/ws-chat/**", "/app/**", "/topic/**", "/api/categories")
+                        .authenticated()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // 또는 ALWAYS
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
@@ -63,18 +69,16 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // ✅ 비밀번호 암호화 방식
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // ✅ 최신 방식의 AuthenticationManager 등록 (and() 사용 안 함)
     @Bean
     public AuthenticationManager authenticationManager() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(customUserDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
-        return authentication -> provider.authenticate(authentication);
+        return provider::authenticate;
     }
 }

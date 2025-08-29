@@ -1,6 +1,5 @@
 class SearchManager {
     constructor() {
-        // 헤더 검색창, 버튼, 자동완성, 결과 영역 요소
         this.searchInput = document.getElementById('search-input');
         this.searchButton = document.getElementById('search-button');
         this.autoCompleteList = document.getElementById('autocomplete-list');
@@ -11,19 +10,12 @@ class SearchManager {
         this.isLoading = false;
 
         this.init();
-
-        // 전역 함수로 등록 (HTML의 onclick 등 지원)
         window.searchKeyword = this.searchKeywordFunc.bind(this);
     }
 
     init() {
-        // 검색창 자동완성
         if (this.searchInput) {
-            this.searchInput.addEventListener('input', (e) => {
-                this.handleInput(e.target.value);
-            });
-
-            // 엔터로 검색
+            this.searchInput.addEventListener('input', (e) => this.handleInput(e.target.value));
             this.searchInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
                     e.preventDefault();
@@ -31,29 +23,17 @@ class SearchManager {
                 }
             });
         }
-        // 검색 버튼(존재 시)로 검색
         if (this.searchButton) {
-            this.searchButton.addEventListener('click', () => {
-                this.performSearch();
-            });
+            this.searchButton.addEventListener('click', () => this.performSearch());
         }
-
-        // 무한 스크롤용
         window.addEventListener('scroll', () => {
-            if (this.shouldLoadMore()) {
-                this.loadMoreResults();
-            }
+            if (this.shouldLoadMore()) this.loadMoreResults();
         });
-
-        // 인기검색어 버튼 자동 이벤트 연결
         document.querySelectorAll('.keyword_btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                this.searchKeywordFunc(btn.textContent.trim());
-            });
+            btn.addEventListener('click', () => this.searchKeywordFunc(btn.textContent.trim()));
         });
     }
 
-    // 인기검색어 클릭이나 외부에서 호출하는 함수
     searchKeywordFunc(keyword) {
         if (!keyword || keyword.length < 2) {
             alert('검색어는 2자 이상 입력해주세요.');
@@ -64,18 +44,17 @@ class SearchManager {
 
     handleInput(value) {
         clearTimeout(this.debounceTimer);
-        if (value.length < 2) {
+        if (!value || value.length < 2) {
             this.hideAutoComplete();
             return;
         }
-        this.debounceTimer = setTimeout(() => {
-            this.fetchAutoComplete(value);
-        }, 300);
+        this.debounceTimer = setTimeout(() => this.fetchAutoComplete(value), 300);
     }
 
     async fetchAutoComplete(prefix) {
         try {
             const response = await fetch(`/api/search/autocomplete?q=${encodeURIComponent(prefix)}`);
+            if (!response.ok) return;
             const suggestions = await response.json();
             this.showAutoComplete(suggestions);
         } catch (error) {
@@ -85,17 +64,17 @@ class SearchManager {
 
     showAutoComplete(suggestions) {
         if (!this.autoCompleteList) return;
-        if (!suggestions || suggestions.length === 0) {
+        if (!Array.isArray(suggestions) || suggestions.length === 0) {
             this.hideAutoComplete();
             return;
         }
         this.autoCompleteList.innerHTML = suggestions
-            .map(s => `<li class="autocomplete-item" data-value="${s}">${this.escapeHtml(s)}</li>`)
+            .map(s => `<li class="autocomplete-item" data-value="${this.escapeHtml(s)}">${this.escapeHtml(s)}</li>`)
             .join('');
         this.autoCompleteList.style.display = 'block';
         this.autoCompleteList.querySelectorAll('.autocomplete-item').forEach(item => {
             item.addEventListener('click', () => {
-                this.searchInput.value = item.dataset.value;
+                if (this.searchInput) this.searchInput.value = item.dataset.value;
                 this.hideAutoComplete();
                 this.performSearch();
             });
@@ -128,9 +107,9 @@ class SearchManager {
         if (this.isLoading) return;
         this.isLoading = true;
         this.showLoadingIndicator();
-
         try {
             const response = await fetch(`/api/search?query=${encodeURIComponent(keyword)}&type=ALL&page=${page}&size=20`);
+            if (!response.ok) throw new Error('검색 API 오류');
             const data = await response.json();
             this.renderSearchResults(data);
             this.currentPage = page;
@@ -145,7 +124,8 @@ class SearchManager {
 
     renderSearchResults(data) {
         if (!this.searchResults) return;
-        if (!data.items || (data.items.length === 0 && this.currentPage === 0)) {
+        const items = Array.isArray(data?.items) ? data.items : [];
+        if (items.length === 0 && this.currentPage === 0) {
             this.searchResults.innerHTML = `
                 <div class="no-results">
                     <p>검색 결과가 없습니다.</p>
@@ -154,24 +134,37 @@ class SearchManager {
             `;
             return;
         }
-        const html = data.items.map(item => `
+        const html = items.map(item => {
+            const href = `/trade/${encodeURIComponent(item.id)}`;
+            const src = this.resolveImageUrl(item.imageUrl);
+            const title = this.escapeHtml(item.title ?? '');
+            const content = this.escapeHtml(item.content ?? '');
+            const price = this.formatPrice(item.price);
+            const location = this.escapeHtml(item.location ?? '');
+            const time = this.formatTime(item.createdAt);
+            return `
             <div class="search-result-item">
-                <a href="/items/${item.id}" class="result-link">
-                    <img src="${item.imageUrl || '/images/no-image.png'}"
-                         alt="${item.title}" class="result-image">
+                <a href="${href}" class="result-link">
+                    <img src="${src}" alt="${title}" class="result-image">
                     <div class="result-content">
-                        <h3 class="result-title">${item.title}</h3>
-                        <p class="result-summary">${item.content}</p>
+                        <h3 class="result-title">${title}</h3>
+                        <p class="result-summary">${content}</p>
                         <div class="result-meta">
-                            <span class="result-price">${this.formatPrice(item.price)}원</span>
-                            <span class="result-location">${item.location}</span>
-                            <span class="result-time">${this.formatTime(item.createdAt)}</span>
+                            <span class="result-price">${price}원</span>
+                            <span class="result-location">${location}</span>
+                            <span class="result-time">${time}</span>
                         </div>
                     </div>
                 </a>
-            </div>
-        `).join('');
+            </div>`;
+        }).join('');
         this.searchResults.insertAdjacentHTML('beforeend', html);
+    }
+
+    resolveImageUrl(url) {
+        if (typeof url !== 'string' || url.trim() === '') return '/img/placeholder.jpeg';
+        if (url.startsWith('/')) return url;
+        return `/img/${url}`;
     }
 
     shouldLoadMore() {
@@ -180,13 +173,9 @@ class SearchManager {
         return scrollPosition > threshold;
     }
 
-    showLoadingIndicator() {
-        // TODO: 스피너 표시
-    }
+    showLoadingIndicator() {}
 
-    hideLoadingIndicator() {
-        // TODO: 스피너 제거
-    }
+    hideLoadingIndicator() {}
 
     showError(message) {
         if (this.searchResults)
@@ -194,19 +183,24 @@ class SearchManager {
     }
 
     formatPrice(price) {
-        return price.toLocaleString();
+        if (price == null || isNaN(Number(price))) return '0';
+        try {
+            return Number(price).toLocaleString();
+        } catch {
+            return String(price);
+        }
     }
 
     formatTime(dateString) {
+        if (!dateString) return '';
         const date = new Date(dateString);
-        return date.toLocaleDateString('ko-KR', {
-            year: 'numeric', month: 'short', day: 'numeric'
-        });
+        if (isNaN(date.getTime())) return '';
+        return date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' });
     }
 
     escapeHtml(text) {
         const div = document.createElement('div');
-        div.textContent = text;
+        div.textContent = String(text ?? '');
         return div.innerHTML;
     }
 }

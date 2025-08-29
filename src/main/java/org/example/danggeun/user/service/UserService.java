@@ -3,29 +3,31 @@ package org.example.danggeun.user.service;
 import lombok.RequiredArgsConstructor;
 import org.example.danggeun.user.entity.User;
 import org.example.danggeun.user.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public  class UserService {
+public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
+    @Transactional
+    public Long signUp(String email, String rawPassword, String username, String phone) {
+        if (userRepository.existsByEmail(email)) {
+            throw new IllegalArgumentException("이미 가입된 이메일입니다.");
+        }
 
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
+        User user = User.builder()
+                .email(email)
+                .password(passwordEncoder.encode(rawPassword))
+                .username(username)
+                .phone(phone)
+                .role("ROLE_USER")
+                .build();
 
-    public User save(User user) {
-        return userRepository.save(user);
-    }
-
-    public User findById(Long loginUserId) {
-        return userRepository.findById(loginUserId).orElse(null);
+        return userRepository.save(user).getId();
     }
 }

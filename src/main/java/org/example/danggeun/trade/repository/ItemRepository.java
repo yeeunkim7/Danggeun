@@ -13,27 +13,42 @@ import java.util.List;
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
-    @Query(value = """
-        SELECT i.* FROM item i
-        WHERE i.status = 'SALE'
-        AND (
-            i.title ILIKE '%' || :keyword || '%'
-            OR i.content ILIKE '%' || :keyword || '%'
-        )
-        ORDER BY 
-            CASE 
-                WHEN i.title ILIKE :keyword || '%' THEN 1
+    @Query(
+            value = """
+            SELECT i.* 
+            FROM item i
+            WHERE i.status = 'SALE'
+              AND (
+                    i.title   ILIKE '%' || :keyword || '%'
+                 OR i.content ILIKE '%' || :keyword || '%'
+              )
+            ORDER BY 
+              CASE 
+                WHEN i.title ILIKE :keyword || '%'       THEN 1
                 WHEN i.title ILIKE '%' || :keyword || '%' THEN 2
                 ELSE 3
-            END,
-            i.created_at DESC
+              END,
+              i.created_at DESC
         """,
-            nativeQuery = true)
+            countQuery = """
+            SELECT COUNT(*) 
+            FROM item i
+            WHERE i.status = 'SALE'
+              AND (
+                    i.title   ILIKE '%' || :keyword || '%'
+                 OR i.content ILIKE '%' || :keyword || '%'
+              )
+        """,
+            nativeQuery = true
+    )
     Page<Item> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
-    @Query("SELECT DISTINCT i.title FROM Item i " +
-            "WHERE i.status = 'SALE' AND LOWER(i.title) LIKE LOWER(:prefix) || '%' " +
-            "ORDER BY i.viewCount DESC")
+    @Query(
+            "SELECT DISTINCT i.title " +
+                    "FROM Item i " +
+                    "WHERE i.status = 'SALE' " +
+                    "  AND LOWER(i.title) LIKE CONCAT(LOWER(:prefix), '%') " +
+                    "ORDER BY i.viewCount DESC"
+    )
     List<String> findTitlesByPrefix(@Param("prefix") String prefix, Pageable pageable);
-
 }

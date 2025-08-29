@@ -6,6 +6,7 @@ import org.example.danggeun.trade.entity.Trade;
 import org.example.danggeun.category.entity.Category;
 import org.example.danggeun.user.entity.User;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.time.LocalDateTime;
 
 @Getter
@@ -23,9 +24,8 @@ public class TradeCreateRequestDto {
     public Trade toEntity(User seller, Category category, String imageUrl) {
         return Trade.builder()
                 .title(this.title)
-                .name(this.name)
-                .price(this.price)
                 .detail(this.detail)
+                .price(this.price)
                 .imageUrl(imageUrl)
                 .state("00")
                 .createdAt(LocalDateTime.now())

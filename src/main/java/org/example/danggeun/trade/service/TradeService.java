@@ -52,7 +52,6 @@ public class TradeService {
             imageUrl = s3Service.uploadFile(image);
         }
 
-        // 3) DTO → 엔티티 변환 & 저장
         Trade trade = dto.toEntity(seller, category, imageUrl);
         Trade saved = tradeRepository.save(trade);
 
@@ -93,7 +92,7 @@ public class TradeService {
                     String.format(ErrorMessages.SEARCH_KEYWORD_TOO_SHORT, Constants.MIN_SEARCH_LENGTH)
             );
         }
-        return tradeRepository.findByTitleContainingIgnoreCase(keyword, pageable)
+        return tradeRepository.searchByKeyword(keyword, pageable)
                 .map(TradeListResponseDto::new);
     }
 

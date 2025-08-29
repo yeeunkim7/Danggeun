@@ -1,9 +1,9 @@
 package org.example.danggeun.trade.dto;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.example.danggeun.address.entity.Address;
 import org.example.danggeun.trade.entity.Trade;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -12,7 +12,6 @@ public class TradeDetailResponseDto {
 
     private final Long id;
     private final String title;
-    private final String name;
     private final Long price;
     private final String detail;
     private final String state;
@@ -27,7 +26,6 @@ public class TradeDetailResponseDto {
     public TradeDetailResponseDto(Trade entity) {
         this.id = entity.getId();
         this.title = entity.getTitle();
-        this.name = entity.getName();
         this.price = entity.getPrice();
         this.detail = entity.getDetail();
         this.state = entity.getState();
@@ -45,6 +43,5 @@ public class TradeDetailResponseDto {
         } else {
             this.address = "주소 정보 없음";
         }
-
     }
 }

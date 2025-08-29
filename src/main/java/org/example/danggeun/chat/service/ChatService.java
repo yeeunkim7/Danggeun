@@ -111,15 +111,14 @@ public class ChatService {
         User defaultSeller = userService.findByEmail(AI_EMAIL)
                 .orElseThrow(() -> new IllegalStateException("시스템 판매자가 없습니다."));
 
-        return tradeRepository.findByTitle("AI Dummy Product")
+        return tradeRepository.findFirstBySellerAndTitle(defaultSeller, "AI Dummy Product")
                 .orElseGet(() -> tradeRepository.save(
                         Trade.builder()
                                 .category(defaultCategory)
                                 .seller(defaultSeller)
-                                .name("AI Dummy Product Name")
-                                .title("AI Dummy Product")
+                                .title("AI Dummy Product")              // ← name 사용 제거
+                                .description("This is an AI dummy product for chat.") // detail 커스텀 빌더
                                 .price(0L)
-                                .detail("This is an AI dummy product for chat.")
                                 .state("00")
                                 .createdAt(LocalDateTime.now())
                                 .build()
@@ -145,7 +144,6 @@ public class ChatService {
 
         List<ChatSummaryDto> result = new ArrayList<>();
         for (Chat chat : chats) {
-
             Message lastMsg = chat.getMessages().isEmpty() ? null
                     : chat.getMessages().get(chat.getMessages().size() - 1);
             String lastMessage = (lastMsg != null ? lastMsg.getContent() : "");
@@ -153,14 +151,12 @@ public class ChatService {
             Long sellerId = chat.getSeller().getId();
             Long opponentId = buyerId.equals(userId) ? sellerId : buyerId;
 
-
             User otherUser = userId.equals(chat.getBuyer().getId())
                     ? chat.getSeller()
                     : chat.getBuyer();
 
-
             String title = chat.getProduct() != null
-                    ? chat.getProduct().getTitle()
+                    ? chat.getProduct().getTitle()   // ← getName() → getTitle()
                     : otherUser.getUsername();
 
             result.add(ChatSummaryDto.builder()
