@@ -57,9 +57,11 @@ public class User {
     private String region;
 
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Trade> products = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Address> address = new ArrayList<>();
 
     @PrePersist

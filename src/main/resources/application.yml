@@ -1,12 +1,23 @@
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
+  error:
+    whitelabel:
+      enabled: false
+    path: /error
+  servlet:
+    session:
+      timeout: 30m # 세션 타임아웃 30분
+      cookie:
+        http-only: true
+        secure: false # 개발환경에서는 false, 운영환경에서는 true
+        same-site: lax
 
 spring:
   profiles:
-    active: local
+    active: ${SPRING_PROFILES_ACTIVE:local}
 
   config:
-    import: optional:dotenv:.env # .env 파일 불러오기
+    import: optional:dotenv:.env
 
   thymeleaf:
     prefix: classpath:/templates/
@@ -14,15 +25,16 @@ spring:
     mode: HTML
     encoding: UTF-8
     cache: false
-    error:
-      whitelabel:
-        enabled: false
-      path: /error
 
   sql:
     init:
       mode: always
       encoding: UTF-8
+
+  session:
+    store-type: none # 기본 메모리 세션 사용
+    jdbc:
+      initialize-schema: never
 
   security:
     oauth2:
@@ -31,35 +43,83 @@ spring:
           google:
             client-id: ${GOOGLE_CLIENT_ID}
             client-secret: ${GOOGLE_CLIENT_SECRET}
-            scope: [ email, profile ]
-            redirect-uri: "http://13.60.13.30.nip.io/login/oauth2/code/{registrationId}"
+            scope: [email, profile]
+            redirect-uri: ${OAUTH_REDIRECT_URI:http://localhost:8080/login/oauth2/code/{registrationId}}
         provider:
           google:
             user-name-attribute: sub
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/danggeun
-    username: postgres
-    password: 2327
-
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/danggeun}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:}
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true # SQL 로그 출력으로 디버깅
 
 gemini:
-  api-key: AIzaSyAc6DXXoR-eyFEPumW-TnTou-S0IPkoxA8
+  api-key: ${GEMINI_API_KEY}
 
-#aws: ${GEMINI_API_KEY}
-#  access-key-id: ${AWS_ACCESS_KEY_ID}
-#  secret-access-key: ${AWS_SECRET_ACCESS_KEY}
-#  region: eu-north-1
-#  s3:
-#    bucket-name: ${S3_BUCKET_NAME}
+google:
+  maps:
+    api-key: ${GOOGLE_MAPS_API_KEY}
 
 file:
-  upload-dir: ${FILE_UPLOAD_DIR}
+  upload-dir: ${FILE_UPLOAD_DIR:./uploads}
+
+logging:
+  level:
+    org.example.danggeun.security: DEBUG # 보안 관련 로그 출력
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  sql:
+    init:
+      mode: never
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            redirect-uri: ${OAUTH_REDIRECT_URI}
+
+  session:
+    jdbc:
+      initialize-schema: always # 운영환경에서는 세션 테이블 사용
+
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    session:
+      cookie:
+        secure: true # 운영환경에서는 HTTPS 사용
+
+logging:
+  level:
+    org.example.danggeun.security: INFO
+    org.springframework.security: WARN

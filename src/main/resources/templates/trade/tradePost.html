@@ -9,7 +9,8 @@
 <body>
 <div class="container">
   <div class="image-section">
-    <img th:src="${product.imageUrl} ?? '/img/sample1.jpeg'" alt="업로드된 이미지" />
+    <img th:src="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl)} ? ${product.imageUrl} : '/img/sample1.jpeg'"
+         alt="업로드된 이미지" />
   </div>
 
   <div class="meta">
@@ -17,7 +18,7 @@
       <div class="user" th:text="${product.sellerName}">아이디</div>
       <div class="location" th:text="${product.address}">부평 1동</div>
     </div>
-      <form th:action="@{/chat/room/{postId}(postId=${product.id})}" method="get" style="display:inline;">
+    <form th:action="@{/chat/room/{postId}(postId=${product.id})}" method="get" style="display:inline;">
       <button class="chat-btn" type="submit">채팅하기</button>
     </form>
   </div>

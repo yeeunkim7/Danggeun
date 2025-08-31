@@ -48,10 +48,16 @@ public class SecurityConfig {
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        .sessionFixation().migrateSession() // 세션 고정 공격 방지
+                        .invalidSessionUrl("/login") // 무효한 세션 시 로그인 페이지로 이동
+                        .maximumSessions(1) // 동시 세션 1개로 제한
+                        .maxSessionsPreventsLogin(false) // 새 로그인 시 기존 세션 만료
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
+                        .usernameParameter("email") // 이메일을 username으로 사용
+                        .passwordParameter("password")
                         .successHandler(customLoginSuccessHandler)
                         .failureHandler(customLoginFailureHandler)
                         .permitAll()
@@ -59,11 +65,15 @@ public class SecurityConfig {
                 .oauth2Login(oauth -> oauth
                         .loginPage("/login")
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-                        .defaultSuccessUrl("/")
+                        .successHandler(customLoginSuccessHandler) // OAuth2도 같은 success handler 사용
+                        .defaultSuccessUrl("/", true)
                 )
                 .logout(logout -> logout
+                        .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .clearAuthentication(true)
                 );
 
         return http.build();
