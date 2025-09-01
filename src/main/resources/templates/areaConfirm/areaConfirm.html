@@ -4,74 +4,37 @@
   <meta charset="UTF-8">
   <title>동네 인증</title>
 
-  <!-- CSRF (있으면 자동 전송) -->
-  <meta name="_csrf" th:content="${_csrf.token}">
-  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+  <!-- CSRF 토큰 (있는 경우에만) -->
+  <meta th:if="${_csrf}" name="_csrf" th:content="${_csrf.token}">
+  <meta th:if="${_csrf}" name="_csrf_header" th:content="${_csrf.headerName}">
 
-  <style>
-    body {
-      background-color: #fff8dc;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 50px;
-    }
-    .container {
-      background-color: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      width: 640px;
-      margin: 0 auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.08);
-    }
-    .row { display:flex; gap:8px; justify-content:center; align-items:center; margin: 12px 0; }
-    input[type="text"] {
-      flex:1;
-      min-width: 360px;
-      padding: 10px;
-      font-size: 14px;
-    }
-    button {
-      padding: 10px 16px;
-      background-color: #ff7e00;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    button:hover {
-      background-color: #e56b00;
-    }
-    #map {
-      width: 100%;
-      height: 320px;
-      margin: 16px 0;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-    }
-    .muted { color:#666; font-size: 13px; margin: 6px 0 14px; }
-  </style>
+  <!-- CSS 파일 -->
+  <link rel="stylesheet" href="/css/areaconfirm/areaConfirm.css">
 </head>
 <body>
 
 <div class="container">
   <h3>어디에 살고 계신가요?</h3>
 
+  <div id="errorMessage" class="error" style="display: none;"></div>
+  <div id="successMessage" class="success" style="display: none;"></div>
+
   <div class="row">
     <input type="text" id="address" placeholder="예) 서울 강서구 화곡동" autocomplete="off" />
-    <button type="button" onclick="searchAddress()">주소 검색</button>
+    <button type="button" id="searchBtn" onclick="searchAddress()">주소 검색</button>
   </div>
 
   <div class="muted">주소를 입력하거나, 아래 버튼으로 현재 위치를 불러오세요.</div>
 
   <div class="row">
-    <button type="button" onclick="setLocation()">현재 위치로 설정</button>
+    <button type="button" id="locationBtn" onclick="setLocation()">현재 위치로 설정</button>
   </div>
 
   <div id="map"></div>
 
-  <p id="locationText" class="muted"></p>
-  <button type="button" onclick="confirmArea()">동네인증 완료하기</button>
+  <p id="locationText" class="muted">지도에서 위치를 선택해주세요.</p>
+
+  <button type="button" id="confirmBtn" onclick="confirmArea()" disabled>동네인증 완료하기</button>
 </div>
 
 <!-- 로그인 사용자 ID 전달 (JS 로드 전에 설정) -->
@@ -80,19 +43,30 @@
   window.currentUserId = [[${user.id}]];
 </script>
 
-<!-- JavaScript 파일 로드 -->
+<!-- 기존 동네 인증 정보가 있는 경우 -->
+<script th:if="${existingArea != null}">
+  console.log('기존 동네 인증 정보:', [[${existingArea}]]);
+  window.existingArea = {
+    address: '[[${existingArea.address}]]',
+    latitude: [[${existingArea.latitude}]],
+    longitude: [[${existingArea.longitude}]],
+    confirmedAt: '[[${existingArea.confirmedAt}]]'
+  };
+</script>
+
+<!-- JavaScript 파일 -->
 <script src="/js/areaConfirm.js"></script>
 
 <!-- Google Maps API 로드 (비동기) -->
 <script th:if="${googleApiKey != null}"
         th:src="@{|https://maps.googleapis.com/maps/api/js?key=${googleApiKey}&libraries=places&callback=initMap|}"
         async defer
-        onerror="console.error('Google Maps API 로드 실패')"></script>
+        onerror="console.error('Google Maps API 로드 실패'); showError('Google Maps를 로드할 수 없습니다.')"></script>
 
 <!-- API 키가 없는 경우 경고 -->
 <script th:if="${googleApiKey == null}">
   console.error('Google Maps API 키가 설정되지 않았습니다.');
-  alert('Google Maps API 키가 설정되지 않았습니다. 관리자에게 문의하세요.');
+  showError('Google Maps API 키가 설정되지 않았습니다. 관리자에게 문의하세요.');
 </script>
 
 </body>

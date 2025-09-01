@@ -1,18 +1,7 @@
 package org.example.danggeun.areaconfirm.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -22,7 +11,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "area")
+@Table(name = "area", indexes = {
+        @Index(name = "idx_area_user_id", columnList = "user_id"),
+        @Index(name = "idx_area_user_confirmed", columnList = "user_id, confirmed_at")
+})
 public class Area {
 
     @Id
@@ -33,21 +25,23 @@ public class Area {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Lob
-    @Column(name = "address", length = 200)
+    @Column(name = "address", length = 500, nullable = false)
     private String address;
 
+    // precision과 scale 제거 - Double 타입은 이미 충분한 정밀도를 제공
     @Column(name = "latitude", nullable = false)
-    private double latitude;
+    private Double latitude;
 
     @Column(name = "longitude", nullable = false)
-    private double longitude;
+    private Double longitude;
 
-    @Column(name = "confirmed_at")
+    @Column(name = "confirmed_at", nullable = false)
     private LocalDateTime confirmedAt;
 
     @PrePersist
     protected void onCreate() {
-        this.confirmedAt = LocalDateTime.now();
+        if (this.confirmedAt == null) {
+            this.confirmedAt = LocalDateTime.now();
+        }
     }
 }

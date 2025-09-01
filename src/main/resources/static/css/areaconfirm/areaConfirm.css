@@ -1,0 +1,151 @@
+body {
+  background-color: #fff8dc;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 50px;
+  margin: 0;
+}
+
+.container {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  max-width: 640px;
+  margin: 0 auto;
+  box-shadow: 0 0 10px rgba(0,0,0,0.08);
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  margin: 12px 0;
+  flex-wrap: wrap;
+}
+
+input[type="text"] {
+  flex: 1;
+  min-width: 300px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+button {
+  padding: 10px 16px;
+  background-color: #ff7e00;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #e56b00;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+button:disabled:hover {
+  background-color: #ccc;
+}
+
+#map {
+  width: 100%;
+  height: 320px;
+  margin: 16px 0;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background-color: #f5f5f5;
+}
+
+.muted {
+  color: #666;
+  font-size: 13px;
+  margin: 6px 0 14px;
+}
+
+.loading {
+  color: #ff7e00;
+  font-weight: bold;
+}
+
+.error {
+  color: #dc3545;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 12px;
+  border-radius: 4px;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.success {
+  color: #155724;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  padding: 12px;
+  border-radius: 4px;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  body {
+    padding: 20px;
+  }
+
+  .container {
+    padding: 20px;
+    margin: 0;
+  }
+
+  input[type="text"] {
+    min-width: 200px;
+  }
+
+  .row {
+    flex-direction: column;
+  }
+
+  button {
+    width: 100%;
+    margin: 4px 0;
+  }
+
+  #map {
+    height: 280px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+
+  .container {
+    padding: 15px;
+  }
+
+  h3 {
+    font-size: 18px;
+  }
+
+  input[type="text"] {
+    min-width: 100%;
+    font-size: 16px; /* iOS 줌 방지 */
+  }
+
+  #map {
+    height: 250px;
+  }
+}

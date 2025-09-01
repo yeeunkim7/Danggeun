@@ -54,6 +54,13 @@ spring:
     url: ${DB_URL:jdbc:postgresql://localhost:5432/danggeun}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 300000
+      max-lifetime: 1800000
+      connection-timeout: 20000
+
   jpa:
     open-in-view: false
     hibernate:
@@ -62,26 +69,63 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
     show-sql: true # SQL 로그 출력으로 디버깅
 
+  # 파일 업로드 설정 추가
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
+      location: ${java.io.tmpdir}
+
+  # 웹 리소스 설정
+  web:
+    resources:
+      static-locations: classpath:/static/
+      cache:
+        cachecontrol:
+          max-age: 3600 # 1시간 캐시
+
+# API 키 설정 (컨트롤러와 키명 일치)
 gemini:
-  api-key: ${GEMINI_API_KEY}
+  api-key: ${GEMINI_API_KEY:}
 
 google:
   maps:
-    api-key: ${GOOGLE_MAPS_API_KEY}
+    api:
+      key: ${GOOGLE_MAPS_API_KEY:}
 
+# 파일 업로드 디렉토리
 file:
   upload-dir: ${FILE_UPLOAD_DIR:./uploads}
 
+# 로깅 설정
 logging:
   level:
     org.example.danggeun.security: DEBUG # 보안 관련 로그 출력
     org.springframework.security: DEBUG
     org.hibernate.SQL: DEBUG
+    org.springframework.web: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# 관리 및 모니터링 (선택사항)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
 
 ---
-
+# 운영환경 설정
 spring:
   config:
     activate:
@@ -91,15 +135,24 @@ spring:
     init:
       mode: never
 
+  thymeleaf:
+    cache: true # 운영환경에서는 캐시 활성화
+
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 10
 
   jpa:
     hibernate:
       ddl-auto: validate
     show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
 
   security:
     oauth2:
@@ -109,8 +162,15 @@ spring:
             redirect-uri: ${OAUTH_REDIRECT_URI}
 
   session:
+    store-type: jdbc # 운영환경에서는 JDBC 세션 사용
     jdbc:
-      initialize-schema: always # 운영환경에서는 세션 테이블 사용
+      initialize-schema: always
+
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          max-age: 86400 # 운영환경에서는 24시간 캐시
 
 server:
   port: ${SERVER_PORT:8080}
@@ -123,3 +183,54 @@ logging:
   level:
     org.example.danggeun.security: INFO
     org.springframework.security: WARN
+    org.hibernate.SQL: WARN
+    root: INFO
+  file:
+    name: logs/application.log
+
+---
+# 로컬 개발환경 설정
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+logging:
+  level:
+    org.example.danggeun: DEBUG
+    org.springframework.web: DEBUG
+
+---
+# 테스트 환경 설정
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+
+  h2:
+    console:
+      enabled: true
