@@ -10,7 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "\"user\"")
+@Table(name = "\"user\"",
+        indexes = {
+                @Index(name = "idx_user_email", columnList = "user_email"),
+                @Index(name = "idx_user_username", columnList = "user_nm")
+        })
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,7 +27,7 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "user_nm", length = 50, nullable = false)
+    @Column(name = "user_nm", length = 50, nullable = false, unique = true)
     private String username;
 
     @Column(name = "user_password", length = 100, nullable = false)
@@ -35,25 +39,26 @@ public class User {
     @Column(name = "user_phone", length = 50)
     private String phone;
 
-    @Column(name = "user_createdat")
+    @Column(name = "user_createdat", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "provider")
+    @Column(name = "provider", length = 50)
     private String provider;
 
-    @Column(name = "provider_id")
+    @Column(name = "provider_id", length = 100)
     private String providerId;
 
-    @Column(name = "role")
-    private String role;
+    @Column(name = "role", length = 20, nullable = false)
+    @Builder.Default
+    private String role = "ROLE_USER";
 
-    @Column(name = "nickname")
+    @Column(name = "nickname", length = 50)
     private String nickname;
 
-    @Column(name = "profile_image_url")
+    @Column(name = "profile_image_url", length = 500)
     private String profileImageUrl;
 
-    @Column(name = "region")
+    @Column(name = "region", length = 100)
     private String region;
 
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -69,5 +74,19 @@ public class User {
         if (this.createdAt == null) {
             this.createdAt = LocalDateTime.now();
         }
+        if (this.role == null) {
+            this.role = "ROLE_USER";
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }

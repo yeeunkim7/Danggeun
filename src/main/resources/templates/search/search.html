@@ -27,14 +27,12 @@
     <div class="item-grid">
       <div class="item-card" th:each="item : ${result.items.content}">
         <a th:href="@{/trade/{id}(id=${item.id})}">
-          <!-- 이미지: 값이 있으면 그걸, 없으면 플레이스홀더 -->
-          <div class="item-image"
-               th:if="${item.imageUrl != null}"
-               th:style="|background-image: url('@{${item.imageUrl}}'); background-size: cover; background-position:center;|">
-          </div>
-          <div class="item-image"
-               th:if="${item.imageUrl == null}"
-               th:style="|background-image: url('@{/img/placeholder.jpeg}'); background-size: cover; background-position:center;|">
+          <!-- 이미지 처리 개선 -->
+          <div class="item-image">
+            <img th:src="${item.imageUrl != null and item.imageUrl != '' ? (item.imageUrl.startsWith('/') ? item.imageUrl : '/img/' + item.imageUrl) : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjREJEQ0UyIi8+CjxwYXRoIGQ9Ik0xMDAgNzVMMTI1IDEwMEgxMTJWMTI1SDg4VjEwMEg3NUwxMDAgNzVaIiBmaWxsPSIjOTk5OTk5Ii8+Cjwvc3ZnPgo='}"
+                 th:alt="${item.title}"
+                 class="item-img"
+                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjREJEQ0UyIi8+CjxwYXRoIGQ9Ik0xMDAgNzVMMTI1IDEwMEgxMTJWMTI1SDg4VjEwMEg3NUwxMDAgNzVaIiBmaWxsPSIjOTk5OTk5Ii8+PC9zdmc+Cg=='" />
           </div>
 
           <div class="item-info">
@@ -50,16 +48,21 @@
   <!-- 사용자 검색 결과 -->
   <div th:if="${result.users != null}">
     <h2>사용자 결과</h2>
-    <ul>
-      <li th:each="user : ${result.users.content}">
-        <img th:if="${user.profileImageUrl != null}"
-             th:src="@{${user.profileImageUrl}}"
-             alt="프로필" width="40" height="40" style="object-fit:cover;border-radius:50%;" />
-        <img th:if="${user.profileImageUrl == null}"
-             th:src="@{/img/placeholder-profile.jpeg}"
-             alt="프로필" width="40" height="40" style="object-fit:cover;border-radius:50%;" />
-        <span th:text="${user.nickname}">닉네임</span> /
-        <span th:text="${user.region}">지역</span>
+    <ul class="user-list">
+      <li th:each="user : ${result.users.content}" class="user-item">
+        <img th:if="${user.profileImageUrl != null and user.profileImageUrl != ''}"
+             th:src="${user.profileImageUrl.startsWith('/') ? user.profileImageUrl : '/img/' + user.profileImageUrl}"
+             alt="프로필"
+             class="profile-img"
+             onerror="this.src='/img/placeholder-profile.jpeg'" />
+        <img th:if="${user.profileImageUrl == null or user.profileImageUrl == ''}"
+             src="/img/placeholder-profile.jpeg"
+             alt="프로필"
+             class="profile-img" />
+        <div class="user-info">
+          <span class="user-nickname" th:text="${user.nickname}">닉네임</span>
+          <span class="user-region" th:text="${user.region}">지역</span>
+        </div>
       </li>
     </ul>
   </div>

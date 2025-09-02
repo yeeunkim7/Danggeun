@@ -6,21 +6,17 @@ import com.google.genai.types.GenerateContentResponse;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.danggeun.category.entity.Category;
-import org.example.danggeun.category.repository.CategoryRepository;
 import org.example.danggeun.chat.dto.ChatSummaryDto;
 import org.example.danggeun.chat.entity.Chat;
 import org.example.danggeun.chat.repository.ChatRepository;
 import org.example.danggeun.message.entity.Message;
 import org.example.danggeun.trade.entity.Trade;
-import org.example.danggeun.trade.repository.TradeRepository;
 import org.example.danggeun.user.entity.User;
 import org.example.danggeun.user.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,10 +29,8 @@ public class ChatService {
 
     private final UserService userService;
     private final ChatRepository chatRepository;
-    private final TradeRepository tradeRepository;
-    private final CategoryRepository categoryRepository;
 
-    @Value("${GEMINI_API_KEY}")
+    @Value("${GEMINI_API_KEY:}")
     private String apiKey;
 
     private Client geminiClient;
@@ -44,23 +38,36 @@ public class ChatService {
 
     @PostConstruct
     public void init() {
-        this.generationConfig = GenerateContentConfig.builder()
-                .temperature(0.7f)
-                .topP(1.0f)
-                .build();
+        try {
+            if (apiKey == null || apiKey.isEmpty()) {
+                log.warn("GEMINI_API_KEY가 설정되지 않았습니다. AI 채팅 기능이 제한됩니다.");
+                return;
+            }
 
-        this.geminiClient = Client.builder()
-                .apiKey(this.apiKey)
-                .build();
+            this.generationConfig = GenerateContentConfig.builder()
+                    .temperature(0.7f)
+                    .topP(1.0f)
+                    .build();
 
-        log.info("Gemini Client 초기화 성공!");
+            this.geminiClient = Client.builder()
+                    .apiKey(this.apiKey)
+                    .build();
+
+            log.info("Gemini Client 초기화 성공!");
+        } catch (Exception e) {
+            log.error("Gemini Client 초기화 실패", e);
+        }
     }
 
     public String getAiResponse(String userMessage) {
+        if (geminiClient == null) {
+            return "죄송합니다. AI 서비스가 현재 사용할 수 없습니다.";
+        }
+
         try {
             GenerateContentResponse response = this.geminiClient.models.generateContent(
                     "gemini-1.5-flash-latest",
-                    userMessage,
+                    "당근마켓 중고거래 도우미로서 친근하게 답변해주세요: " + userMessage,
                     this.generationConfig
             );
             return response.text();
@@ -78,15 +85,15 @@ public class ChatService {
     public Chat findOrCreateAiChat(Long loginUserId) {
         User buyer = userService.findById(loginUserId);
         User aiUser = findOrCreateAiUser();
-        Trade dummyProduct = findOrCreateDummyProduct();
 
+        // AI 채팅은 product가 null인 채팅으로 구분
         return chatRepository
-                .findByBuyerAndSellerAndProduct(buyer, aiUser, dummyProduct)
+                .findByBuyerAndSellerAndProductIsNull(buyer, aiUser)
                 .orElseGet(() -> {
                     Chat chat = Chat.builder()
                             .buyer(buyer)
                             .seller(aiUser)
-                            .product(dummyProduct)
+                            .product(null)  // AI 채팅은 제품 없음
                             .build();
                     return chatRepository.save(chat);
                 });
@@ -96,33 +103,12 @@ public class ChatService {
     protected User findOrCreateAiUser() {
         return userService.findByEmail(AI_EMAIL).orElseGet(() -> {
             User system = User.builder()
-                    .username("chatbot")
+                    .username("AI 도우미")
                     .email(AI_EMAIL)
                     .password("{noop}changeme")
                     .build();
             return userService.save(system);
         });
-    }
-
-    @Transactional
-    public Trade findOrCreateDummyProduct() {
-        Category defaultCategory = categoryRepository.findById(1L)
-                .orElseThrow(() -> new IllegalStateException("기본 카테고리가 없습니다."));
-        User defaultSeller = userService.findByEmail(AI_EMAIL)
-                .orElseThrow(() -> new IllegalStateException("시스템 판매자가 없습니다."));
-
-        return tradeRepository.findFirstBySellerAndTitle(defaultSeller, "AI Dummy Product")
-                .orElseGet(() -> tradeRepository.save(
-                        Trade.builder()
-                                .category(defaultCategory)
-                                .seller(defaultSeller)
-                                .title("AI Dummy Product")              // ← name 사용 제거
-                                .description("This is an AI dummy product for chat.") // detail 커스텀 빌더
-                                .price(0L)
-                                .state("00")
-                                .createdAt(LocalDateTime.now())
-                                .build()
-                ));
     }
 
     @Transactional
@@ -147,6 +133,7 @@ public class ChatService {
             Message lastMsg = chat.getMessages().isEmpty() ? null
                     : chat.getMessages().get(chat.getMessages().size() - 1);
             String lastMessage = (lastMsg != null ? lastMsg.getContent() : "");
+
             Long buyerId = chat.getBuyer().getId();
             Long sellerId = chat.getSeller().getId();
             Long opponentId = buyerId.equals(userId) ? sellerId : buyerId;
@@ -155,9 +142,17 @@ public class ChatService {
                     ? chat.getSeller()
                     : chat.getBuyer();
 
-            String title = chat.getProduct() != null
-                    ? chat.getProduct().getTitle()   // ← getName() → getTitle()
-                    : otherUser.getUsername();
+            String title;
+            if (chat.getProduct() != null) {
+                title = chat.getProduct().getTitle();
+            } else {
+                // AI 채팅인 경우
+                if (AI_EMAIL.equals(otherUser.getEmail())) {
+                    title = "AI 도우미";
+                } else {
+                    title = otherUser.getUsername();
+                }
+            }
 
             result.add(ChatSummaryDto.builder()
                     .chatId(chat.getId())
@@ -172,9 +167,9 @@ public class ChatService {
         return result;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Chat findById(Long chatId) {
         return chatRepository.findById(chatId)
-                .orElseThrow(() -> new IllegalArgumentException("채팅방을 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("채팅방을 찾을 수 없습니다: " + chatId));
     }
 }

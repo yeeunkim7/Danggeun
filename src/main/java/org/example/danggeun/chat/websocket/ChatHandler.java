@@ -1,4 +1,4 @@
-package org.example.danggeun.chat.websocket;
+/*package org.example.danggeun.chat.websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -202,4 +202,4 @@ public class ChatHandler extends TextWebSocketHandler {
     private void notifyOfflineUsers(ChatSocketMessageDto msg, Set<String> participants) {
         log.info("오프라인 사용자에게 알림 전송 (예시)"); // 실제 구현 필요
     }
-}
+} */

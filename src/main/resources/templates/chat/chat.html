@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>채팅 - 당근마켓</title>
-    <link rel="stylesheet" href="/css/chat/chat_styles.css">
-    <link rel="stylesheet" href="/css/header/header.css">
+    <link rel="stylesheet" type="text/css" href="/css/chat/chat.css">
+    <link rel="stylesheet" type="text/css" href="/css/header/header.css">
 </head>
 <body>
-<header th:replace="fragments/header :: headerFragment"></header>
+<header th:replace="~{fragments/header :: headerFragment}"></header>
 
 <main class="chat-page-container">
     <div class="chat-container">
@@ -46,7 +46,7 @@
             <div class="chat-messages"></div>
 
             <form class="chat-input-form">
-                <textarea placeholder="메시지를 입력해주세요"></textarea>
+                <textarea placeholder="메시지를 입력해주세요" rows="1"></textarea>
                 <button type="submit">전송</button>
             </form>
         </section>

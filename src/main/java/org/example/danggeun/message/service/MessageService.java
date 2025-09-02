@@ -41,7 +41,8 @@ public class MessageService {
 
     @Transactional(readOnly = true)
     public List<Message> getMessages(Long chatId) {
-        return messageRepository.findAllByChatIdOrderByCreatedAtAsc(chatId);
+        // 수정: findAllByChatIdOrderByCreatedAtAsc → findByChatIdOrderByCreatedAtAsc
+        return messageRepository.findByChatIdOrderByCreatedAtAsc(chatId);
     }
 
     public List<Chat> findAllChatsByUser(User user) {

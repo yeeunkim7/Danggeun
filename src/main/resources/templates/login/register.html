@@ -14,33 +14,66 @@
     <form th:action="@{/register}" th:object="${user}" method="post" class="register-form" novalidate>
         <h1 class="register-title">회원가입</h1>
 
+        <!-- 전체 오류 메시지 -->
         <div class="error-message" th:if="${error}">
             <p th:text="${error}">오류가 발생했습니다.</p>
         </div>
 
         <div class="form-group">
             <label for="username">닉네임</label>
-            <input type="text" id="username" th:field="*{username}" placeholder="닉네임을 입력해주세요" required autocomplete="nickname">
-        </div>
-
-        <div class="form-group">
-            <label for="phone">전화번호</label>
-            <input type="text" id="phone" th:field="*{phone}" placeholder="전화번호를 입력해주세요" inputmode="tel" autocomplete="tel">
+            <input type="text" id="username" th:field="*{username}"
+                   placeholder="닉네임을 입력해주세요" required autocomplete="nickname"
+                   th:class="${#fields.hasErrors('username')} ? 'error-input' : ''">
+            <div class="field-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">
+                닉네임 오류
+            </div>
+            <div class="validation-message" id="username-validation"></div>
         </div>
 
         <div class="form-group">
             <label for="email">이메일</label>
-            <input type="email" id="email" th:field="*{email}" placeholder="이메일을 입력해주세요" required autocomplete="email">
+            <input type="email" id="email" th:field="*{email}"
+                   placeholder="이메일을 입력해주세요" required autocomplete="email"
+                   th:class="${#fields.hasErrors('email')} ? 'error-input' : ''">
+            <div class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+                이메일 오류
+            </div>
+            <div class="validation-message" id="email-validation"></div>
         </div>
 
         <div class="form-group">
             <label for="password">비밀번호</label>
-            <input type="password" id="password" th:field="*{password}" placeholder="비밀번호를 입력해주세요" required autocomplete="new-password">
+            <input type="password" id="password" th:field="*{password}"
+                   placeholder="영문, 숫자, 특수문자 포함 8~15자" required autocomplete="new-password"
+                   th:class="${#fields.hasErrors('password')} ? 'error-input' : ''">
+            <div class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
+                비밀번호 오류
+            </div>
+            <div class="password-policy">
+                <small>영문, 숫자, 특수문자(@$!%*?&)를 포함하여 8~15자로 입력해주세요.</small>
+            </div>
+            <div class="password-strength" id="password-strength"></div>
         </div>
 
         <div class="form-group">
             <label for="confirmPassword">비밀번호 확인</label>
-            <input type="password" id="confirmPassword" th:field="*{confirmPassword}" placeholder="비밀번호를 다시 입력해주세요" required autocomplete="new-password">
+            <input type="password" id="confirmPassword" th:field="*{confirmPassword}"
+                   placeholder="비밀번호를 다시 입력해주세요" required autocomplete="new-password"
+                   th:class="${#fields.hasErrors('confirmPassword')} ? 'error-input' : ''">
+            <div class="field-error" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">
+                비밀번호 확인 오류
+            </div>
+            <div class="validation-message" id="confirm-password-validation"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">전화번호 (선택)</label>
+            <input type="text" id="phone" th:field="*{phone}"
+                   placeholder="010-1234-5678" inputmode="tel" autocomplete="tel"
+                   th:class="${#fields.hasErrors('phone')} ? 'error-input' : ''">
+            <div class="field-error" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">
+                전화번호 오류
+            </div>
         </div>
 
         <button type="submit" class="btn-register">회원가입</button>
@@ -52,5 +85,6 @@
     </form>
 </div>
 
+<script src="/js/register.js"></script>
 </body>
 </html>

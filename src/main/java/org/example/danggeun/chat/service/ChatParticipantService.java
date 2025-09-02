@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Service  // 누락된 어노테이션 추가
 @RequiredArgsConstructor
 public class ChatParticipantService {
 

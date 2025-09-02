@@ -32,6 +32,9 @@ class SearchManager {
         document.querySelectorAll('.keyword_btn').forEach(btn => {
             btn.addEventListener('click', () => this.searchKeywordFunc(btn.textContent.trim()));
         });
+
+        // 이미지 로드 실패 처리
+        this.handleImageErrors();
     }
 
     searchKeywordFunc(keyword) {
@@ -145,7 +148,9 @@ class SearchManager {
             return `
             <div class="search-result-item">
                 <a href="${href}" class="result-link">
-                    <img src="${src}" alt="${title}" class="result-image">
+                    <div class="result-image-container">
+                        <img src="${src}" alt="${title}" class="result-image" onerror="this.src='/img/placeholder.jpeg'">
+                    </div>
                     <div class="result-content">
                         <h3 class="result-title">${title}</h3>
                         <p class="result-summary">${content}</p>
@@ -159,12 +164,40 @@ class SearchManager {
             </div>`;
         }).join('');
         this.searchResults.insertAdjacentHTML('beforeend', html);
+
+        // 새로 추가된 이미지들에 대한 에러 처리
+        this.handleImageErrors();
     }
 
     resolveImageUrl(url) {
-        if (typeof url !== 'string' || url.trim() === '') return '/img/placeholder.jpeg';
-        if (url.startsWith('/')) return url;
+        if (typeof url !== 'string' || url.trim() === '') {
+            return this.getPlaceholderImage();
+        }
+        if (url.startsWith('/')) {
+            return url;
+        }
+        // img/ 접두사가 없는 경우 추가
         return `/img/${url}`;
+    }
+
+    getPlaceholderImage() {
+        // Base64 encoded SVG placeholder
+        return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjREJEQ0UyIi8+CjxwYXRoIGQ9Ik0xMDAgNzVMMTI1IDEwMEgxMTJWMTI1SDg4VjEwMEg3NUwxMDAgNzVaIiBmaWxsPSIjOTk5OTk5Ii8+PC9zdmc+Cg==';
+    }
+
+    handleImageErrors() {
+        // 모든 이미지에 대해 에러 처리 설정
+        document.querySelectorAll('img').forEach(img => {
+            if (!img.hasAttribute('data-error-handled')) {
+                img.setAttribute('data-error-handled', 'true');
+                img.addEventListener('error', () => {
+                    const placeholderSrc = this.getPlaceholderImage();
+                    if (img.src !== placeholderSrc) {
+                        img.src = placeholderSrc;
+                    }
+                });
+            }
+        });
     }
 
     shouldLoadMore() {
@@ -173,13 +206,27 @@ class SearchManager {
         return scrollPosition > threshold;
     }
 
-    showLoadingIndicator() {}
+    showLoadingIndicator() {
+        if (this.searchResults) {
+            const loadingElement = document.createElement('div');
+            loadingElement.className = 'loading-indicator';
+            loadingElement.innerHTML = '<p>로딩 중...</p>';
+            loadingElement.id = 'loading-indicator';
+            this.searchResults.appendChild(loadingElement);
+        }
+    }
 
-    hideLoadingIndicator() {}
+    hideLoadingIndicator() {
+        const loadingElement = document.getElementById('loading-indicator');
+        if (loadingElement) {
+            loadingElement.remove();
+        }
+    }
 
     showError(message) {
-        if (this.searchResults)
+        if (this.searchResults) {
             this.searchResults.innerHTML = `<p class="error-message">${this.escapeHtml(message)}</p>`;
+        }
     }
 
     formatPrice(price) {
@@ -195,7 +242,11 @@ class SearchManager {
         if (!dateString) return '';
         const date = new Date(dateString);
         if (isNaN(date.getTime())) return '';
-        return date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' });
+        return date.toLocaleDateString('ko-KR', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
     }
 
     escapeHtml(text) {
@@ -205,6 +256,51 @@ class SearchManager {
     }
 }
 
+// 페이지 로드 완료 후 SearchManager 초기화
 document.addEventListener('DOMContentLoaded', () => {
     new SearchManager();
+
+    // 기존 상품 목록을 위한 코드 (API에서 불러오기)
+    loadProductList();
 });
+
+async function loadProductList() {
+    try {
+        const response = await fetch('/api/products');
+        if (!response.ok) throw new Error('데이터를 불러오는 데 실패했습니다.');
+
+        const products = await response.json();
+        const container = document.getElementById('product-list');
+
+        if (!container) return;
+        container.innerHTML = '';
+
+        products.forEach(product => {
+            const div = document.createElement('div');
+            div.className = 'product-item';
+
+            // 이미지 URL 처리 개선
+            const imageUrl = product.productImg ?
+                (product.productImg.startsWith('/') ? product.productImg : `/img/${product.productImg}`) :
+                '/img/placeholder.jpeg';
+
+            div.innerHTML = `
+                <h3>${product.productNm || '상품명 없음'}</h3>
+                <p>가격: ${product.productPrice} 원</p>
+                <p>상세: ${product.productDetail || '설명 없음'}</p>
+                <img src="${imageUrl}"
+                     alt="상품 이미지"
+                     style="max-width:200px;"
+                     onerror="this.src='/img/placeholder.jpeg'">
+                <hr/>
+            `;
+            container.appendChild(div);
+        });
+    } catch (error) {
+        console.error('상품 목록 로드 오류:', error);
+        const container = document.getElementById('product-list');
+        if (container) {
+            container.innerHTML = '<p>상품 정보를 불러오는 중 오류가 발생했습니다.</p>';
+        }
+    }
+}

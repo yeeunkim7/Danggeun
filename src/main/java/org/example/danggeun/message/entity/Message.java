@@ -8,7 +8,7 @@ import org.example.danggeun.user.entity.User;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "message")
+@Table(name = "Message")
 @Getter
 @Setter
 @Builder
@@ -21,29 +21,28 @@ public class Message {
     @Column(name = "message_id")
     private Long id;
 
-    @Column(name = "message_uuid", unique = true, nullable = false)
-    private String messageId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chat_id", nullable = false)
+    private Chat chat;
 
-    @Lob
-    @Column(name = "message_content", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sender_id", nullable = false)
+    private User sender;
+
+    @Column(name = "content", nullable = false, columnDefinition = "TEXT")
     private String content;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "is_read", nullable = false)
-    private boolean read = false;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id", nullable = false)
-    private User sender;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chat_id", nullable = false)
-    private Chat chat;
+    @Builder.Default
+    private boolean isRead = false;
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
     }
 }

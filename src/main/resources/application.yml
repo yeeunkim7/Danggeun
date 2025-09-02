@@ -28,7 +28,7 @@ spring:
 
   sql:
     init:
-      mode: always
+      mode: never
       encoding: UTF-8
 
   session:
@@ -103,13 +103,16 @@ google:
 file:
   upload-dir: ${FILE_UPLOAD_DIR:./uploads}
 
-# 로깅 설정
+# 로깅 설정 (DevTools 관련 불필요한 로그 제거)
 logging:
   level:
     org.example.danggeun.security: DEBUG # 보안 관련 로그 출력
-    org.springframework.security: DEBUG
+    org.springframework.security: WARN # DEBUG에서 WARN으로 변경
     org.hibernate.SQL: DEBUG
     org.springframework.web: DEBUG
+    # DevTools 관련 불필요한 에러 로그 제거
+    org.springframework.web.servlet.resource.ResourceHttpRequestHandler: WARN
+    org.example.danggeun.exception.GlobalExceptionHandler: WARN
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
@@ -184,6 +187,7 @@ logging:
     org.example.danggeun.security: INFO
     org.springframework.security: WARN
     org.hibernate.SQL: WARN
+    org.springframework.web.servlet.resource.ResourceHttpRequestHandler: ERROR
     root: INFO
   file:
     name: logs/application.log
@@ -210,6 +214,8 @@ logging:
   level:
     org.example.danggeun: DEBUG
     org.springframework.web: DEBUG
+    # 로컬 환경에서도 불필요한 DevTools 에러 로그 제거
+    org.springframework.web.servlet.resource.ResourceHttpRequestHandler: WARN
 
 ---
 # 테스트 환경 설정

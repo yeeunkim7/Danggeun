@@ -5,15 +5,15 @@ DELETE FROM message;
 DELETE FROM category;
 DELETE FROM "user";
 
--- 유저 (user_id = 1)
+-- 유저 (user_id = 1) - user_created_at 컬럼 제거
 INSERT INTO "user" (
   user_id, provider, provider_id, role,
   user_createdat, user_email, user_nm, user_password,
-  user_phone, user_created_at, nickname, profile_image_url, region
+  user_phone, nickname, profile_image_url, region
 ) VALUES (
-  1, 'local', 'local_1', 'USER',
-  NOW(), 'test@example.com', '테스트유저', '1234',
-  '010-0000-0000', NOW(), 'testnick', NULL, '서울시 강남구'
+  1, 'local', 'local_1', 'ROLE_USER',
+  NOW(), 'test@example.com', '테스트유저', '$2a$10$8VeYnGTONOEzeRtQZMeqxOftNbBG45qh3vTkWEinFRGWNJvMLpJVK',
+  '010-0000-0000', 'testnick', NULL, '서울시 강남구'
 );
 
 -- 카테고리 (1~3번)
