@@ -2,54 +2,68 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>글 작성</title>
-    <link rel="stylesheet" th:href="@{/css/write/write_styles.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>글 작성 - 당근마켓</title>
+    <link rel="stylesheet" th:href="@{/css/write/write.css}">
     <link rel="stylesheet" th:href="@{/css/header/header.css}">
 </head>
 <body>
 <header th:replace="~{fragments/header :: headerFragment}"></header>
 
 <main class="container">
-
-    <form th:action="@{/trade/submit}"
+    <form th:action="@{/write}"
           th:object="${product}"
           method="post"
           enctype="multipart/form-data"
-          id="write-form">
+          id="write-form"
+          novalidate>
 
         <div class="form-row">
-            <label class="image-upload">
+            <!-- 이미지 업로드 -->
+            <label class="image-upload" for="image-input">
                 <img id="preview-image"
                      src="https://cdn-icons-png.flaticon.com/512/685/685655.png"
-                     alt="카메라 아이콘" />
+                     alt="사진 업로드 아이콘" />
                 <input type="file"
-                       th:field="*{image}"
-                       accept="image/*"
+                       id="image-input"
+                       name="image"
+                       accept="image/jpeg,image/png,image/webp,image/gif"
                        onchange="previewImage(event)"
-                       required
                        style="display: none;" />
             </label>
 
             <div class="form-group">
-                <label for="title">글 제목</label>
+                <!-- 제목 -->
+                <label for="title">글 제목 *</label>
                 <input type="text"
                        th:field="*{title}"
-                       placeholder="글 제목"
+                       id="title"
+                       placeholder="글 제목을 입력해주세요"
                        class="input-gray"
+                       maxlength="100"
                        required />
+                <div class="error-message" id="title-error" role="alert"></div>
 
                 <!-- 가격 -->
-                <label for="price" style="margin-top: 14px;">가격</label>
+                <label for="price" style="margin-top: 20px;">가격 *</label>
                 <input type="number"
                        th:field="*{price}"
-                       placeholder="가격"
+                       id="price"
+                       placeholder="가격을 입력해주세요 (원)"
                        class="input-gray"
+                       min="0"
+                       max="1000000000"
+                       step="1"
                        required />
+                <div class="error-message" id="price-error" role="alert"></div>
 
-                <div class="form-group">
-                    <label for="category-select">카테고리</label>
+                <!-- 카테고리 -->
+                <div class="form-group" style="margin-top: 20px;">
+                    <label for="category-select">카테고리 *</label>
                     <div class="category-select-wrapper">
-                        <select id="category-select" name="categoryId" required>
+                        <select id="category-select"
+                                th:field="*{categoryId}"
+                                required>
                             <option value="" disabled selected>카테고리를 선택해주세요</option>
                             <option th:each="cat : ${categories}"
                                     th:value="${cat.id}"
@@ -57,46 +71,71 @@
                         </select>
                         <button type="button" class="category-add-btn">+ 새 카테고리</button>
                     </div>
+                    <div class="error-message" id="category-error" role="alert"></div>
                 </div>
             </div>
         </div>
 
-        <!-- 설명 -->
-        <div class="form-group textarea-group" style="margin-top: 24px;">
-            <label for="detail">물품 설명</label>
+        <!-- 물품 설명 -->
+        <div class="form-group textarea-group" style="margin-top: 32px;">
+            <label for="detail">물품 설명 *</label>
             <textarea th:field="*{detail}"
-                      placeholder="게시글 내용을 작성해주세요."
+                      id="detail"
+                      placeholder="게시글 내용을 작성해주세요.&#10;&#10;• 상품의 상태 (상, 중, 하)&#10;• 구매 시기&#10;• 사용 정도&#10;• 하자 유무&#10;• 배송/직거래 여부 등"
+                      maxlength="2000"
                       required></textarea>
+            <div class="error-message" id="detail-error" role="alert"></div>
+            <div style="text-align: right; font-size: 12px; color: #8b95a1; margin-top: 4px;">
+                <span id="detail-count">0</span>/2000자
+            </div>
         </div>
 
         <!-- 거래 장소 -->
         <div class="form-group" style="margin-top: 24px;">
-            <label for="address">거래 희망 장소</label>
+            <label for="address">거래 희망 장소 *</label>
             <input type="text"
                    th:field="*{address}"
-                   placeholder="거래를 희망하는 장소"
+                   id="address"
+                   placeholder="거래를 희망하는 장소를 입력해주세요 (예: 강남역 2번 출구)"
                    class="input-gray"
+                   maxlength="100"
                    required />
+            <div class="error-message" id="address-error" role="alert"></div>
         </div>
 
-        <button type="submit" id="submit-btn" class="submit-btn">완료</button>
+        <!-- 서버 메시지 표시 -->
+        <div th:if="${error}" style="background: #ffe6e6; border: 1px solid #ff9999; padding: 15px; margin: 20px 0; border-radius: 8px; color: #cc0000;">
+            <strong>오류:</strong> <span th:text="${error}"></span>
+        </div>
+
+        <div th:if="${success}" style="background: #e6ffe6; border: 1px solid #99ff99; padding: 15px; margin: 20px 0; border-radius: 8px; color: #006600;">
+            <strong>성공:</strong> <span th:text="${success}"></span>
+        </div>
+
+        <button type="submit" id="submit-btn" class="submit-btn">
+            <span id="submit-text">완료</span>
+        </button>
     </form>
 </main>
 
 <!-- 카테고리 추가 모달 -->
-<div id="category-modal" class="category-modal">
+<div id="category-modal" class="category-modal" role="dialog" aria-hidden="true">
     <div class="modal-content">
-        <span id="close-category-modal"
-              class="close-btn"
-              style="float:right;cursor:pointer;font-size:20px;"> × </span>
+        <button id="close-category-modal" class="close-btn" type="button">×</button>
         <h2>새 카테고리 추가</h2>
-        <input type="text" id="new-category-name" placeholder="카테고리 이름" class="input-gray" style="width:100%;margin:12px 0;">
-        <button id="save-category-btn" class="submit-btn" style="width:100%;">추가하기</button>
+        <div>
+            <input type="text"
+                   id="new-category-name"
+                   placeholder="카테고리 이름을 입력해주세요"
+                   class="input-gray"
+                   maxlength="50"
+                   style="width:100%;margin:12px 0;" />
+            <div class="error-message" id="modal-error" role="alert"></div>
+            <button id="save-category-btn" class="submit-btn" style="width:100%;" type="button">추가하기</button>
+        </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 <script th:src="@{/js/write.js}"></script>
 </body>
 </html>

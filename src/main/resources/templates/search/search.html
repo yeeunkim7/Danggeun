@@ -24,24 +24,36 @@
   <div th:if="${result.items != null}">
     <h2>상품 결과</h2>
 
-    <div class="item-grid">
-      <div class="item-card" th:each="item : ${result.items.content}">
-        <a th:href="@{/trade/{id}(id=${item.id})}">
-          <!-- 이미지 처리 개선 -->
-          <div class="item-image">
-            <img th:src="${item.imageUrl != null and item.imageUrl != '' ? (item.imageUrl.startsWith('/') ? item.imageUrl : '/img/' + item.imageUrl) : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjREJEQ0UyIi8+CjxwYXRoIGQ9Ik0xMDAgNzVMMTI1IDEwMEgxMTJWMTI1SDg4VjEwMEg3NUwxMDAgNzVaIiBmaWxsPSIjOTk5OTk5Ii8+Cjwvc3ZnPgo='}"
+    <!-- 검색 결과를 리스트 형태로 표시 -->
+    <div class="search-results">
+      <div class="search-result-item" th:each="item : ${result.items.content}">
+        <a th:href="@{/trade/{id}(id=${item.id})}" class="result-link">
+          <div class="result-image-container">
+            <img th:src="@{${item.imageUrl != null and !#strings.isEmpty(item.imageUrl) ?
+                         (item.imageUrl.startsWith('/') ? item.imageUrl : '/img/' + item.imageUrl) :
+                         '/img/mac.jpeg'}}"
                  th:alt="${item.title}"
-                 class="item-img"
-                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjREJEQ0UyIi8+CjxwYXRoIGQ9Ik0xMDAgNzVMMTI1IDEwMEgxMTJWMTI1SDg4VjEwMEg3NUwxMDAgNzVaIiBmaWxsPSIjOTk5OTk5Ii8+PC9zdmc+Cg=='" />
+                 class="result-image"
+                 onerror="this.onerror=null; this.src='/img/mac.jpeg'" />
           </div>
 
-          <div class="item-info">
-            <div class="item-title" th:utext="${item.title}">제목</div>
-            <div class="item-price" th:text="${item.price + '원'}">가격</div>
-            <div class="item-location" th:text="${item.location}">위치</div>
+          <div class="result-content">
+            <h3 class="result-title" th:utext="${item.title}">제목</h3>
+            <p class="result-summary" th:text="${item.content}">설명</p>
+            <div class="result-meta">
+              <span class="result-price" th:text="${#numbers.formatInteger(item.price, 1, 'COMMA')} + '원'">가격</span>
+              <span class="result-location" th:text="${item.location}">위치</span>
+              <span class="result-time" th:text="${#temporals.format(item.createdAt, 'MM-dd')}">날짜</span>
+            </div>
           </div>
         </a>
       </div>
+    </div>
+
+    <!-- 검색 결과 없음 메시지 -->
+    <div th:if="${#lists.isEmpty(result.items.content)}" class="no-results">
+      <p>검색 결과가 없습니다.</p>
+      <p>다른 검색어를 입력해보세요.</p>
     </div>
   </div>
 
@@ -50,15 +62,12 @@
     <h2>사용자 결과</h2>
     <ul class="user-list">
       <li th:each="user : ${result.users.content}" class="user-item">
-        <img th:if="${user.profileImageUrl != null and user.profileImageUrl != ''}"
-             th:src="${user.profileImageUrl.startsWith('/') ? user.profileImageUrl : '/img/' + user.profileImageUrl}"
+        <img th:src="@{${user.profileImageUrl != null and !#strings.isEmpty(user.profileImageUrl) ?
+                     (user.profileImageUrl.startsWith('/') ? user.profileImageUrl : '/img/' + user.profileImageUrl) :
+                     '/img/profile-placeholder.jpeg'}}"
              alt="프로필"
              class="profile-img"
-             onerror="this.src='/img/placeholder-profile.jpeg'" />
-        <img th:if="${user.profileImageUrl == null or user.profileImageUrl == ''}"
-             src="/img/placeholder-profile.jpeg"
-             alt="프로필"
-             class="profile-img" />
+             onerror="this.onerror=null; this.src='/img/profile-placeholder.jpeg'" />
         <div class="user-info">
           <span class="user-nickname" th:text="${user.nickname}">닉네임</span>
           <span class="user-region" th:text="${user.region}">지역</span>
@@ -68,7 +77,7 @@
   </div>
 
   <!-- 페이지네이션 -->
-  <div class="pagination" th:if="${result.items != null}">
+  <div class="pagination" th:if="${result.items != null and !#lists.isEmpty(result.items.content)}">
     <a class="page-arrow" th:if="${!result.items.first}"
        th:href="@{/search(query=${query}, type=${type}, page=${result.items.number - 1}, size=${result.items.size})}">
       이전

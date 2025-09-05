@@ -48,11 +48,33 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
     """)
     List<String> findTitlesByPrefix(@Param("prefix") String prefix, Pageable pageable);
 
+    // 수정된 findAllWithSeller - 최신순 정렬 추가
     @Query("""
         SELECT t FROM Trade t
-        JOIN FETCH t.seller
+        JOIN FETCH t.seller s
+        LEFT JOIN FETCH s.address
+        ORDER BY t.createdAt DESC
     """)
     List<Trade> findAllWithSeller();
+
+    // 추가: 페이징 지원 버전
+    @Query("""
+        SELECT t FROM Trade t
+        JOIN FETCH t.seller s
+        LEFT JOIN FETCH s.address
+        ORDER BY t.createdAt DESC
+    """)
+    List<Trade> findAllWithSellerPaged(Pageable pageable);
+
+    // 추가: 상태별 조회 (활성 상품만)
+    @Query("""
+        SELECT t FROM Trade t
+        JOIN FETCH t.seller s
+        LEFT JOIN FETCH s.address
+        WHERE t.state = '00'
+        ORDER BY t.createdAt DESC
+    """)
+    List<Trade> findActiveTradesWithSeller();
 
     Optional<Trade> findFirstBySellerAndTitle(User seller, String title);
 }

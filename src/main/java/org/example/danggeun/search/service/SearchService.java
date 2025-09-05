@@ -53,14 +53,14 @@ public class SearchService {
     }
 
     private Page<ItemSearchDto> searchItems(String keyword, Pageable pageable) {
-        Page<Trade> trades = tradeRepository.searchByKeyword(keyword, pageable); // 커스텀 쿼리 사용 가정
+        Page<Trade> trades = tradeRepository.searchByKeyword(keyword, pageable);
 
         return trades.map(t -> ItemSearchDto.builder()
                 .id(t.getId())
                 .title(highlightKeyword(t.getTitle(), keyword))
                 .content(t.getDetail())
                 .price(t.getPrice() == null ? 0 : t.getPrice().intValue())
-                .imageUrl(t.getImageUrl())
+                .imageUrl(resolveImageUrl(t.getImageUrl(), t.getTitle()))
                 .location(resolveLocation(t))
                 .createdAt(t.getCreatedAt())
                 .build());
@@ -72,9 +72,50 @@ public class SearchService {
         return users.map(u -> UserSimpleDto.builder()
                 .id(u.getId())
                 .nickname(u.getNickname())
-                .profileImageUrl(u.getProfileImageUrl())
+                .profileImageUrl(resolveProfileImageUrl(u.getProfileImageUrl()))
                 .region(resolveRegion(u))
                 .build());
+    }
+
+    private String resolveImageUrl(String imageUrl, String productTitle) {
+        // null이거나 빈 문자열인 경우 상품 제목에 따라 적절한 기본 이미지 반환
+        if (imageUrl == null || imageUrl.trim().isEmpty()) {
+            if (productTitle != null) {
+                String title = productTitle.toLowerCase();
+                if (title.contains("노트북") || title.contains("맥북") || title.contains("laptop") || title.contains("갤럭시북")) {
+                    return "mac.jpeg";
+                } else if (title.contains("자전거") || title.contains("bike")) {
+                    return "bike.jpeg";
+                } else if (title.contains("책") || title.contains("book")) {
+                    return "book.jpeg";
+                } else if (title.contains("책상") || title.contains("desk")) {
+                    return "desk.jpeg";
+                } else if (title.contains("그램") || title.contains("gram")) {
+                    return "gram.jpeg";
+                }
+            }
+            return "bike.jpeg"; // 최종 기본값
+        }
+
+        // 이미 전체 경로인 경우 그대로 반환
+        if (imageUrl.startsWith("/img/") || imageUrl.startsWith("http")) {
+            return imageUrl;
+        }
+
+        // 파일명만 있는 경우 그대로 반환
+        return imageUrl;
+    }
+
+    private String resolveProfileImageUrl(String profileImageUrl) {
+        if (profileImageUrl == null || profileImageUrl.trim().isEmpty()) {
+            return "profile-placeholder.jpeg"; // 기본 프로필 이미지
+        }
+
+        if (profileImageUrl.startsWith("/img/") || profileImageUrl.startsWith("http")) {
+            return profileImageUrl;
+        }
+
+        return profileImageUrl;
     }
 
     public List<String> getAutoComplete(String prefix) {
@@ -126,7 +167,15 @@ public class SearchService {
         return "지역 정보 없음";
     }
 
-    private void saveSearchHistory(String keyword, SearchType type) { }
-    private List<String> getRecentSearches(String prefix) { return new ArrayList<>(); }
-    private List<String> getPopularSearches(String prefix) { return new ArrayList<>(); }
+    private void saveSearchHistory(String keyword, SearchType type) {
+        // 검색 기록 저장 로직 (향후 구현)
+    }
+
+    private List<String> getRecentSearches(String prefix) {
+        return new ArrayList<>();
+    }
+
+    private List<String> getPopularSearches(String prefix) {
+        return new ArrayList<>();
+    }
 }
