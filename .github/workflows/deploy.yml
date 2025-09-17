@@ -2,26 +2,22 @@ name: Deploy to EC2
 
 on:
   push:
-    branches: [ main ]     # main 푸시 시 자동 실행
-  workflow_dispatch:        # 수동 실행도 가능
-
-concurrency:
-  group: deploy-${{ github.ref }}
-  cancel-in-progress: true  # 중복 배포 방지
+    branches:
+      - main   # main 브랜치 push 시 자동 실행
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy over SSH
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.7.0
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
-          script: |
-            cd ~/app/Danggeun
-            git pull origin main
-            chmod +x mvnw deploy.sh
-            ./deploy.sh
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: Deploy to EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "cd ~/app/Danggeun && ./deploy.sh"
