@@ -1,0 +1,27 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches: [ main ]     # main 푸시 시 자동 실행
+  workflow_dispatch:        # 수동 실행도 가능
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true  # 중복 배포 방지
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            cd ~/app/Danggeun
+            git pull origin main
+            chmod +x mvnw deploy.sh
+            ./deploy.sh
