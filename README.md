@@ -1,90 +1,73 @@
----
+# 🥕 당근마켓 클론 프로젝트
+
 ## 1. 프로젝트 소개
 
 [오르미 11기 백엔드 개발자 부트캠프]  
-'챗봇상담사가 있는 중고거래 플랫폼' 구현 클론 프로젝트
+**챗봇 상담사가 있는 지역 기반 중고거래 플랫폼** 클론 프로젝트
 
-# 🛠️ 개발 서비스 소개
+💡 **당근마켓 클론페이지**는 지역 기반 중고거래 플랫폼인 당근마켓(Daangn Market)의 핵심 기능을 모방하여 구현한 웹 애플리케이션입니다.  
+실시간 채팅과 **AI 챗봇 고객센터**를 통해 거래 지원을 제공합니다.
 
-💡 **당근마켓 클론페이지**는 지역 기반 중고 거래 플랫폼인 당근마켓(Daangn Market)의 주요 기능과 사용자 경험을 모방하여 구현한 웹 애플리케이션입니다.  
-실시간 채팅 기능과 더불어 **AI 챗봇 고객센터**를 통해 빠르고 정확한 거래 지원을 제공합니다.
+### 🔧 개발 목적
+- 지역 기반 중고거래 플랫폼의 기능 이해
+- CRUD, 인증, 채팅 등 실전 기능 구현
+- **CI/CD 파이프라인을 통한 자동 배포 경험**
+- 반응형 웹 및 사용자 친화적 UI/UX 설계
 
-## 🔧 개발 목적
+---
 
-- 지역 기반 중고 거래 플랫폼의 기능 이해
-- 실제 서비스 수준의 CRUD, 인증, 채팅 등의 기능 구현
-- AI 챗봇을 통한 고객 지원 자동화 경험 추가
-- 모바일 친화 UI/UX 설계 및 반응형 웹 개발 연습
-- 실전 프로젝트 경험을 통한 포트폴리오 구축
-
-## 🚀 사용 기술 스택
+## 2. 사용 기술 스택
 
 ### Backend
-
-- Java 17
-- Spring Boot, Spring MVC
+- Java 17, Spring Boot, Spring MVC
 - Spring Security, OAuth2 (Google 로그인)
 - JPA, Hibernate
-- WebSocket (채팅)
+- WebSocket (실시간 채팅)
 
 ### Frontend
-
-- HTML5, CSS3 (SCSS)
-- JavaScript (ES6+)
+- HTML5, CSS3 (SCSS), JavaScript (ES6+)
 - Thymeleaf
 
 ### AI / 챗봇
-
 - OpenAI GPT API
 - JSON 파싱 및 프롬프트 구조화
 
 ### Infrastructure & DevOps
-
-- AWS S3 (이미지 업로드 등 정적 리소스 저장)
-- MySQL
-- Git, GitHub
-- IntelliJ IDEA
+- AWS EC2 (배포), AWS S3 (이미지 업로드)
+- MySQL, PostgreSQL
+- GitHub Actions (CI/CD)
+- Git, IntelliJ IDEA
 
 ### 협업 도구
-
 - GitHub (이슈/PR 관리)
 - Notion (기획/정리)
 - Discord (실시간 회의)
 - Figma (디자인 참고)
 
 ---
-![img.png](src/main/resources/static/asset/img.png)
 
-## 2. 팀원 소개 및 역할
-### 🔗 팀원 GitHub 및 프로필 이미지
+## 3. 팀원 소개 및 역할
 
-| 이름     | GitHub | 이미지                                                     |
-|--------|--------|---------------------------------------------------------|
-|👑<br/>김재경| [github.com/Jaekyung89](https://github.com/Jaekyung89) |![img12.png](src/main/resources/static/asset/img_12.png) |
-| 이소연    | [github.com/BlueGiraffe07](https://github.com/BlueGiraffe07) | ![img_10.png](src/main/resources/static/asset/img_10.png)                               |
-| 김예은    | [github.com/yeeunkim7](https://github.com/yeeunkim7) | ![img_11.png](src/main/resources/static/asset/img_11.png)                               |
-| 김민형    | [github.com/KimTeaHyeong1](https://github.com/KimTeaHyeong1) | ![img_13.png](src/main/resources/static/asset/img_13.png)                               |
-
-
-| 이름     | 담당 역할                               |
-|--------|-------------------------------------|
-| 👑 김재경 | 팀장, 챗봇 연동, Trade 페이지                |
-| 이소연    | 메인페이지, Notion, 발표자료(PPT), README 정리 |
-| 김예은    | 소셜 로그인, 회원가입, AWS E2 배포             |
-| 김민형    | Post기능, 채팅페이지                       |
+| 이름     | GitHub | 담당 역할 |
+|----------|--------|-----------|
+| 👑 김재경 | [Jaekyung89](https://github.com/Jaekyung89) | 팀장, 챗봇 연동, Trade 페이지 |
+| 이소연    | [BlueGiraffe07](https://github.com/BlueGiraffe07) | 메인페이지, 발표자료, README 정리 |
+| 김예은    | [yeeunkim7](https://github.com/yeeunkim7) | **소셜 로그인, 회원가입, AWS EC2 CI/CD 배포 담당** |
+| 김민형    | [KimTeaHyeong1](https://github.com/KimTeaHyeong1) | 게시글(Post) 기능, 채팅 페이지 |
 
 > 🎨 [피그마 디자인 시안 바로가기](https://www.figma.com/design/kSMua8TOVGIIPbNH1jie1Q/%EC%98%A4%EB%A5%B4%EB%AF%B8-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EB%8B%B9%EA%B7%BC%EB%A7%88%EC%BC%93Web-%ED%81%B4%EB%A1%A0%EC%BD%94%EB%94%A9-?node-id=0-1&p=f)
 
 ---
 
-## 3. ERD 구조
+## 4. ERD 구조
 
 > 📌 ERD 다이어그램 (db 설계)
 ![img.png](src/main/resources/static/asset/ERD.png)
 ---
 
-## 4. 페이지 구성 및 주요 기능
-### 4-1. 페이지 구성
+## 5. 페이지 구성 및 주요 기능
+
+### 페이지별 주요 기능
 
 - 로그인(Login)
 ![img_1.png](src/main/resources/static/asset/img_1.png)
@@ -131,132 +114,95 @@
 
 ---
 
-## 6. 디렉토리 구조
 
-```bash
-## 🗃 디렉토리 구조
+## 6. 챗봇 기능 상세
 
-```bash
-Danggeun/
-├── .gradle/
-├── .idea/
-│   ├── dataSources/
-│   ├── shelf/
-│   ├── compiler.xml
-│   ├── dataSources.local.xml
-│   ├── dataSources.xml
-│   ├── encodings.xml
-│   ├── jarRepositories.xml
-│   ├── misc.xml
-│   ├── vcs.xml
-│   └── workspace.xml
-├── .mvn/
-│   └── wrapper/
-│       └── maven-wrapper.properties
-├── db/
-│   └── danggeun_dump.sql
-├── src/
-│   ├── main/
-│   │   ├── java/org.example.danggeun/
-│   │   │   ├── address.entity/
-│   │   │   ├── areaConfirm/
-│   │   │   │   ├── Controller/
-│   │   │   │   ├── Dto/
-│   │   │   │   ├── entity/
-│   │   │   │   ├── repository/
-│   │   │   │   └── service/
-│   │   │   ├── category/
-│   │   │   ├── chat.entity/
-│   │   │   ├── common/
-│   │   │   ├── config/
-│   │   │   ├── item.dto/
-│   │   │   ├── mainpage.controller/
-│   │   │   ├── message.entity/
-│   │   │   ├── s3/
-│   │   │   ├── search.controller/
-│   │   │   ├── security/
-│   │   │   ├── trade/
-│   │   │   │   ├── controller/
-│   │   │   │   ├── dto/
-│   │   │   │   ├── entity/
-│   │   │   │   ├── repository/
-│   │   │   │   └── service/
-│   │   │   ├── user/
-│   │   │   │   ├── controller/
-│   │   │   │   ├── dto/
-│   │   │   │   ├── entity/
-│   │   │   │   ├── repository/
-│   │   │   │   └── service/
-│   │   │   ├── write/
-│   │   │   └── DanggeunApplication.java
-│   │   └── resources/
-│   │       ├── static/
-│   │       │   ├── asset/
-│   │       │   ├── css/
-│   │       │   │   ├── header/
-│   │       │   │   ├── login/
-│   │       │   │   ├── mainpage/
-│   │       │   │   ├── search/
-│   │       │   │   └── trade/
-│   │       │   ├── images/
-│   │       │   ├── js/
-│   │       │   └── uploads/
-│   │       └── templates/
-│   │           ├── areaConfirm/
-│   │           ├── fragments/
-│   │           ├── login/
-│   │           ├── mainPage/
-│   │           ├── search/
-│   │           └── trade/
-│   ├── test/
-│   │   └── java/org.example.danggeun/
-│   │       └── DanggeunApplicationTests.java
-├── target/
-├── uploads/
-├── .gitattributes
-├── .gitignore
-├── danggeun_dump.sql
-├── mvnw
-├── mvnw.cmd
-├── pom.xml
-├── README.md
-└── setup_db.sh
-```
+| 항목 | 설명 |
+|------|------|
+| 목적 | 고객센터 자동화, FAQ 응답 |
+| API | OpenAI GPT API |
+| 제공 기능 | 게시글 등록 안내, 거래 주의사항, 계정 오류 처리, 재연결 안내 |
+| 위치 | 우측 하단 플로팅 버튼, 마이페이지 → 고객센터 |
+
 ---
 
-## 7. 브랜치 전략 및 코드 컨벤션
+## 7. 디렉토리 구조
+
+```text
+Danggeun/
+├── db/
+├── src/
+│   ├── main/
+│   │   ├── java/org/example/danggeun
+│   │   │   ├── address/
+│   │   │   ├── areaconfirm/ (controller, dto, entity, repository, service)
+│   │   │   ├── category/
+│   │   │   ├── chat/ (controller, entity, service, websocket)
+│   │   │   ├── common/
+│   │   │   ├── config/
+│   │   │   ├── exception/
+│   │   │   ├── mainpage/
+│   │   │   ├── message/
+│   │   │   ├── s3/
+│   │   │   ├── search/
+│   │   │   ├── security/
+│   │   │   ├── trade/ (controller, dto, entity, repository, service)
+│   │   │   └── user/ (controller, dto, entity, repository, service)
+│   │   └── resources/
+│   │       ├── static/ (css, js, images, uploads)
+│   │       └── templates/ (thymeleaf views)
+│   └── test/java/org/example/danggeun
+├── uploads/
+├── pom.xml
+├── deploy.sh
+└── README.md
+
+---
+
+## 8. CI/CD 배포 흐름
+
+본 프로젝트는 **GitHub Actions + AWS EC2**를 활용한 자동 배포 파이프라인을 구축했습니다.  
+`main` 브랜치에 push가 발생하면, GitHub Actions가 실행되어 EC2 서버로 SSH 접속 후 `deploy.sh` 스크립트를 실행하여 자동 배포됩니다.
+
+### 배포 다이어그램
+
+![CI/CD 배포 다이어그램](![cicdimage.png](src/main/resources/static/asset/cicdiamge.png))
+
+### 배포 흐름
+1. 개발자가 `git push origin main` 실행
+2. GitHub Actions Workflow 자동 실행
+3. SSH를 통해 AWS EC2에 접속
+4. `deploy.sh` 스크립트 실행
+   - 최신 코드 pull
+   - Maven 빌드
+   - Spring Boot 서비스 재시작
+5. 배포 완료 후, `systemctl status`로 서비스 상태 확인
+6. 브라우저를 통해 EC2 IP로 서비스 접속 가능
+
+---
+
+## 9. 브랜치 전략 & 코드 컨벤션
 
 ### 브랜치 정책
+- `main`: 배포용 브랜치
+- `feature/기능명`: 기능 단위 작업
+- Pull Request 기반 병합, 코드 리뷰 필수  
+- 미완성 코드 main 병합 ❌
 
-| 브랜치명 | 설명 |
-|----------|------|
-| main | 배포용 브랜치 |
-| 이름별 브랜치 (예: minhyung) | 기능별 개발 진행 |
-| feature/기능명 | 특정 기능 단위 작업 (선택) |
-
-- 병합은 Pull Request 기반
-- 코드 리뷰 후 병합
-- 미완성 코드 main에 병합 ❌
-
-### 코드 컨벤션 요약
-
-- 문자열: 쌍따옴표 `"` 사용
-- 문장 끝에 세미콜론 `;` 필수
+### 코드 컨벤션
+- 문자열: `"` 사용
+- 세미콜론 `;` 필수
 - 들여쓰기: 4칸 space
 - 변수/함수: camelCase, 클래스: PascalCase
 - 상수: UPPER_SNAKE_CASE
-- 연산자/콤마 사이 공백 사용
-- 불필요한 줄바꿈/압축 금지
-
-> 📄 자세한 컨벤션은 Notion `Code Convention` 페이지 참고
+- 연산자/콤마 뒤 공백
+- 불필요한 줄바꿈 금지
 
 ---
 
-## 8. 기대 효과
+## 10. 기대 효과
 
-- 실무에 가까운 아키텍처 설계 및 기능 구현
-- 챗봇 기능 통한 **AI 연동 경험 확보**
-- 사용자 중심 서비스 설계 및 기술 적용 경험
+- **실무에 가까운 CI/CD 자동배포 경험 확보 (GitHub Actions + AWS EC2)**
+- 챗봇 기능 통한 **AI 연동 경험 강화**
+- 사용자 중심 서비스 설계 및 개선 경험
 - Git 기반 협업 및 코드리뷰 문화 경험
-
----
